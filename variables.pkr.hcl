@@ -19,7 +19,7 @@ variable "root_volume_size" {
 variable "eks_version" {
   description = "The EKS cluster version associated with the AMI created"
   type        = string
-  default     = "1.24"
+  default     = "1.27"
 }
 
 variable "http_proxy" {
@@ -80,4 +80,10 @@ variable "ami_name_prefix" {
   description = "The prefix to use when creating the AMI name. i.e. - `<ami_name_prefix>-<eks_version>-<timestamp>"
   type        = string
   default     = "amazon-eks-node"
+}
+
+variable "ami_description" {
+  description = "The description to use when creating the AMI"
+  type        = string
+  default     = "Amazon EKS AL2023 image"
 }

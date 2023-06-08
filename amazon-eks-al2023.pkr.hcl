@@ -16,7 +16,7 @@ source "amazon-ebs" "this" {
     volume_type           = "gp2"
   }
 
-  ami_description         = "EKS Kubernetes Worker AMI with AmazonLinux2 image"
+  ami_description         = var.ami_description
   ami_name                = local.target_ami_name
   ami_virtualization_type = "hvm"
   instance_type           = var.instance_type
@@ -65,6 +65,7 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'packer' | {{ .Vars }} sudo -S -E bash -eux '{{ .Path }}'"
+
     environment_vars = [
       "HTTP_PROXY=${var.http_proxy}",
       "HTTPS_PROXY=${var.https_proxy}",

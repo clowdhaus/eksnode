@@ -1,8 +1,8 @@
 use std::process;
 
 use anyhow::Result;
-use eksami::{Cli, Commands};
 use clap::Parser;
+use eksami::{Cli, Commands};
 use tracing::debug;
 use tracing_log::AsTrace;
 use tracing_subscriber::FmtSubscriber;
