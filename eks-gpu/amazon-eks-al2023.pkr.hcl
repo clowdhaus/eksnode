@@ -23,16 +23,16 @@ source "amazon-ebs" "this" {
 
   launch_block_device_mappings {
     delete_on_termination = true
-    device_name           = "/dev/sda1"
+    device_name           = "/dev/xvda"
     volume_size           = var.root_volume_size
-    volume_type           = "gp2"
+    volume_type           = "gp3"
   }
 
   launch_block_device_mappings {
     delete_on_termination = true
-    device_name           = "/dev/sdb"
+    device_name           = "/dev/xvdb"
     volume_size           = var.data_volume_size
-    volume_type           = "gp2"
+    volume_type           = "gp3"
   }
 
   region = var.aws_region
