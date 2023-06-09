@@ -18,7 +18,7 @@ async fn main() -> Result<()> {
   tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
 
   match &cli.command {
-    Commands::Bootstrap(update) => match update.run().await {
+    Commands::Bootstrap(bstrap) => match bstrap.run().await {
       Ok(result) => debug!("{:#?}", result),
       Err(err) => {
         eprintln!("{err}");

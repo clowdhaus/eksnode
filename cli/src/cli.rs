@@ -137,6 +137,8 @@ impl Default for LocalDisks {
 
 impl Bootstrap {
   pub async fn run(&self) -> Result<&Bootstrap> {
-    Ok(&self)
+    crate::imds::get_imds_data().await?;
+
+    Ok(self)
   }
 }
