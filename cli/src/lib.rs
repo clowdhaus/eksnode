@@ -3,6 +3,7 @@ pub mod eks;
 pub mod fs;
 pub mod image;
 pub mod imds;
+pub mod resource;
 pub mod utils;
 
 use std::env;
