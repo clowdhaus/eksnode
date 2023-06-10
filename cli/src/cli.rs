@@ -109,7 +109,7 @@ pub struct Bootstrap {
   pause_container_account: Option<String>,
 
   /// The tag of the pause container
-  #[arg(long)]
+  #[arg(long, default_value = "3.5")]
   pause_container_version: Option<String>,
 
   /// IPv6 CIDR range of the cluster

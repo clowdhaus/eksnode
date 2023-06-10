@@ -190,20 +190,20 @@ fi
 DOCKER_CONFIG_JSON="${DOCKER_CONFIG_JSON:-}"
 ENABLE_DOCKER_BRIDGE="${ENABLE_DOCKER_BRIDGE:-false}"
 
-# As of Kubernetes version 1.24, we will start defaulting the container runtime to containerd
-# and no longer support docker as a container runtime.
-DEFAULT_CONTAINER_RUNTIME=dockerd
-if vercmp "$KUBELET_VERSION" gteq "1.24.0"; then
-  DEFAULT_CONTAINER_RUNTIME=containerd
-fi
-CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-$DEFAULT_CONTAINER_RUNTIME}"
+# # As of Kubernetes version 1.24, we will start defaulting the container runtime to containerd
+# # and no longer support docker as a container runtime.
+# DEFAULT_CONTAINER_RUNTIME=dockerd
+# if vercmp "$KUBELET_VERSION" gteq "1.24.0"; then
+#   DEFAULT_CONTAINER_RUNTIME=containerd
+# fi
+# CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-$DEFAULT_CONTAINER_RUNTIME}"
 
-log "INFO: Using $CONTAINER_RUNTIME as the container runtime"
+# log "INFO: Using $CONTAINER_RUNTIME as the container runtime"
 
-if vercmp "$KUBELET_VERSION" gteq "1.24.0" && [ $CONTAINER_RUNTIME != "containerd" ]; then
-  log "ERROR: containerd is the only supported container runtime as of Kubernetes version 1.24"
-  exit 1
-fi
+# if vercmp "$KUBELET_VERSION" gteq "1.24.0" && [ $CONTAINER_RUNTIME != "containerd" ]; then
+#   log "ERROR: containerd is the only supported container runtime as of Kubernetes version 1.24"
+#   exit 1
+# fi
 
 USE_MAX_PODS="${USE_MAX_PODS:-true}"
 B64_CLUSTER_CA="${B64_CLUSTER_CA:-}"
@@ -224,11 +224,11 @@ if [[ ! -z ${LOCAL_DISKS} ]]; then
   setup-local-disks "${LOCAL_DISKS}"
 fi
 
-DEFAULT_MOUNT_BPF_FS="true"
-if vercmp "$KUBELET_VERSION" lt "1.27.0"; then
-  DEFAULT_MOUNT_BPF_FS="false"
-fi
-MOUNT_BPF_FS="${MOUNT_BPF_FS:-$DEFAULT_MOUNT_BPF_FS}"
+# DEFAULT_MOUNT_BPF_FS="true"
+# if vercmp "$KUBELET_VERSION" lt "1.27.0"; then
+#   DEFAULT_MOUNT_BPF_FS="false"
+# fi
+# MOUNT_BPF_FS="${MOUNT_BPF_FS:-$DEFAULT_MOUNT_BPF_FS}"
 
 # Helper function which calculates the amount of the given resource (either CPU or memory)
 # to reserve in a given resource range, specified by a start and end of the range and a percentage
