@@ -1,0 +1,34 @@
+[package]
+name = "eksami"
+version = "0.1.0"
+authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
+description = "A command line interface used in building and bootstrapping Amazon EKS AMIs"
+documentation = "https://github.com/clowdhaus/exp-amazon-eks-ami"
+homepage = "https://github.com/clowdhaus/exp-amazon-eks-ami"
+repository = "https://github.com/clowdhaus/exp-amazon-eks-ami"
+license = "Apache-2.0"
+edition = "2021"
+categories = [
+  "command-line-utilities",
+  "kubernetes",
+]
+
+[dependencies]
+anstyle = "1.0.0"
+anyhow = "1.0"
+aws-config = "0.55"
+aws-sdk-eks = "0.28"
+aws-sdk-s3 = "0.28"
+aws-types = "0.55"
+clap = { version = "4.2", features = ["derive", "color", "unstable-styles"] }
+clap-verbosity-flag = "2.0"
+phf = { version = "0.11", features = ["macros"] }
+regex = "1.8"
+semver = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+tokio = { version = "1.23", features = ["full"] }
+tracing = {version = "0.1", features = ["log-always"] }
+tracing-log = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

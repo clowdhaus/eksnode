@@ -5,8 +5,7 @@ use anyhow::Result;
 /// KubeReserved is a function of pod density so we are calculating the amount of
 /// memory to reserve for Kubernetes systems daemons by considering the maximum
 /// number of pods this instance type supports.
-/// TODO - this is preferred https://kubernetes.io/docs/concepts/scheduling-eviction/pod-overhead/
-pub(crate) fn memory_mebibytes_to_reserve(max_pods: u32) -> Result<u32> {
+pub fn memory_mebibytes_to_reserve(max_pods: u32) -> Result<u32> {
   let reserve = 11 * max_pods + 255;
   Ok(reserve)
 }
@@ -20,7 +19,7 @@ pub(crate) fn memory_mebibytes_to_reserve(max_pods: u32) -> Result<u32> {
 /// 0.5% of the next 2 cores (up to 4 cores)
 /// 0.25% of any cores above 4 cores
 /// 400mCPU is added when max pods > 110
-pub(crate) fn cpu_millicores_to_reserve(max_pods: u32, num_cpus: u32) -> Result<u32> {
+pub fn cpu_millicores_to_reserve(max_pods: u32, num_cpus: u32) -> Result<u32> {
   let mut reserved = 0;
   for cpu in 0..num_cpus {
     match cpu {

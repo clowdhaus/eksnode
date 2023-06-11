@@ -1,0 +1,12 @@
+[workspace]
+members = [
+    "eksami",
+    "eksami-gen",
+]
+resolver = "2"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1

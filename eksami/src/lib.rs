@@ -1,4 +1,5 @@
 pub mod cli;
+pub mod ec2_instances;
 pub mod eks;
 pub mod fs;
 pub mod image;
@@ -17,7 +18,7 @@ pub use cli::{Cli, Commands};
 pub async fn get_sdk_config(region: &Option<String>) -> Result<SdkConfig> {
   let aws_region = match region {
     Some(region) => Some(Region::new(region.to_owned())),
-    None => env::var("AWS_REGION").ok().map(Region::new),
+    None => env::var("AWS_DEFAULT_REGION").ok().map(Region::new),
   };
 
   let region_provider = RegionProviderChain::first_try(aws_region).or_default_provider();

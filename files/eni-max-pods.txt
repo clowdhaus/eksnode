@@ -1,33 +1,6 @@
-# Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License"). You may
-# not use this file except in compliance with the License. A copy of the
-# License is located at
-#
-#     http://aws.amazon.com/apache2.0/
-#
-# or in the "license" file accompanying this file. This file is distributed
-# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-# express or implied. See the License for the specific language governing
-# permissions and limitations under the License.
-#
 # The regions queried were:
-# - ap-northeast-1
-# - ap-northeast-2
-# - ap-northeast-3
-# - ap-south-1
-# - ap-southeast-1
-# - ap-southeast-2
-# - ca-central-1
-# - eu-central-1
-# - eu-north-1
 # - eu-west-1
-# - eu-west-2
-# - eu-west-3
-# - sa-east-1
 # - us-east-1
-# - us-east-2
-# - us-west-1
 # - us-west-2
 #
 # Mapping is calculated from AWS EC2 API using the following formula:
@@ -35,6 +8,10 @@
 # * +2 for the pods that use host-networking (AWS CNI and kube-proxy)
 #
 #   # of ENI * (# of IPv4 per ENI - 1) + 2
+#
+# Note: only one network card is supported, so use the MaximumNetworkInterfaces
+# from the default card if more than one is present
+# https://github.com/aws/amazon-vpc-cni-k8s/blob/4bd975383285cc9607f2bde3229bdefe2a44d815/scripts/gen_vpc_ip_limits.go#L162
 #
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI
 #
@@ -223,16 +200,14 @@ g5.8xlarge 234
 g5.xlarge 58
 g5g.16xlarge 737
 g5g.2xlarge 58
-g5g.4xlarge 234
+g5g.4xlarge 118
 g5g.8xlarge 234
 g5g.metal 737
-g5g.xlarge 58
+g5g.xlarge 44
 h1.16xlarge 737
 h1.2xlarge 58
 h1.4xlarge 234
 h1.8xlarge 234
-hpc6a.48xlarge 100
-hpc6id.32xlarge 51
 hs1.8xlarge 234
 i2.2xlarge 58
 i2.4xlarge 234
@@ -259,7 +234,7 @@ i4g.4xlarge 234
 i4g.8xlarge 234
 i4g.large 29
 i4g.xlarge 58
-i4i.16xlarge 737
+i4i.16xlarge 394
 i4i.2xlarge 58
 i4i.32xlarge 737
 i4i.4xlarge 234
