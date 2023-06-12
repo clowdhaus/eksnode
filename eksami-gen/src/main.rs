@@ -1,3 +1,5 @@
+//! Script-like crate for generating files used by `eksami` or image creation process
+
 use std::{
   collections::{btree_map, BTreeMap},
   env, fs,
@@ -25,7 +27,7 @@ struct Instance {
   maximum_pods: i32,
 }
 
-/// Get the EC2 client
+/// Construct and return the EC2 client
 async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
   let client = Client::from_conf(
     config::Builder::from(&config)
@@ -51,12 +53,6 @@ async fn get_instances(region: Region) -> Result<Vec<InstanceTypeInfo>> {
   Ok(results)
 }
 
-/// TODO - move to eksami
-fn calc_max_pods(network_interfaces: i32, ipv4_addresses: i32) -> i32 {
-  // # of ENI * (# of IPv4 per ENI - 1) + 2
-  network_interfaces * (ipv4_addresses - 1) + 2
-}
-
 /// Creates a manually generated map of instances that are missing or faulty
 ///
 /// https://github.com/aws/amazon-vpc-cni-k8s/blob/4bd975383285cc9607f2bde3229bdefe2a44d815/scripts/gen_vpc_ip_limits.go#L193
@@ -80,17 +76,24 @@ fn get_manual_instances() -> Result<BTreeMap<String, Instance>> {
       instance_storage_supported: inst.1,
       maximum_network_interfaces: inst.2,
       ipv4_addresses_per_interface: inst.3,
-      maximum_pods: calc_max_pods(inst.2, inst.3),
+      maximum_pods: calculate_eni_max_pods(inst.2, inst.3),
     };
     result.insert(instance_type, instance);
   }
   Ok(result)
 }
 
+/// Calculate the max number of pods an instance can theoretically support based on ENIs alone
+///
+/// num ENIs * (num of IPv4s per ENI - 1) + 2
+fn calculate_eni_max_pods(network_interfaces: i32, ipv4_addresses: i32) -> i32 {
+  network_interfaces * (ipv4_addresses - 1) + 2
+}
+
 /// Writes the max pods per instance type to text file
 ///
 /// This file will be copied to the instance when creating the AMI
-fn write_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>, cur_dir: &Path) -> Result<()> {
+fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>, cur_dir: &Path) -> Result<()> {
   let mut handlebars = Handlebars::new();
   let template = cur_dir.join("eksami-gen").join("templates").join("eni-max-pods.tpl");
   handlebars.register_template_file("tpl", template)?;
@@ -189,7 +192,7 @@ async fn main() -> Result<()> {
             instance_storage_supported: instance.instance_storage_supported.unwrap(),
             maximum_network_interfaces: network_interfaces,
             ipv4_addresses_per_interface: ipv4_addresses,
-            maximum_pods: calc_max_pods(network_interfaces, ipv4_addresses),
+            maximum_pods: calculate_eni_max_pods(network_interfaces, ipv4_addresses),
           };
           e.insert(inst);
         }
@@ -200,7 +203,7 @@ async fn main() -> Result<()> {
   // Generate files
   let cur_exe = env::current_exe()?;
   let cur_dir = cur_exe.parent().unwrap().parent().unwrap().parent().unwrap();
-  write_max_pods(&instances, regions, cur_dir)?;
+  write_eni_max_pods(&instances, regions, cur_dir)?;
   write_ec2_instances(&instances, cur_dir)?;
 
   Ok(())

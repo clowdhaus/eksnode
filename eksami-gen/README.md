@@ -1,6 +1,6 @@
 # eksami-gen
 
-Script-like crate for generating files used by `eksami`
+Script-like crate for generating files used by `eksami` or image creation process
 
 ## Usage
 

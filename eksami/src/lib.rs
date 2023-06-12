@@ -2,6 +2,7 @@ pub mod cli;
 pub mod ec2_instances;
 pub mod eks;
 pub mod fs;
+pub mod gpu;
 pub mod image;
 pub mod imds;
 pub mod resource;

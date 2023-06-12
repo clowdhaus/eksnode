@@ -3,7 +3,6 @@ use std::process;
 use anyhow::Result;
 use clap::Parser;
 use eksami::{Cli, Commands};
-use tracing::debug;
 use tracing_log::AsTrace;
 use tracing_subscriber::FmtSubscriber;
 
@@ -19,13 +18,11 @@ async fn main() -> Result<()> {
 
   match &cli.command {
     Commands::Bootstrap(bstrap) => match bstrap.run().await {
-      Ok(result) => debug!("{:#?}", result),
+      Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");
         process::exit(2);
       }
     },
   }
-
-  Ok(())
 }

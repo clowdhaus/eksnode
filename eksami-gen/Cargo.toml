@@ -2,7 +2,7 @@
 name = "eksami-gen"
 version = "0.1.0"
 authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
-description = "Script-like crate for generating files used by `eksami`"
+description = "Script-like crate for generating files used by `eksami` or image creation process"
 documentation = "https://github.com/clowdhaus/exp-amazon-eks-ami"
 homepage = "https://github.com/clowdhaus/exp-amazon-eks-ami"
 repository = "https://github.com/clowdhaus/exp-amazon-eks-ami"

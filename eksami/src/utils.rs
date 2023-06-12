@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use regex::Regex;
 use semver::Version;
 
@@ -11,14 +11,23 @@ pub fn get_semver(ver: &str) -> Result<Version> {
         let version = Version::parse(cap.as_str()).unwrap();
         Ok(version)
       }
-      None => Err(anyhow::anyhow!("Unable to parse version")),
+      None => Err(anyhow!("Unable to parse version")),
     },
-    None => Err(anyhow::anyhow!("Unable to parse version")),
+    None => Err(anyhow!("Unable to parse version")),
   };
 }
 
-pub fn get_kubelet_version() -> Result<Version> {
-  todo!();
+/// Execute a command and return the output (stdout)
+pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<String> {
+  let output = std::process::Command::new(cmd).args(args).output();
+
+  match output {
+    Ok(output) => {
+      let stdout = String::from_utf8_lossy(&output.stdout);
+      Ok(stdout.to_string())
+    }
+    Err(e) => Err(anyhow!("Error executing command {}: {}", cmd, e)),
+  }
 }
 
 #[cfg(test)]

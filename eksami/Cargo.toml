@@ -13,6 +13,12 @@ categories = [
   "kubernetes",
 ]
 
+default-run = "eksami"
+
+[[bin]]
+name = "eksami"
+path = "src/main.rs"
+
 [dependencies]
 anstyle = "1.0.0"
 anyhow = "1.0"

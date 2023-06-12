@@ -17,6 +17,7 @@
     - Introduce unit tests, snapshot tests, and various integration tests
     - CLI provides ability to run various commands both locally and on host all through same interface/executable
       - Bootstrap, calc max pods, collect logs, validate configs, etc.
+    - Improve troubleshooting through the use debug logging controlled by variable flag
 
 3. Provide a stable interface and better support for customization to override default values
     - Improved validation of input parameters
