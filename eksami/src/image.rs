@@ -1,10 +1,11 @@
 use anyhow::Result;
+use tracing::error;
 
 /// Get the ECR URI for the given region and domain
 ///
 /// More details about the mappings in this file can be found here
 /// https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html
-pub fn get_ecr_uri(region: &str, domain: &str) -> Result<String> {
+pub fn get_ecr_uri(region: &str, domain: &str, enable_fips: bool) -> Result<String> {
   let acct_id = match region {
     "af-south-1" => "877085696533",
     "ap-east-1" => "800184023465",
@@ -27,7 +28,14 @@ pub fn get_ecr_uri(region: &str, domain: &str) -> Result<String> {
     _ => "602401143452",
   };
 
-  let uri = format!("{acct_id}.dkr.ecr.{region}.{domain}");
+  if enable_fips && !region.starts_with("us-") {
+    error!("FIPS endpoints are only supported in US regions");
+  }
+
+  let uri = match enable_fips {
+    true => format!("{acct_id}.dkr.ecr-fips.{region}.{domain}"),
+    false => format!("{acct_id}.dkr.ecr.{region}.{domain}"),
+  };
 
   Ok(uri)
 }
@@ -38,13 +46,19 @@ mod tests {
 
   #[test]
   fn it_gets_ecr_uri_apeast1() {
-    let result = get_ecr_uri("ap-east-1", "amazonaws.com").unwrap();
+    let result = get_ecr_uri("ap-east-1", "amazonaws.com", false).unwrap();
     assert_eq!(result, "800184023465.dkr.ecr.ap-east-1.amazonaws.com");
   }
 
   #[test]
   fn it_gets_ecr_uri_default() {
-    let result = get_ecr_uri("us-east-1", "amazonaws.com").unwrap();
+    let result = get_ecr_uri("us-east-1", "amazonaws.com", false).unwrap();
     assert_eq!(result, "602401143452.dkr.ecr.us-east-1.amazonaws.com");
+  }
+
+  #[test]
+  fn it_gets_ecr_uri_fips() {
+    let result = get_ecr_uri("us-east-1", "amazonaws.com", true).unwrap();
+    assert_eq!(result, "602401143452.dkr.ecr-fips.us-east-1.amazonaws.com");
   }
 }

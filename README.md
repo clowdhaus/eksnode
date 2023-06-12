@@ -1,31 +1,27 @@
 # Experimental Amazon EKS AMI
 
-## Goals
+## Motivation
 
-1. Create AL2023 based EKS AMIs
-2. Ability to create EKS AMIs that are hardened against OpenSCAP baseline(s)/profile(s)
-3. Ability to routinely create and validate EKS AMIs using the Kubernetes conformance tests
+1. Fresh slate to build using the latest technologies
+  - AL2 AMI -> AL2023
+  - Cgroupsv1 -> Cgroupsv2
+  - Docker is removed and only containerd is considered
+  - Add https://github.com/awslabs/soci-snapshotter by default
 
-### MVP 1
+2. Improve the development process and increase confidence in changes
+  - Bash scripts -> Rust binary
+  - Introduce unit tests, snapshot tests, and various integration tests
+  - CLI provides ability to run various commands both locally and on host all through same interface/executable
+    - Bootstrap, calc max pods, collect logs, validate configs, etc.
 
-- [ ] Create AL2023 x86_64 & ARM64 EKS AMIs
-- [ ] Validate AMIs on simple test EKS cluster (simple checks - connects to control plane, can run daemonset, etc.)
+3. Provide a stable interface and better support for customization to override default values
+  - Improved validation of input parameters
+  - Support for customizing the AMI using a configuration file
+  - Allow users to specify which images they would like to have cached in the AMI
 
-### MVP 2
+4. The ability to generate multiple AMI types/configurations
+  - CIS compliant AMIs (default)
+  - STIG and FedRAMP compliant AMIs
+  - AMIs w/ GPU support (drivers and devices)
 
-- [ ] Able to scan EKS AMIs with OpenSCAP for CIS and STIG compliance
-  - [ ] Ansible playbook to run OpenSCAP scan
-  - [ ] Ansible playbook to harden
-  - [ ] Packer Ansible remote provisioner
-
-### MVP 3
-
-- [ ] Automation
-  - [ ] Build hardened AMI with OpenSCAP results
-  - [ ] Validate hardened AMI with Kubernetes conformance tests
-  - [ ] Generate SBOM for AMI
-
-### Misc
-
-- [ ] Use cgroups v2
-- [ ] Set max PIDs
+5. Support for generating SBOMs
