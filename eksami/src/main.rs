@@ -17,7 +17,14 @@ async fn main() -> Result<()> {
   tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
 
   match &cli.command {
-    Commands::Bootstrap(bstrap) => match bstrap.run().await {
+    Commands::Bootstrap(bstrap) => match bstrap.exec().await {
+      Ok(_) => Ok(()),
+      Err(err) => {
+        eprintln!("{err}");
+        process::exit(2);
+      }
+    },
+    Commands::CalcMaxPods(maxpods) => match maxpods.calc().await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");

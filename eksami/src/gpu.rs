@@ -52,8 +52,8 @@ fn get_nvidia_max_clock(clock_type: &NvidiaGpuClock) -> Result<i32> {
   }
 }
 
-pub fn enable_nvidia_gpu_boost() -> Result<()> {
-  info!("Enabling NVIDIA GPU Boost");
+pub fn set_nvidia_max_clock() -> Result<()> {
+  info!("Setting NVIDIA GPU to max clock");
 
   // Enable persistence mode - enabled first since it makes
   // nvidia-smi commands execute faster when enabled

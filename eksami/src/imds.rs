@@ -47,7 +47,7 @@ pub struct InstanceMetadata {
   pub instance_id: String,
 }
 
-/// Get the EC2 instance metadata
+/// Get data from the IMDS endpoint
 ///
 /// Collects the relevant metadata from IMDS used in bootstrapping
 pub async fn get_imds_data() -> Result<InstanceMetadata> {
@@ -55,8 +55,12 @@ pub async fn get_imds_data() -> Result<InstanceMetadata> {
   let region = client.get("/latest/meta-data/placement/region").await?;
   let domain = client.get("/latest/meta-data/services/domain").await?;
   let mac_address = client.get("/latest/meta-data/mac").await?;
-  let temp = format!("/latest/meta-data/network/interfaces/macs/{mac_address}/vpc-ipv4-cidr-blocks");
-  let vpc_ipv4_cidr_blocks = client.get(&temp).await.ok();
+  let vpc_ipv4_cidr_blocks = client
+    .get(&format!(
+      "/latest/meta-data/network/interfaces/macs/{mac_address}/vpc-ipv4-cidr-blocks"
+    ))
+    .await
+    .ok();
   let local_ipv4 = client.get("/latest/meta-data/local-ipv4").await.ok();
   let temp = format!("/latest/meta-data/network/interfaces/macs/{mac_address}/ipv6s");
   let ipv6_addresses = client.get(&temp).await.ok();
@@ -75,4 +79,12 @@ pub async fn get_imds_data() -> Result<InstanceMetadata> {
   };
 
   Ok(metadata)
+}
+
+/// Get the instance type from IMDS endpoint
+pub async fn get_instance_type() -> Result<String> {
+  let client = get_client().await?;
+  let instance_type = client.get("/latest/meta-data/instance-type").await?;
+
+  Ok(instance_type)
 }

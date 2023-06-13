@@ -14,6 +14,7 @@ use aws_sdk_ec2::{
   Client,
 };
 use aws_types::region::Region;
+use eksami::resource::calculate_eni_max_pods;
 use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -21,10 +22,26 @@ use tokio_stream::StreamExt;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Instance {
+  /// The default number of vCPUs for the instance
+  default_vcpus: i32,
+
+  /// The (theoretical) maximum number of pods
+  ///
+  /// This is based off the maximum number of ENIs and the
+  /// maximum number of IPv4 addresses per ENI
+  eni_maximum_pods: i32,
+
+  /// The hypervisor (nitro | xen | unknown)
+  hypervisor: String,
+
+  /// Indicates whether instance storage is supported
   instance_storage_supported: bool,
-  maximum_network_interfaces: i32,
+
+  /// The maximum number of IPv4 addresses per ENI
   ipv4_addresses_per_interface: i32,
-  maximum_pods: i32,
+
+  /// The maximum number of ENIs
+  maximum_network_interfaces: i32,
 }
 
 /// Construct and return the EC2 client
@@ -59,35 +76,30 @@ async fn get_instances(region: Region) -> Result<Vec<InstanceTypeInfo>> {
 fn get_manual_instances() -> Result<BTreeMap<String, Instance>> {
   let mut result = BTreeMap::new();
   for inst in vec![
-    ("cr1.8xlarge", false, 8, 30),
-    ("hs1.8xlarge", false, 8, 30),
-    ("u-12tb1.metal", false, 5, 30),
-    ("u-18tb1.metal", false, 15, 50),
-    ("u-24tb1.metal", false, 15, 50),
-    ("u-6tb1.metal", false, 5, 30),
-    ("u-9tb1.metal", false, 5, 30),
-    ("c5a.metal", false, 15, 50),
-    ("c5ad.metal", true, 15, 50),
-    ("p4de.24xlarge", true, 15, 50),
-    ("bmn-sf1.metal", false, 15, 50),
+    ("cr1.8xlarge", 32, "unknown", true, 30, 8),
+    ("hs1.8xlarge", 16, "unknown", true, 30, 8),
+    ("u-12tb1.metal", 448, "unknown", false, 30, 5),
+    ("u-18tb1.metal", 448, "unknown", false, 50, 15),
+    ("u-24tb1.metal", 448, "unknown", false, 50, 15),
+    ("u-6tb1.metal", 448, "unknown", false, 30, 5),
+    ("u-9tb1.metal", 448, "unknown", false, 30, 5),
+    ("c5a.metal", 96, "unknown", false, 50, 15),
+    ("c5ad.metal", 96, "unknown", true, 50, 15),
+    ("p4de.24xlarge", 96, "nitro", true, 50, 15),
+    ("bmn-sf1.metal", 1, "unknown", false, 50, 15),
   ] {
     let instance_type = inst.0.to_string();
     let instance = Instance {
-      instance_storage_supported: inst.1,
-      maximum_network_interfaces: inst.2,
-      ipv4_addresses_per_interface: inst.3,
-      maximum_pods: calculate_eni_max_pods(inst.2, inst.3),
+      default_vcpus: inst.1,
+      eni_maximum_pods: calculate_eni_max_pods(inst.5, inst.4, false),
+      hypervisor: inst.2.to_string(),
+      instance_storage_supported: inst.3,
+      ipv4_addresses_per_interface: inst.4,
+      maximum_network_interfaces: inst.5,
     };
     result.insert(instance_type, instance);
   }
   Ok(result)
-}
-
-/// Calculate the max number of pods an instance can theoretically support based on ENIs alone
-///
-/// num ENIs * (num of IPv4s per ENI - 1) + 2
-fn calculate_eni_max_pods(network_interfaces: i32, ipv4_addresses: i32) -> i32 {
-  network_interfaces * (ipv4_addresses - 1) + 2
 }
 
 /// Writes the max pods per instance type to text file
@@ -113,14 +125,14 @@ fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>
 ///
 /// This generates a static map that will be used by eksami to lookup instance details
 /// without the need to re-query the EC2 API
-fn write_ec2_instances(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -> Result<()> {
+fn write_ec2(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -> Result<()> {
   let mut handlebars = Handlebars::new();
-  let template = cur_dir.join("eksami-gen").join("templates").join("ec2_instances.tpl");
+  let template = cur_dir.join("eksami-gen").join("templates").join("ec2.tpl");
   handlebars.register_template_file("tpl", template)?;
 
   let data = json!({"instances": instances});
   let rendered = handlebars.render("tpl", &data)?;
-  let dest_path = cur_dir.join("eksami").join("src").join("ec2_instances.rs");
+  let dest_path = cur_dir.join("eksami").join("src").join("ec2.rs");
   fs::write(dest_path, rendered)?;
 
   Ok(())
@@ -128,12 +140,6 @@ fn write_ec2_instances(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -
 
 /// Generates the max pods per instance type file and the EC2 instance details file
 ///
-/// If running from eksami-gen directory:
-/// ```bash
-/// cargo run
-/// ```
-///
-/// If running from other locations within the project:
 /// ```bash
 /// cargo run --bin eksami-gen
 /// ```
@@ -189,10 +195,15 @@ async fn main() -> Result<()> {
             .unwrap();
 
           let inst = Instance {
+            default_vcpus: instance.v_cpu_info.unwrap().default_v_cpus().unwrap(),
+            eni_maximum_pods: calculate_eni_max_pods(network_interfaces, ipv4_addresses, false),
+            hypervisor: match instance.hypervisor {
+              Some(hypervisor) => hypervisor.as_str().to_owned(),
+              None => "unknown".to_string(),
+            },
             instance_storage_supported: instance.instance_storage_supported.unwrap(),
-            maximum_network_interfaces: network_interfaces,
             ipv4_addresses_per_interface: ipv4_addresses,
-            maximum_pods: calculate_eni_max_pods(network_interfaces, ipv4_addresses),
+            maximum_network_interfaces: network_interfaces,
           };
           e.insert(inst);
         }
@@ -204,7 +215,7 @@ async fn main() -> Result<()> {
   let cur_exe = env::current_exe()?;
   let cur_dir = cur_exe.parent().unwrap().parent().unwrap().parent().unwrap();
   write_eni_max_pods(&instances, regions, cur_dir)?;
-  write_ec2_instances(&instances, cur_dir)?;
+  write_ec2(&instances, cur_dir)?;
 
   Ok(())
 }
