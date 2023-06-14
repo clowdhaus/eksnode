@@ -149,11 +149,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-set +u
-set -- "${POSITIONAL[@]}" # restore positional parameters
-CLUSTER_NAME="$1"
-set -u
-
 KUBELET_VERSION=$(kubelet --version | grep -Eo '[0-9]\.[0-9]+\.[0-9]+')
 log "INFO: Using kubelet version $KUBELET_VERSION"
 
@@ -169,21 +164,6 @@ if [[ ! -z ${LOCAL_DISKS} ]]; then
   setup-local-disks "${LOCAL_DISKS}"
 fi
 
-if [[ ! -z "${IP_FAMILY}" ]]; then
-  IP_FAMILY="$(tr [A-Z] [a-z] <<< "$IP_FAMILY")"
-  if [[ "${IP_FAMILY}" != "ipv4" ]] && [[ "${IP_FAMILY}" != "ipv6" ]]; then
-    log "ERROR: Invalid --ip-family. Only ipv4 or ipv6 are allowed"
-    exit 1
-  fi
-fi
-
-if [[ ! -z "${SERVICE_IPV6_CIDR}" ]]; then
-  if [[ "${IP_FAMILY}" == "ipv4" ]]; then
-    log "ERROR: --ip-family should be ipv6 when --service-ipv6-cidr is specified"
-    exit 1
-  fi
-  IP_FAMILY="ipv6"
-fi
 
 AWS_DEFAULT_REGION=$(imds 'latest/dynamic/instance-identity/document' | jq .region -r)
 AWS_SERVICES_DOMAIN=$(imds 'latest/meta-data/services/domain')

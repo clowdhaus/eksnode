@@ -22,7 +22,7 @@ pub async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
 }
 
 /// Describe the cluster to get its full details
-pub async fn get_cluster(client: &Client, name: &str) -> Result<Cluster> {
+pub async fn describe_cluster(client: &Client, name: &str) -> Result<Cluster> {
   let request = client.describe_cluster().name(name);
   let response = match request.send().await {
     Ok(response) => response,

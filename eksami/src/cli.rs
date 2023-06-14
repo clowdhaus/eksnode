@@ -96,8 +96,8 @@ pub struct Bootstrap {
   enable_local_outpost: bool,
 
   /// Specify ip family of the cluster
-  #[arg(long)]
-  ip_family: Option<String>,
+  #[arg(long, value_enum)]
+  ip_family: Option<IpvFamily>,
 
   /// Extra arguments to add to the kubelet
   ///
@@ -109,9 +109,9 @@ pub struct Bootstrap {
   #[arg(long, value_enum)]
   local_disks: Option<LocalDisks>,
 
-  /// Mount a bpffs at /sys/fs/bpf (default: true)
+  /// Mount a bpf filesystem at /sys/fs/bpf (default: true)
   #[arg(long, default_value = "true")]
-  mount_bfs_fs: bool,
+  mount_bpf_fs: bool,
 
   /// The AWS account (number) to pull the pause container from
   #[arg(long)]
@@ -130,9 +130,41 @@ pub struct Bootstrap {
   use_max_pods: bool,
 }
 
+#[derive(Clone, Debug, ValueEnum, Serialize, Deserialize)]
+pub enum IpvFamily {
+  Ipv4,
+  Ipv6,
+}
+
+impl Default for IpvFamily {
+  fn default() -> Self {
+    Self::Ipv4
+  }
+}
+
+#[derive(Clone, Debug, ValueEnum, Serialize, Deserialize)]
+pub enum LocalDisks {
+  /// Mount local disks individually
+  Mount,
+  /// Mount local disk in a raid0 configuration
+  Raid0,
+}
+
+impl Default for LocalDisks {
+  fn default() -> Self {
+    Self::Raid0
+  }
+}
+
 impl Bootstrap {
   pub async fn exec(&self) -> Result<()> {
-    // crate::imds::get_imds_data().await?;
+    if let Some(IpvFamily::Ipv6) = self.ip_family {
+      if self.service_ipv6_cidr.is_none() {
+        return Err(anyhow!(
+          "--service-ipv6-cidr must be specified when using --ip-family ipv6"
+        ));
+      }
+    }
 
     Ok(())
   }
@@ -204,20 +236,6 @@ impl MaxPods {
     println!("{result}");
 
     Ok(())
-  }
-}
-
-#[derive(Clone, Debug, ValueEnum, Serialize, Deserialize)]
-pub enum LocalDisks {
-  /// Mount local disks individually
-  Mount,
-  /// Mount local disk in a raid0 configuration
-  Raid0,
-}
-
-impl Default for LocalDisks {
-  fn default() -> Self {
-    Self::Raid0
   }
 }
 
