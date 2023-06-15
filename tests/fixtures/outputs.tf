@@ -5,5 +5,5 @@ output "ssh_connect" {
 
 output "scp_cmd" {
   description = "SCP command to copy files to remote host"
-  value       = "scp -i ${module.key_pair.key_pair_name}.pem -r ../../cli ec2-user@${module.ec2.public_dns}:~/"
+  value       = "scp -i ${module.key_pair.key_pair_name}.pem -r ../../eksami ec2-user@${module.ec2.public_dns}:~/"
 }

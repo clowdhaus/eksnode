@@ -242,13 +242,6 @@ if [[ -z "${B64_CLUSTER_CA}" ]] || [[ -z "${APISERVER_ENDPOINT}" ]]; then
   fi
 fi
 
-if [[ -z "${IP_FAMILY}" ]] || [[ "${IP_FAMILY}" == "None" ]]; then
-  ### this can happen when the ipFamily field is not found in describeCluster response
-  ### or B64_CLUSTER_CA and APISERVER_ENDPOINT are defined but IPFamily isn't
-  IP_FAMILY="ipv4"
-fi
-
-log "INFO: Using IP family: ${IP_FAMILY}"
 
 echo $B64_CLUSTER_CA | base64 -d > $CA_CERTIFICATE_FILE_PATH
 
@@ -296,31 +289,6 @@ fi
 ### kubelet.service configuration
 
 MAC=$(imds 'latest/meta-data/mac')
-
-if [[ -z "${DNS_CLUSTER_IP}" ]]; then
-  if [[ "${IP_FAMILY}" == "ipv6" ]]; then
-    if [[ -z "${SERVICE_IPV6_CIDR}" ]]; then
-      log "ERROR: One of --service-ipv6-cidr or --dns-cluster-ip must be provided when --ip-family is ipv6"
-      exit 1
-    fi
-    DNS_CLUSTER_IP=$(awk -F/ '{print $1}' <<< $SERVICE_IPV6_CIDR)a
-  fi
-
-  if [[ "${IP_FAMILY}" == "ipv4" ]]; then
-    if [[ ! -z "${SERVICE_IPV4_CIDR}" ]] && [[ "${SERVICE_IPV4_CIDR}" != "None" ]]; then
-      #Sets the DNS Cluster IP address that would be chosen from the serviceIpv4Cidr. (x.y.z.10)
-      DNS_CLUSTER_IP=${SERVICE_IPV4_CIDR%.*}.10
-    else
-      TEN_RANGE=$(imds "latest/meta-data/network/interfaces/macs/$MAC/vpc-ipv4-cidr-blocks" | grep -c '^10\..*' || true)
-      DNS_CLUSTER_IP=10.100.0.10
-      if [[ "$TEN_RANGE" != "0" ]]; then
-        DNS_CLUSTER_IP=172.20.0.10
-      fi
-    fi
-  fi
-else
-  DNS_CLUSTER_IP="${DNS_CLUSTER_IP}"
-fi
 
 KUBELET_CONFIG=/etc/kubernetes/kubelet/kubelet-config.json
 echo "$(jq ".clusterDNS=[\"$DNS_CLUSTER_IP\"]" $KUBELET_CONFIG)" > $KUBELET_CONFIG

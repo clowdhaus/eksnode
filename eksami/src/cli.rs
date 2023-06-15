@@ -1,9 +1,12 @@
+use std::net::IpAddr;
+
 use anyhow::{anyhow, Result};
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
+use ipnet::IpNet;
 use serde::{Deserialize, Serialize};
 
-use crate::{ec2, resource};
+use crate::{ec2, eks, resource};
 
 /// Styles for CLI
 fn get_styles() -> clap::builder::Styles {
@@ -63,71 +66,67 @@ pub struct Bootstrap {
   ///
   /// Only valid when used with --b64-cluster-ca. Bypasses calling "aws eks describe-cluster"
   #[arg(long)]
-  apiserver_endpoint: Option<String>,
+  pub apiserver_endpoint: Option<String>,
 
   /// The base64 encoded cluster CA content
   ///
   /// Only valid when used with --apiserver-endpoint. Bypasses calling "aws eks describe-cluster"
   #[arg(long)]
-  b64_cluster_ca: Option<String>,
+  pub b64_cluster_ca: Option<String>,
 
   /// The name of the EKS cluster
   #[arg(long)]
-  cluster_name: String,
+  pub cluster_name: String,
 
   /// File containing the containerd configuration to be used in place of AMI defaults
   #[arg(long)]
-  containerd_config_file: Option<String>,
+  pub containerd_config_file: Option<String>,
 
   /// Overrides the IP address to use for DNS queries within the cluster
   ///
   /// Defaults to 10.100.0.10 or 172.20.0.10 based on the IP address of the primary interface
   #[arg(long)]
-  dns_cluster_ip: Option<String>,
+  pub dns_cluster_ip: Option<IpAddr>,
 
   /// Execute the bootstrap process without making any changes to the system
   ///
   /// Useful for debugging - will display changes that are intended to be made during bootstrapping
   #[arg(long)]
-  dry_run: bool,
+  pub dry_run: bool,
 
-  /// Enable support for worker nodes to communicate with the local control plane when running on a disconnected Outpost
+  /// Specifies cluster is a local cluster on Outpost
   #[arg(long)]
-  enable_local_outpost: bool,
+  pub is_local_cluster: bool,
 
   /// Specify ip family of the cluster
-  #[arg(long, value_enum)]
-  ip_family: Option<IpvFamily>,
+  #[arg(long, value_enum, default_value_t)]
+  pub ip_family: IpvFamily,
 
   /// Extra arguments to add to the kubelet
   ///
   /// Useful for adding labels or taints
   #[arg(long)]
-  kubelet_extra_args: Option<String>,
+  pub kubelet_extra_args: Option<String>,
 
   /// Setup instance storage NVMe disks in raid0 or mount the individual disks for use by pods
   #[arg(long, value_enum)]
-  local_disks: Option<LocalDisks>,
+  pub local_disks: Option<LocalDisks>,
 
   /// Mount a bpf filesystem at /sys/fs/bpf (default: true)
   #[arg(long, default_value = "true")]
-  mount_bpf_fs: bool,
+  pub mount_bpf_fs: bool,
 
-  /// The AWS account (number) to pull the pause container from
+  /// The pause container image <registry>:<tag/version>
   #[arg(long)]
-  pause_container_account: Option<String>,
+  pub pause_container_image: Option<String>,
 
-  /// The tag of the pause container
-  #[arg(long, default_value = "3.5")]
-  pause_container_version: Option<String>,
-
-  /// IPv6 CIDR range of the cluster
+  /// IPv4 or IPv6 CIDR range of the cluster
   #[arg(long)]
-  service_ipv6_cidr: Option<String>,
+  pub service_cidr: Option<IpNet>,
 
   /// Sets --max-pods for the kubelet when true (default: true)
   #[arg(long, default_value = "true")]
-  use_max_pods: bool,
+  pub use_max_pods: bool,
 }
 
 #[derive(Clone, Debug, ValueEnum, Serialize, Deserialize)]
@@ -158,13 +157,12 @@ impl Default for LocalDisks {
 
 impl Bootstrap {
   pub async fn exec(&self) -> Result<()> {
-    if let Some(IpvFamily::Ipv6) = self.ip_family {
-      if self.service_ipv6_cidr.is_none() {
-        return Err(anyhow!(
-          "--service-ipv6-cidr must be specified when using --ip-family ipv6"
-        ));
-      }
-    }
+    let config = crate::get_sdk_config(None).await?;
+    let imds_data = crate::imds::get_imds_data().await?;
+    println!("{:#?}", imds_data);
+
+    let cluster_boostrap = eks::collect_or_get_cluster_bootstrap(config, self, &imds_data.vpc_ipv4_cidr_blocks).await?;
+    println!("{:#?}", cluster_boostrap);
 
     Ok(())
   }
@@ -241,8 +239,7 @@ impl MaxPods {
 
 #[cfg(test)]
 mod tests {
-  // use super::*;
-
+  use assert_cmd::prelude::*;
   use rstest::*;
 
   #[rstest]
@@ -429,7 +426,15 @@ mod tests {
     #[case] prefix_delegation: bool,
     #[case] expected: String,
   ) {
-    let mut cmd = assert_cmd::Command::cargo_bin("eksami").unwrap();
+    let bin_under_test = escargot::CargoBuild::new()
+      .bin("eksami")
+      .current_release()
+      .current_target()
+      .run()
+      .unwrap();
+
+    let mut cmd = bin_under_test.command();
+
     cmd
       .arg("calc-max-pods")
       .arg("--instance-type")
