@@ -4,6 +4,7 @@ pub mod eks;
 pub mod gpu;
 pub mod image;
 pub mod imds;
+pub mod kubelet;
 pub mod resource;
 pub mod utils;
 

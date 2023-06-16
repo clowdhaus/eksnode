@@ -42,6 +42,7 @@ tracing-log = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 [dev-dependencies]
-rstest = "0.17"
 assert_cmd = "2.0"
 escargot = "0.5"
+insta = "1.29"
+rstest = "0.17"
