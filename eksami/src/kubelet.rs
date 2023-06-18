@@ -1,4 +1,9 @@
-use std::{collections::BTreeMap, fs::File, io::BufReader, path::Path};
+use std::{
+  collections::BTreeMap,
+  fs::File,
+  io::{BufReader, BufWriter},
+  path::Path,
+};
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -719,12 +724,20 @@ pub struct KubeletConfiguration {
 }
 
 impl KubeletConfiguration {
-  pub fn load_from_file<P: AsRef<Path>>(path: P) -> Result<Self> {
+  pub fn load<P: AsRef<Path>>(path: P) -> Result<Self> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
     let conf: KubeletConfiguration = serde_json::from_reader(reader)?;
 
     Ok(conf)
+  }
+
+  pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
+    let file = File::create(path)?;
+    let writer = BufWriter::new(file);
+    serde_json::to_writer_pretty(writer, self)?;
+
+    Ok(())
   }
 }
 
