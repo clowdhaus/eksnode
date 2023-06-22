@@ -924,7 +924,7 @@ mod tests {
   use super::*;
 
   #[test]
-  fn it_serializes_kubelete_config() {
+  fn it_serializes_kubelet_config() {
     let config = r###"{
       "kind": "KubeletConfiguration",
       "apiVersion": "kubelet.config.k8s.io/v1",

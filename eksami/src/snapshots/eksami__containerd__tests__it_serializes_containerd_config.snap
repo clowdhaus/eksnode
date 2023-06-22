@@ -1,0 +1,68 @@
+---
+source: eksami/src/containerd.rs
+expression: deserialized
+---
+ContainerdConfiguration {
+    version: 2,
+    root: Some(
+        "/var/lib/containerd",
+    ),
+    state: Some(
+        "/run/containerd",
+    ),
+    temp_dir: None,
+    plugin_dir: None,
+    grpc: Some(
+        GrpcConfig {
+            address: Some(
+                "/run/containerd/containerd.sock",
+            ),
+            tcp_address: None,
+            tcp_tls_ca: None,
+            tcp_tls_cert: None,
+            tcp_tls_key: None,
+            uid: None,
+            gid: None,
+            max_recv_message_size: None,
+            max_send_message_size: None,
+        },
+    ),
+    ttrpc: None,
+    debug: None,
+    metrics: None,
+    disabled_plugins: [],
+    required_plugins: [],
+    plugins: Some(
+        {
+            "plugins": Object {
+                "io.containerd.grpc.v1.cri": Object {
+                    "cni": Object {
+                        "bin_dir": String("/opt/cni/bin"),
+                        "conf_dir": String("/etc/cni/net.d"),
+                    },
+                    "containerd": Object {
+                        "default_runtime_name": String("runc"),
+                        "runtimes": Object {
+                            "runc": Object {
+                                "options": Object {
+                                    "SystemdCgroup": Bool(true),
+                                },
+                                "runtime_type": String("io.containerd.runc.v2"),
+                            },
+                        },
+                    },
+                    "registry": Object {
+                        "config_path": String("/etc/containerd/certs.d:/etc/docker/certs.d"),
+                    },
+                    "sandbox_image": String("SANDBOX_IMAGE"),
+                },
+            },
+        },
+    ),
+    oom_score: None,
+    cgroup: None,
+    proxy_plugins: None,
+    timeouts: None,
+    imports: [],
+    stream_processors: None,
+}

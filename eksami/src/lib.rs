@@ -1,4 +1,5 @@
 pub mod cli;
+pub mod containerd;
 pub mod ec2;
 pub mod eks;
 pub mod gpu;
