@@ -1577,11 +1577,11 @@ pub static INSTANCES: phf::Map<&'static str, Instance> = phf_map! {
   },
   "g5g.4xlarge" => Instance {
     default_vcpus: 16,
-    eni_maximum_pods: 118,
+    eni_maximum_pods: 234,
     hypervisor: "nitro",
     instance_storage_supported: false,
     ipv4_addresses_per_interface: 30,
-    maximum_network_interfaces: 4,
+    maximum_network_interfaces: 8,
   },
   "g5g.8xlarge" => Instance {
     default_vcpus: 32,
@@ -1601,11 +1601,11 @@ pub static INSTANCES: phf::Map<&'static str, Instance> = phf_map! {
   },
   "g5g.xlarge" => Instance {
     default_vcpus: 4,
-    eni_maximum_pods: 44,
+    eni_maximum_pods: 58,
     hypervisor: "nitro",
     instance_storage_supported: false,
     ipv4_addresses_per_interface: 15,
-    maximum_network_interfaces: 3,
+    maximum_network_interfaces: 4,
   },
   "h1.16xlarge" => Instance {
     default_vcpus: 64,
@@ -1873,11 +1873,11 @@ pub static INSTANCES: phf::Map<&'static str, Instance> = phf_map! {
   },
   "i4i.16xlarge" => Instance {
     default_vcpus: 64,
-    eni_maximum_pods: 394,
+    eni_maximum_pods: 737,
     hypervisor: "nitro",
     instance_storage_supported: true,
     ipv4_addresses_per_interface: 50,
-    maximum_network_interfaces: 8,
+    maximum_network_interfaces: 15,
   },
   "i4i.2xlarge" => Instance {
     default_vcpus: 8,
