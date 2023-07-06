@@ -88,7 +88,7 @@ pub struct MaxPods {
 }
 
 impl MaxPods {
-  pub async fn calc(&self) -> Result<()> {
+  pub async fn calc(&self) -> Result<i32> {
     let instance_type = if self.instance_type_from_imds {
       crate::imds::get_instance_type().await?
     } else {
@@ -122,7 +122,7 @@ impl MaxPods {
 
     println!("{result}");
 
-    Ok(())
+    Ok(result)
   }
 }
 
