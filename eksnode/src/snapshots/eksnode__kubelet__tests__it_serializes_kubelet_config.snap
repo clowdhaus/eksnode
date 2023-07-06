@@ -1,5 +1,5 @@
 ---
-source: eksami/src/kubelet.rs
+source: eksnode/src/kubelet.rs
 expression: deserialized
 ---
 KubeletConfiguration {

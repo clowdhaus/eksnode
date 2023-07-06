@@ -1,5 +1,5 @@
 ---
-source: eksami/src/containerd.rs
+source: eksnode/src/containerd.rs
 expression: deserialized
 ---
 ContainerdConfiguration {

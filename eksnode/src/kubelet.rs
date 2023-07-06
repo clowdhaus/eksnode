@@ -9,6 +9,9 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 /// KubeletConfiguration contains the configuration for the Kubelet
+///
+/// https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/
+/// https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct KubeletConfiguration {
@@ -925,7 +928,7 @@ mod tests {
 
   #[test]
   fn it_serializes_kubelet_config() {
-    let config = r###"{
+    let config = r#"{
       "kind": "KubeletConfiguration",
       "apiVersion": "kubelet.config.k8s.io/v1",
       "address": "0.0.0.0",
@@ -970,7 +973,7 @@ mod tests {
         "TLS_RSA_WITH_AES_256_GCM_SHA384",
         "TLS_RSA_WITH_AES_128_GCM_SHA256"
       ]
-    }"###;
+    }"#;
 
     let deserialized: KubeletConfiguration = serde_json::from_str(config).unwrap();
     insta::assert_debug_snapshot!(deserialized);

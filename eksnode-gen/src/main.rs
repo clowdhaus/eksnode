@@ -1,4 +1,4 @@
-//! Script-like crate for generating files used by `eksami` or image creation process
+//! Script-like crate for generating files used by `eksnode` or image creation process
 
 use std::{
   collections::{btree_map, BTreeMap},
@@ -14,7 +14,7 @@ use aws_sdk_ec2::{
   Client,
 };
 use aws_types::region::Region;
-use eksami::resource::calculate_eni_max_pods;
+use eksnode::resource::calculate_eni_max_pods;
 use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -107,7 +107,7 @@ fn get_manual_instances() -> Result<BTreeMap<String, Instance>> {
 /// This file will be copied to the instance when creating the AMI
 fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>, cur_dir: &Path) -> Result<()> {
   let mut handlebars = Handlebars::new();
-  let template = cur_dir.join("eksami-gen").join("templates").join("eni-max-pods.tpl");
+  let template = cur_dir.join("eksnode-gen").join("templates").join("eni-max-pods.tpl");
   handlebars.register_template_file("tpl", template)?;
 
   let data = json!({
@@ -123,16 +123,16 @@ fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>
 
 /// Writes the EC2 instance details collected to a rust file
 ///
-/// This generates a static map that will be used by eksami to lookup instance details
+/// This generates a static map that will be used by eksnode to lookup instance details
 /// without the need to re-query the EC2 API
 fn write_ec2(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -> Result<()> {
   let mut handlebars = Handlebars::new();
-  let template = cur_dir.join("eksami-gen").join("templates").join("ec2.tpl");
+  let template = cur_dir.join("eksnode-gen").join("templates").join("ec2.tpl");
   handlebars.register_template_file("tpl", template)?;
 
   let data = json!({"instances": instances});
   let rendered = handlebars.render("tpl", &data)?;
-  let dest_path = cur_dir.join("eksami").join("src").join("ec2.rs");
+  let dest_path = cur_dir.join("eksnode").join("src").join("ec2.rs");
   fs::write(dest_path, rendered)?;
 
   Ok(())
@@ -141,7 +141,7 @@ fn write_ec2(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -> Result<(
 /// Generates the max pods per instance type file and the EC2 instance details file
 ///
 /// ```bash
-/// cargo run --bin eksami-gen
+/// cargo run --bin eksnode-gen
 /// ```
 ///
 /// Based off of the VPC CNI go equivalent:

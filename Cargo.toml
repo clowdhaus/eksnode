@@ -1,7 +1,7 @@
 [workspace]
 members = [
-    "eksami",
-    "eksami-gen",
+    "eksnode",
+    "eksnode-gen",
 ]
 resolver = "2"
 

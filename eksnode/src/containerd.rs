@@ -195,7 +195,7 @@ mod tests {
 
   #[test]
   fn it_serializes_containerd_config() {
-    let config = r###"
+    let config = r#"
     version = 2
     root = "/var/lib/containerd"
     state = "/run/containerd"
@@ -221,7 +221,7 @@ mod tests {
     [plugins."io.containerd.grpc.v1.cri".cni]
     bin_dir = "/opt/cni/bin"
     conf_dir = "/etc/cni/net.d"
-    "###;
+    "#;
 
     let deserialized: ContainerdConfiguration = toml::from_str(config).unwrap();
     insta::assert_debug_snapshot!(deserialized);

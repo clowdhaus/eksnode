@@ -18,7 +18,7 @@ provider "aws" {
 ################################################################################
 
 locals {
-  name        = "exp-amazon-eks-ami"
+  name        = "eksnode"
   region      = "us-east-1"
   environment = "nonprod"
 

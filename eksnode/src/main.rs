@@ -2,7 +2,7 @@ use std::process;
 
 use anyhow::Result;
 use clap::Parser;
-use eksami::{Cli, Commands};
+use eksnode::{Cli, Commands};
 use tracing_log::AsTrace;
 use tracing_subscriber::FmtSubscriber;
 

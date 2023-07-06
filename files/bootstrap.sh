@@ -4,16 +4,6 @@ set -o pipefail
 set -o nounset
 set -o errexit
 
-err_report() {
-  echo "Exited with error on line $1"
-}
-trap 'err_report $LINENO' ERR
-
-IFS=$'\n\t'
-
-# mute stdout from vercmp
-export VERCMP_QUIET=true
-
 function print_help {
   echo "usage: $0 [options] <cluster-name>"
   echo "Bootstraps an instance into an EKS cluster"
@@ -36,14 +26,6 @@ function print_help {
   echo "--service-ipv6-cidr ipv6 cidr range of the cluster"
   echo "--use-max-pods Sets --max-pods for the kubelet when true. (default: true)"
 }
-
-function log {
-  echo >&2 "$(date '+%Y-%m-%dT%H:%M:%S%z')" "[eks-bootstrap]" "$@"
-}
-
-log "INFO: starting..."
-
-POSITIONAL=()
 
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -164,19 +146,8 @@ if [[ ! -z ${LOCAL_DISKS} ]]; then
   setup-local-disks "${LOCAL_DISKS}"
 fi
 
-
 AWS_DEFAULT_REGION=$(imds 'latest/dynamic/instance-identity/document' | jq .region -r)
 AWS_SERVICES_DOMAIN=$(imds 'latest/meta-data/services/domain')
-
-MACHINE=$(uname -m)
-if [[ "$MACHINE" != "x86_64" && "$MACHINE" != "aarch64" ]]; then
-  log "ERROR: Unknown machine architecture: '$MACHINE'"
-  exit 1
-fi
-
-if [ "$MOUNT_BPF_FS" = "true" ]; then
-  sudo mount-bpf-fs
-fi
 
 ECR_URI=$(/etc/eks/get-ecr-uri.sh "${AWS_DEFAULT_REGION}" "${AWS_SERVICES_DOMAIN}" "${PAUSE_CONTAINER_ACCOUNT:-}")
 PAUSE_CONTAINER_IMAGE=${PAUSE_CONTAINER_IMAGE:-$ECR_URI/eks/pause}
@@ -241,7 +212,6 @@ if [[ -z "${B64_CLUSTER_CA}" ]] || [[ -z "${APISERVER_ENDPOINT}" ]]; then
     CLUSTER_ID=${CLUSTER_ID_IN_DESCRIBE_CLUSTER_RESULT}
   fi
 fi
-
 
 echo $B64_CLUSTER_CA | base64 -d > $CA_CERTIFICATE_FILE_PATH
 

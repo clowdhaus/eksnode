@@ -427,7 +427,7 @@ mod tests {
     #[case] expected: String,
   ) {
     let bin_under_test = escargot::CargoBuild::new()
-      .bin("eksami")
+      .bin("eksnode")
       .current_release()
       .current_target()
       .run()

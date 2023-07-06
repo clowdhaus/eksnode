@@ -1,11 +1,11 @@
 [package]
-name = "eksami-gen"
+name = "eksnode-gen"
 version = "0.1.0"
 authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
-description = "Script-like crate for generating files used by `eksami` or image creation process"
-documentation = "https://github.com/clowdhaus/exp-amazon-eks-ami"
-homepage = "https://github.com/clowdhaus/exp-amazon-eks-ami"
-repository = "https://github.com/clowdhaus/exp-amazon-eks-ami"
+description = "Script-like crate for generating files used by `eksnode` or image creation process"
+documentation = "https://github.com/clowdhaus/eksnode"
+homepage = "https://github.com/clowdhaus/eksnode"
+repository = "https://github.com/clowdhaus/eksnode"
 license = "Apache-2.0"
 edition = "2021"
 categories = [
@@ -18,7 +18,7 @@ anyhow = "1.0"
 aws-config = "0.55"
 aws-sdk-ec2 = "0.28"
 aws-types = "0.55"
-eksami = { path = "../eksami", version ="*"}
+eksnode = { path = "../eksnode", version ="*"}
 handlebars = "4.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
