@@ -115,7 +115,7 @@ fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>
     "instances": instances,
   });
   let rendered = handlebars.render("tpl", &data)?;
-  let dest_path = cur_dir.join("files").join("eni-max-pods.txt");
+  let dest_path = cur_dir.join("ami").join("files").join("eni-max-pods.txt");
   fs::write(dest_path, rendered)?;
 
   Ok(())

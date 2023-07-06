@@ -727,7 +727,7 @@ pub struct KubeletConfiguration {
 }
 
 impl KubeletConfiguration {
-  pub fn load<P: AsRef<Path>>(path: P) -> Result<Self> {
+  pub fn read<P: AsRef<Path>>(path: P) -> Result<Self> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
     let conf: KubeletConfiguration = serde_json::from_reader(reader)?;

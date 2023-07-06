@@ -9,3 +9,8 @@ repos:
     hooks:
       - id: check-merge-conflict
       - id: end-of-file-fixer
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.16.0"
+    hooks:
+      - id: terraform-docs-go
+        args: ["markdown", "./ami", "--output-file", "README.md"]
