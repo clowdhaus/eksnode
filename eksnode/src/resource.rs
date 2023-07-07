@@ -12,10 +12,11 @@ pub fn memory_mebibytes_to_reserve(max_pods: i32) -> Result<i32> {
   Ok(reserve)
 }
 
-/// Calculates the amount of CPU to reserve for kubeReserved in millicores (mCPU) from the total number of vCPUs available on the instance
+/// Calculates the amount of CPU to reserve for kubeReserved in millicores (mCPU) from the total number of vCPUs
+/// available on the instance
 ///
-/// From the total core capacity of this worker node, we calculate the CPU resources to reserve by reserving a percentage
-/// of the available cores in each range up to the total number of cores available on the instance.
+/// From the total core capacity of this worker node, we calculate the CPU resources to reserve by reserving a
+/// percentage of the available cores in each range up to the total number of cores available on the instance.
 /// 6% of the first core
 /// 1% of the next core (up to 2 cores)
 /// 0.5% of the next 2 cores (up to 4 cores)

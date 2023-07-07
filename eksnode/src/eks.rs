@@ -55,8 +55,7 @@ fn ipv6_dns_ip_address(addr: Ipv6Addr) -> Result<Ipv6Addr> {
 /// When --ip-family ipv4 (default):
 /// - If --service-cidr is supplied, return x.x.x.10 address from the CIDR
 /// - If --service-cidr is not supplied, return x.x.x.10 address from the instance metadata
-///   - Querying IMDS vpc-ipv4-cidr-blocks, if 10.x.x.x/x net is found, use 10.100.0.10
-///     otherwise 172.20.0.10 is used
+///   - Querying IMDS vpc-ipv4-cidr-blocks, if 10.x.x.x/x net is found, use 10.100.0.10 otherwise 172.20.0.10 is used
 ///
 /// When --ip-family ipv6:
 /// --service-cidr is required, return :::a address from the CIDR

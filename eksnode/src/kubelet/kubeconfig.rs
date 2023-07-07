@@ -99,7 +99,7 @@ impl KubeConfig {
   pub fn read<P: AsRef<Path>>(path: P) -> Result<Self> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
-    let conf: KubeConfig = serde_json::from_reader(reader)?;
+    let conf: KubeConfig = serde_yaml::from_reader(reader)?;
 
     Ok(conf)
   }
@@ -107,9 +107,7 @@ impl KubeConfig {
   pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
     let file = File::create(path)?;
     let writer = BufWriter::new(file);
-    serde_yaml::to_writer(writer, self)?;
-
-    Ok(())
+    serde_yaml::to_writer(writer, self).map_err(anyhow::Error::from)
   }
 }
 
@@ -247,7 +245,8 @@ struct AuthInfo {
   #[serde(skip_serializing_if = "Option::is_none")]
   token: Option<String>,
 
-  /// TokenFile is a pointer to a file that contains a bearer token (as described above). If both Token and TokenFile are present, Token takes precedence
+  /// TokenFile is a pointer to a file that contains a bearer token (as described above). If both Token and TokenFile
+  /// are present, Token takes precedence
   #[serde(skip_serializing_if = "Option::is_none")]
   token_file: Option<PathBuf>,
 

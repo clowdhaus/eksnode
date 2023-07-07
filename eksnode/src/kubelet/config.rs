@@ -279,13 +279,10 @@ pub struct KubeletConfiguration {
   /// topologyManagerPolicy is the name of the topology manager policy to use.
   /// Valid values include:
   ///
-  /// - `restricted`: kubelet only allows pods with optimal NUMA node alignment for
-  ///   requested resources;
-  /// - `best-effort`: kubelet will favor pods with NUMA alignment of CPU and device
-  ///   resources;
+  /// - `restricted`: kubelet only allows pods with optimal NUMA node alignment for requested resources;
+  /// - `best-effort`: kubelet will favor pods with NUMA alignment of CPU and device resources;
   /// - `none`: kubelet has no knowledge of NUMA alignment of a pod's CPU and device resources.
-  /// - `single-numa-node`: kubelet only allows pods with a single NUMA alignment
-  ///   of CPU and device resources.
+  /// - `single-numa-node`: kubelet only allows pods with a single NUMA alignment of CPU and device resources.
   #[serde(skip_serializing_if = "Option::is_none")]
   topology_manager_policy: Option<String>,
 
@@ -630,12 +627,9 @@ pub struct KubeletConfiguration {
   /// shutdown, and all remaining pods 30s to shutdown.
   ///
   /// shutdownGracePeriodByPodPriority:
-  ///   - priority: 2000000000
-  ///     shutdownGracePeriodSeconds: 10
-  ///   - priority: 10000
-  ///     shutdownGracePeriodSeconds: 20
-  ///   - priority: 0
-  ///     shutdownGracePeriodSeconds: 30
+  ///   - priority: 2000000000 shutdownGracePeriodSeconds: 10
+  ///   - priority: 10000 shutdownGracePeriodSeconds: 20
+  ///   - priority: 0 shutdownGracePeriodSeconds: 30
   ///
   /// The time the Kubelet will wait before exiting will at most be the maximum of all
   /// shutdownGracePeriodSeconds for each priority class range represented on the node.
@@ -707,8 +701,9 @@ pub struct KubeletConfiguration {
   /// as cpu and memory. It also allows setting sizeLimit for emptyDir volume, which will trigger pod eviction if disk
   /// usage from the volume exceeds the limit.
   /// This feature depends on the capability of detecting correct root file system disk usage. For certain systems,
-  /// such as kind rootless, if this capability cannot be supported, the feature LocalStorageCapacityIsolation should be
-  /// disabled. Once disabled, user should not set request/limit for container's ephemeral storage, or sizeLimit for emptyDir.
+  /// such as kind rootless, if this capability cannot be supported, the feature LocalStorageCapacityIsolation should
+  /// be disabled. Once disabled, user should not set request/limit for container's ephemeral storage, or sizeLimit
+  /// for emptyDir.
   #[serde(skip_serializing_if = "Option::is_none")]
   local_storage_capacity_isolation: Option<bool>,
 
@@ -738,9 +733,7 @@ impl KubeletConfiguration {
   pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
     let file = File::create(path)?;
     let writer = BufWriter::new(file);
-    serde_json::to_writer_pretty(writer, self)?;
-
-    Ok(())
+    serde_json::to_writer_pretty(writer, self).map_err(anyhow::Error::from)
   }
 }
 

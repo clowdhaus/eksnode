@@ -173,7 +173,7 @@ impl Bootstrap {
     match ec2::INSTANCES.get(instance_type) {
       Some(instance) => Ok(instance.eni_maximum_pods),
       None => {
-        info!("Instance type {instance_type} not found in static instance data. Will attempt to derive max pods");
+        info!("Instance type {instance_type} not found in static instance data. Attempting to derive max pods");
 
         let max_pods = crate::cli::MaxPods {
           instance_type: Some(instance_type.to_owned()),
