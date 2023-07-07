@@ -10,12 +10,13 @@ use base64::{engine::general_purpose, Engine as _};
 use clap::{Args, ValueEnum};
 use ipnet::IpNet;
 use rand::{seq::SliceRandom, thread_rng};
+use semver::Version;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info};
 
-use crate::{ec2, eks, imds, kubelet};
+use crate::{ec2, eks, imds, kubelet, resource};
 
-#[derive(Args, Debug, Serialize, Deserialize)]
+#[derive(Args, Debug, Default, Serialize, Deserialize)]
 pub struct Bootstrap {
   /// The EKS cluster API Server endpoint
   ///
@@ -110,32 +111,71 @@ impl Default for LocalDisks {
   }
 }
 
+struct KubeletKubeConfig {
+  config: kubelet::KubeConfig,
+  path: PathBuf,
+}
+
 impl Bootstrap {
+  /// Get the cluster details required to join the node to the cluster
   async fn get_cluster_bootstrap(&self) -> Result<eks::ClusterBootstrap> {
     let config = crate::get_sdk_config(None).await?;
     let imds_data = crate::imds::get_imds_data().await?;
     debug!("Instance metadata: {:#?}", imds_data);
 
     // Details required to join node to cluster
-    let cluster_boostrap = eks::collect_or_get_cluster_bootstrap(config, self, &imds_data.vpc_ipv4_cidr_blocks).await?;
-    debug!("Cluster bootstrap details: {:#?}", cluster_boostrap);
+    let cluster_bootstrap =
+      eks::collect_or_get_cluster_bootstrap(config, self, &imds_data.vpc_ipv4_cidr_blocks).await?;
+    debug!("Cluster bootstrap details: {:#?}", cluster_bootstrap);
 
-    Ok(cluster_boostrap)
+    Ok(cluster_bootstrap)
   }
 
-  /// Create kubeconfig file for kubelet
+  /// Get the configuration for kubelet
+  fn get_kubelet_config(
+    &self,
+    dns_cluster_ip: IpAddr,
+    max_pods: i32,
+    kubelet_version: &Version,
+  ) -> Result<kubelet::KubeletConfiguration> {
+    let mebibytes_to_reserve = resource::memory_mebibytes_to_reserve(max_pods)?;
+    let cpu_millicores_to_reserve = resource::cpu_millicores_to_reserve(max_pods, num_cpus::get() as i32)?;
+
+    let mut config: kubelet::KubeletConfiguration =
+      kubelet::KubeletConfiguration::new(dns_cluster_ip, mebibytes_to_reserve, cpu_millicores_to_reserve);
+
+    // Increase the API priority and fairness for the K8s versions that support it.
+    // Starting with 1.27, the default is already increased to 50/100, so leave the higher defaults
+    if kubelet_version.ge(&Version::parse("1.22.0")?) && kubelet_version.lt(&Version::parse("1.27.0")?) {
+      config.kube_api_qps = Some(10);
+      config.kube_api_burst = Some(20);
+    }
+
+    match kubelet_version.lt(&Version::parse("1.26.0")?) {
+      true => config.provider_id = Some("aws".to_string()),
+      false => config.provider_id = Some("external".to_string()),
+    }
+
+    if self.use_max_pods {
+      config.max_pods = Some(max_pods);
+    }
+
+    Ok(config)
+  }
+
+  /// Get the kubeconfig for kubelet
   ///
   /// If cluster is local cluster on Outpost, use aws-iam-authenticator as bootstrap auth for kubelet
   /// TLS bootstrapping which downloads client X.509 certificate and generates kubelet kubeconfig file
   /// which uses the client cert. This allows the worker node can be authenticated through
   /// X.509 certificate which works for both connected and disconnected states.
-  fn create_kubelet_kubeconfig(&self, cluster: &eks::ClusterBootstrap) -> Result<()> {
+  fn get_kubelet_kubeconfig(&self, cluster: &eks::ClusterBootstrap, region: &str) -> Result<KubeletKubeConfig> {
     let name = match self.is_local_cluster {
-      true => &cluster.name,
-      false => self
+      true => self
         .cluster_id
         .as_ref()
         .expect("Cluster ID is required when your local Amazon EKS cluster is on an Amazon Web Services Outpost"),
+      false => &cluster.name,
     };
 
     let path = match self.is_local_cluster {
@@ -143,19 +183,23 @@ impl Bootstrap {
       false => "/var/lib/kubelet/kubeconfig",
     };
 
-    let kubeconfig = kubelet::KubeConfig::new(&cluster.endpoint, name, &cluster.b64_ca)?;
-    kubeconfig.write(Path::new(path))?;
+    let config = kubelet::KubeConfig::new(&cluster.endpoint, name, region)?;
 
-    Ok(())
+    Ok(KubeletKubeConfig {
+      config,
+      path: PathBuf::from(path),
+    })
   }
 
-  fn create_ca_cert(&self, base64_ca: &str) -> Result<()> {
+  /// Decode the base64 encoded CA certificate and write it to disk
+  fn write_ca_cert(&self, base64_ca: &str) -> Result<()> {
     let decoded = general_purpose::STANDARD_NO_PAD.decode(base64_ca.clone())?;
 
     fs::create_dir_all("/etc/kubernetes/pki")?;
     Ok(fs::write("/etc/kubernetes/pki/ca.crt", decoded)?)
   }
 
+  /// Update /etc/hosts for the cluster endpoint IPs for Outpost local cluster
   fn update_etc_hosts(&self, endpoint: &str, path: PathBuf) -> Result<()> {
     let mut hostfile = fs::OpenOptions::new().append(true).open(path)?;
     let mut ips: Vec<IpAddr> = dns_lookup::lookup_host(endpoint)?;
@@ -169,6 +213,7 @@ impl Bootstrap {
       .map_err(anyhow::Error::from)
   }
 
+  /// Get the max pods for the instance
   async fn get_max_pods(&self, instance_type: &str) -> Result<i32> {
     match ec2::INSTANCES.get(instance_type) {
       Some(instance) => Ok(instance.eni_maximum_pods),
@@ -188,21 +233,130 @@ impl Bootstrap {
     }
   }
 
+  /// Configure the node to join the cluster
   pub async fn join_node_to_cluster(&self) -> Result<()> {
     let instance_metadata = imds::get_imds_data().await?;
     let cluster_details = self.get_cluster_bootstrap().await?;
+    let kubelet_version = kubelet::get_kubelet_version()?;
+    let max_pods = self.get_max_pods(&instance_metadata.instance_type).await?;
 
-    // TODO - get kubelet version
-
-    self.create_ca_cert(&cluster_details.b64_ca)?;
-    self.create_kubelet_kubeconfig(&cluster_details)?;
-
+    self.write_ca_cert(&cluster_details.b64_ca)?;
     if self.is_local_cluster {
       self.update_etc_hosts(&cluster_details.endpoint, PathBuf::from("/etc/hosts"))?;
     }
 
-    let _max_pods = self.get_max_pods(&instance_metadata.instance_type).await?;
+    let kubelet_kubeconfig = self.get_kubelet_kubeconfig(&cluster_details, &instance_metadata.region)?;
+    kubelet_kubeconfig.config.write(kubelet_kubeconfig.path)?;
+
+    let kubelet_config = self.get_kubelet_config(cluster_details.dns_cluster_ip, max_pods, &kubelet_version)?;
+    kubelet_config.write(Path::new("/etc/kubernetes/kubelet/kubelet-config.json"))?;
 
     Ok(())
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use std::net::{IpAddr, Ipv4Addr};
+
+  use super::*;
+
+  #[test]
+  fn it_gets_kubelet_config_122() {
+    let bootstrap = Bootstrap {
+      use_max_pods: true,
+      ..Bootstrap::default()
+    };
+
+    let kubelet_config = bootstrap
+      .get_kubelet_config(
+        IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
+        110,
+        &Version::parse("1.22.0").unwrap(),
+      )
+      .unwrap();
+
+    assert_eq!(kubelet_config.kube_api_qps, Some(10));
+    assert_eq!(kubelet_config.kube_api_burst, Some(20));
+    assert_eq!(kubelet_config.provider_id, Some("aws".to_string()));
+    assert_eq!(kubelet_config.max_pods, Some(110));
+  }
+
+  #[test]
+  fn it_gets_kubelet_config_126() {
+    let bootstrap = Bootstrap::default();
+
+    let kubelet_config = bootstrap
+      .get_kubelet_config(
+        IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
+        110,
+        &Version::parse("1.26.0").unwrap(),
+      )
+      .unwrap();
+
+    assert_eq!(kubelet_config.kube_api_qps, Some(10));
+    assert_eq!(kubelet_config.kube_api_burst, Some(20));
+    assert_eq!(kubelet_config.provider_id, Some("external".to_string()));
+    assert_eq!(kubelet_config.max_pods, None);
+  }
+
+  #[test]
+  fn it_gets_kubelet_config_127() {
+    let bootstrap = Bootstrap::default();
+
+    let kubelet_config = bootstrap
+      .get_kubelet_config(
+        IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
+        110,
+        &Version::parse("1.27.0").unwrap(),
+      )
+      .unwrap();
+
+    assert_eq!(kubelet_config.kube_api_qps, None);
+    assert_eq!(kubelet_config.kube_api_burst, None);
+    assert_eq!(kubelet_config.provider_id, Some("external".to_string()));
+    assert_eq!(kubelet_config.max_pods, None);
+  }
+
+  #[test]
+  fn it_gets_kubelet_kubeconfig_local() {
+    let bootstrap = Bootstrap {
+      is_local_cluster: true,
+      cluster_id: Some("6B29FC40-CA47-1067-B31D-00DD010662DA".to_string()),
+      ..Bootstrap::default()
+    };
+
+    let cluster = eks::ClusterBootstrap {
+      name: "example".to_string(),
+      endpoint: "http://localhost:8080".to_string(),
+      b64_ca: "YmFzZTY0IGNh".to_string(),
+      is_local_cluster: true,
+      dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
+    };
+
+    let kubelet_kubeconfig = bootstrap.get_kubelet_kubeconfig(&cluster, "us-west-2").unwrap();
+
+    assert_eq!(
+      kubelet_kubeconfig.path,
+      PathBuf::from("/var/lib/kubelet/bootstrap-kubeconfig")
+    );
+    insta::assert_debug_snapshot!(kubelet_kubeconfig.config);
+  }
+
+  #[test]
+  fn it_gets_kubelet_kubeconfig_eks() {
+    let bootstrap = Bootstrap::default();
+    let cluster = eks::ClusterBootstrap {
+      name: "example".to_string(),
+      endpoint: "http://localhost:8080".to_string(),
+      b64_ca: "YmFzZTY0IGNh".to_string(),
+      is_local_cluster: false,
+      dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
+    };
+
+    let kubelet_kubeconfig = bootstrap.get_kubelet_kubeconfig(&cluster, "eu-west-1").unwrap();
+
+    assert_eq!(kubelet_kubeconfig.path, PathBuf::from("/var/lib/kubelet/kubeconfig"));
+    insta::assert_debug_snapshot!(kubelet_kubeconfig.config);
   }
 }

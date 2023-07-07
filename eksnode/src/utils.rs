@@ -54,4 +54,12 @@ mod tests {
     let result = get_semver("v1.20.4-this.something_else").unwrap();
     assert_eq!(result, expected);
   }
+
+  #[test]
+  fn it_gets_kubelet_version() {
+    let expected = Version::parse("1.24.13").unwrap();
+    // This is the format returned from `kubelet --version`
+    let result = get_semver("Kubernetes v1.24.13-eks-0a21954").unwrap();
+    assert_eq!(result, expected);
+  }
 }

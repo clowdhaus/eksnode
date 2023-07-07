@@ -2,6 +2,7 @@ use std::{
   collections::BTreeMap,
   fs::File,
   io::{BufReader, BufWriter},
+  net::IpAddr,
   path::Path,
 };
 
@@ -12,7 +13,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/
 /// https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct KubeletConfiguration {
   /// Kind is a string value representing the REST resource this object represents.
@@ -84,8 +85,8 @@ pub struct KubeletConfiguration {
   /// tlsCipherSuites is the list of allowed cipher suites for the server.
   /// Note that TLS 1.3 ciphersuites are not configurable.
   /// Values are from tls package constants (https://golang.org/pkg/crypto/tls/#pkg-constants).
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  tls_cipher_suites: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  tls_cipher_suites: Option<Vec<String>>,
 
   /// tlsMinVersion is the minimum TLS version supported.
   /// Values are from tls package constants (https://golang.org/pkg/crypto/tls/#pkg-constants).
@@ -132,14 +133,14 @@ pub struct KubeletConfiguration {
 
   /// eventBurst is the maximum size of a burst of event creations, temporarily
   /// allows event creations to burst to this number, while still not exceeding
-  /// eventRecordQPS. This field canot be a negative number and it is only used
+  /// eventRecordQPS. This field cannot be a negative number and it is only used
   /// when eventRecordQPS > 0.
   #[serde(skip_serializing_if = "Option::is_none")]
   event_burst: Option<i32>,
 
   /// enableDebuggingHandlers enables server endpoints for log access
   /// and local running of containers and commands, including the exec,
-  /// attach, logs, and portforward features.
+  /// attach, logs, and port forward features.
   #[serde(skip_serializing_if = "Option::is_none")]
   enable_debugging_handlers: Option<bool>,
 
@@ -169,8 +170,8 @@ pub struct KubeletConfiguration {
   /// clusterDNS is a list of IP addresses for the cluster DNS server. If set,
   /// kubelet will configure all containers to use this for DNS resolution
   /// instead of the host's DNS servers.
-  #[serde(rename = "clusterDNS", skip_serializing_if = "Vec::is_empty", default)]
-  cluster_dns: Vec<String>,
+  #[serde(rename = "clusterDNS", skip_serializing_if = "Option::is_none")]
+  cluster_dns: Option<Vec<String>>,
 
   /// streamingConnectionIdleTimeout is the maximum time a streaming connection
   /// can be idle before the connection is automatically closed.
@@ -295,7 +296,7 @@ pub struct KubeletConfiguration {
   topology_manager_scope: Option<String>,
 
   /// TopologyManagerPolicyOptions is a set of key=value which allows to set extra options
-  /// to fine tune the behaviour of the topology manager policies.
+  /// to fine tune the behavior of the topology manager policies.
   /// Requires  both the "TopologyManager" and "TopologyManagerPolicyOptions" feature gates to be enabled.
   #[serde(skip_serializing_if = "Option::is_none")]
   topology_manager_policy_options: Option<BTreeMap<String, String>>,
@@ -315,7 +316,7 @@ pub struct KubeletConfiguration {
 
   /// hairpinMode specifies how the Kubelet should configure the container
   /// bridge for hairpin packets.
-  /// Setting this flag allows endpoints in a Service to loadbalance back to
+  /// Setting this flag allows endpoints in a Service to load balance back to
   /// themselves if they should try to access their own Service. Values:
   ///
   /// - "promiscuous-bridge": make the container bridge promiscuous.
@@ -330,7 +331,7 @@ pub struct KubeletConfiguration {
   /// maxPods is the maximum number of Pods that can run on this Kubelet.
   /// The value must be a non-negative integer.
   #[serde(skip_serializing_if = "Option::is_none")]
-  max_pods: Option<i32>,
+  pub max_pods: Option<i32>,
 
   /// podCIDR is the CIDR to use for pod IP addresses, only used in standalone mode.
   /// In cluster mode, this is obtained from the control plane.
@@ -380,12 +381,12 @@ pub struct KubeletConfiguration {
 
   /// kubeAPIQPS is the QPS to use while talking with kubernetes apiserver.
   #[serde(rename = "kubeAPIQPS", skip_serializing_if = "Option::is_none")]
-  kube_api_qps: Option<i32>,
+  pub kube_api_qps: Option<i32>,
 
   /// kubeAPIBurst is the burst to allow while talking with kubernetes API server.
   /// This field cannot be a negative number.
   #[serde(rename = "kubeAPIBurst", skip_serializing_if = "Option::is_none")]
-  kube_api_burst: Option<i32>,
+  pub kube_api_burst: Option<i32>,
 
   /// serializeImagePulls when enabled, tells the Kubelet to pull images one
   /// at a time. We recommend *not* changing the default value on nodes that
@@ -560,14 +561,14 @@ pub struct KubeletConfiguration {
   /// This field is supported only when `cgroupsPerQOS` is set to true.
   /// Refer to [Node Allocatable](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable)
   /// for more information.
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  enforce_node_allocatable: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  enforce_node_allocatable: Option<Vec<String>>,
 
   /// A comma separated whitelist of unsafe sysctls or sysctl patterns (ending in `*`).
   /// Unsafe sysctl groups are `kernel.shm*`, `kernel.msg*`, `kernel.sem`, `fs.mqueue.*`,
   /// and `net.*`. For example: "`kernel.msg*,net.ipv4.route.min_pmtu`"
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  allowed_unsafe_sysctls: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  allowed_unsafe_sysctls: Option<Vec<String>>,
 
   /// volumePluginDir is the full path of the directory in which to search
   /// for additional third party volume plugins.
@@ -578,7 +579,7 @@ pub struct KubeletConfiguration {
   /// providerID, if set, sets the unique ID of the instance that an external
   /// provider (i.e. cloudprovider) can use to identify a specific node.
   #[serde(rename = "providerID", skip_serializing_if = "Option::is_none")]
-  provider_id: Option<String>,
+  pub provider_id: Option<String>,
 
   /// kernelMemcgNotification, if set, instructs the kubelet to integrate with the
   /// kernel memcg notification for determining if memory eviction thresholds are
@@ -637,8 +638,8 @@ pub struct KubeletConfiguration {
   /// the shutdown inhibit lock.
   /// Requires the GracefulNodeShutdown feature gate to be enabled.
   /// This configuration must be empty if either ShutdownGracePeriod or ShutdownGracePeriodCriticalPods is set.
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  shutdown_grace_period_by_pod_priority: Vec<ShutdownGracePeriodByPodPriority>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  shutdown_grace_period_by_pod_priority: Option<Vec<ShutdownGracePeriodByPodPriority>>,
 
   /// reservedMemory specifies a comma-separated list of memory reservations for NUMA nodes.
   /// The parameter makes sense only in the context of the memory manager feature.
@@ -658,8 +659,8 @@ pub struct KubeletConfiguration {
   /// 2. zero limits for any memory type.
   /// 3. NUMAs nodes IDs that do not exist under the machine.
   /// 4. memory types except for memory and hugepages-<size>
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  reserved_memory: Vec<MemoryReservation>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  reserved_memory: Option<Vec<MemoryReservation>>,
 
   /// enableProfilingHandler enables profiling via web interface host:port/debug/pprof/
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -684,8 +685,8 @@ pub struct KubeletConfiguration {
   /// registerWithTaints are an array of taints to add to a node object when
   /// the kubelet registers itself. This only takes effect when registerNode
   /// is true and upon the initial registration of the node.
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  register_with_taints: Vec<Taint>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  register_with_taints: Option<Vec<Taint>>,
 
   /// registerNode enables automatic registration with the apiserver.
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -722,6 +723,67 @@ pub struct KubeletConfiguration {
 }
 
 impl KubeletConfiguration {
+  pub fn new(cluster_dns: IpAddr, mebibytes_to_reserve: i32, cpu_millicores_to_reserve: i32) -> Self {
+    KubeletConfiguration {
+      kind: "KubeletConfiguration".to_string(),
+      api_version: "kubelet.config.k8s.io/v1".to_string(),
+      address: Some("0.0.0.0".to_string()),
+      authentication: Authentication {
+        anonymous: AuthnAnonymous { enabled: false },
+        webhook: AuthnWebhook {
+          cache_ttl: "2m0s".to_string(),
+          enabled: true,
+        },
+        x509: AuthnX509 {
+          client_ca_file: "/etc/kubernetes/pki/ca.crt".to_string(),
+        },
+      },
+      authorization: Authorization {
+        mode: "Webhook".to_string(),
+        webhook: AuthzWebhook {
+          cache_authorized_ttl: "5m0s".to_string(),
+          cache_unauthorized_ttl: "30s".to_string(),
+        },
+      },
+      cluster_domain: Some("cluster.local".to_string()),
+      cluster_dns: Some(vec![cluster_dns.to_string()]),
+      eviction_hard: Some(BTreeMap::from([
+        ("memory.available".to_string(), "100Mi".to_string()),
+        ("nodefs.available".to_string(), "10%".to_string()),
+        ("nodefs.inodesFree".to_string(), "5%".to_string()),
+      ])),
+      kube_reserved: Some(BTreeMap::from([
+        ("cpu".to_string(), format!("{cpu_millicores_to_reserve}m")),
+        ("ephemeral-storage".to_string(), "1Gi".to_string()),
+        ("memory".to_string(), format!("{mebibytes_to_reserve}Mi")),
+      ])),
+      hairpin_mode: Some(HairpinMode::HairpinVeth),
+      read_only_port: Some(0),
+      cgroup_driver: Some("systemd".to_string()),
+      cgroup_root: Some("/".to_string()),
+      system_reserved_cgroup: Some("/service".to_string()),
+      kube_reserved_cgroup: Some("/runtime".to_string()),
+      feature_gates: Some(BTreeMap::from([
+        ("RotateKubeletServerCertificate".to_string(), true),
+        ("KubeletCredentialProviders".to_owned(), true),
+      ])),
+      protect_kernel_defaults: Some(true),
+      serialize_image_pulls: Some(false),
+      server_tls_bootstrap: Some(true),
+      tls_cipher_suites: Some(vec![
+        "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256".to_string(),
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256".to_string(),
+        "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305".to_string(),
+        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384".to_string(),
+        "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305".to_string(),
+        "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384".to_string(),
+        "TLS_RSA_WITH_AES_256_GCM_SHA384".to_string(),
+        "TLS_RSA_WITH_AES_128_GCM_SHA256".to_string(),
+      ]),
+      ..KubeletConfiguration::default()
+    }
+  }
+
   pub fn read<P: AsRef<Path>>(path: P) -> Result<Self> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
@@ -754,7 +816,7 @@ pub enum HairpinMode {
   HairpinNone,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Authentication {
   anonymous: AuthnAnonymous,
@@ -762,13 +824,13 @@ pub struct Authentication {
   x509: AuthnX509,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", rename = "anonymous")]
 pub struct AuthnAnonymous {
   enabled: bool,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", rename = "webhook")]
 pub struct AuthnWebhook {
   #[serde(rename = "cacheTTL")]
@@ -776,21 +838,21 @@ pub struct AuthnWebhook {
   enabled: bool,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", rename = "x509")]
 pub struct AuthnX509 {
   #[serde(rename = "clientCAFile")]
   client_ca_file: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Authorization {
   mode: String,
   webhook: AuthzWebhook,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", rename = "webhook")]
 pub struct AuthzWebhook {
   #[serde(rename = "cacheAuthorizedTTL")]
@@ -799,7 +861,7 @@ pub struct AuthzWebhook {
   cache_unauthorized_ttl: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemorySwapConfiguration {
   /// swapBehavior configures swap memory available to container workloads. May be one of
@@ -820,7 +882,7 @@ pub enum ResourceChangeDetectionStrategy {
 }
 
 // Specifies the shutdown grace period for Pods based on their associated priority class value
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ShutdownGracePeriodByPodPriority {
   /// priority is the priority value associated with the shutdown grace period
@@ -830,7 +892,7 @@ pub struct ShutdownGracePeriodByPodPriority {
   shutdown_grace_period_seconds: i64,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Taint {
   /// Required. The taint key to be applied to a node.
@@ -848,7 +910,7 @@ pub struct Taint {
 }
 
 // MemoryReservation specifies the memory reservation of different types for each NUMA node
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MemoryReservation {
   numa_node: i32,
@@ -856,7 +918,7 @@ pub struct MemoryReservation {
 }
 
 /// LoggingConfiguration contains logging options
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LoggingConfiguration {
   /// Format Flag specifies the structure of log messages.
@@ -874,8 +936,8 @@ pub struct LoggingConfiguration {
 
   /// VModule overrides the verbosity threshold for individual files.
   /// Only supported for "text" log format.
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  vmodule: Vec<VModuleItem>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  vmodule: Option<Vec<VModuleItem>>,
 
   /// [Alpha] Options holds additional parameters that are specific
   /// to the different logging formats. Only the options for the selected
@@ -886,7 +948,7 @@ pub struct LoggingConfiguration {
 }
 
 // TracingConfiguration provides versioned configuration for OpenTelemetry tracing clients.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TracingConfiguration {
   /// Endpoint of the collector this component will report traces to.
@@ -901,7 +963,7 @@ pub struct TracingConfiguration {
 }
 
 /// Defines verbosity for one or more files which match a certain glob pattern
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VModuleItem {
   /// FilePattern is a base file name (i.e. minus the ".go" suffix and

@@ -314,7 +314,7 @@ struct ExecConfig {
 
   /// Arguments to pass to the command when executing it
   #[serde(skip_serializing_if = "Option::is_none")]
-  args: Option<Vec<String>>,
+  pub args: Option<Vec<String>>,
 
   /// Env defines additional environment variables to expose to the process.
   /// These are unioned with the host's environment, as well as variables
