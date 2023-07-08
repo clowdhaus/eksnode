@@ -1,5 +1,5 @@
-pub mod bootstrap;
 pub mod cli;
+pub mod commands;
 pub mod containerd;
 pub mod ec2;
 pub mod eks;

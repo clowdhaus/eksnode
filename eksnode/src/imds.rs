@@ -55,7 +55,7 @@ pub struct InstanceMetadata {
 
 /// Get data from the IMDS endpoint
 ///
-/// Collects the relevant metadata from IMDS used in bootstrapping
+/// Collects the relevant metadata from IMDS used in joining node to cluster
 pub async fn get_imds_data() -> Result<InstanceMetadata> {
   let client = get_client().await?;
   let region = client.get("/latest/meta-data/placement/region").await?;

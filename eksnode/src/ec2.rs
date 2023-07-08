@@ -2,8 +2,7 @@
 //! cargo run --bin eksnode-gen
 //!
 //! EC2 instance types and the properties used by `eksnode`
-//! This is a static map of instances to avoid API calls during
-//! the bootstrap process
+//! This is a static map of instances to avoid API calls when adding the node to the cluster
 use phf::phf_map;
 
 #[derive(Debug)]
@@ -13,8 +12,7 @@ pub struct Instance {
 
   /// The (theoretical) maximum number of pods
   ///
-  /// This is based off the maximum number of ENIs and the
-  /// maximum number of IPv4 addresses per ENI
+  /// This is based off the maximum number of ENIs and the maximum number of IPv4 addresses per ENI
   pub eni_maximum_pods: i32,
 
   /// The hypervisor (nitro | xen | unknown)

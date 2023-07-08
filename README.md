@@ -37,7 +37,7 @@
 
 ## Image vs Bootstrap
 
-There are tradeoffs when it comes to determining if a change should be made to the image or the bootstrap process. Baking the changes into the image results in faster instance startup times but reduces the configuration flexibility and increase the amount of image variants. Making the changes during instance bootstrapping results in longer instance startup times but allows for a more flexible and dynamic configuration. See below for more details on how we approached this tradeoff below and some of the factors that influenced our decisions.
+There are tradeoffs when it comes to determining if a change should be made to the image or the node join process. Baking the changes into the image results in faster instance startup times but reduces the configuration flexibility and increase the amount of image variants. Making the changes during node provisioning results in longer startup times but allows for a more flexible and dynamic configuration. See below for more details on how we approached this tradeoff below and some of the factors that influenced our decisions.
 
 ### Image
 

@@ -18,7 +18,7 @@ async fn main() -> Result<()> {
   tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
 
   match &cli.command {
-    Commands::Bootstrap(bstrap) => match bstrap.join_node_to_cluster().await {
+    Commands::Join(node) => match node.join_node_to_cluster().await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");

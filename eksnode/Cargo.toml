@@ -2,7 +2,7 @@
 name = "eksnode"
 version = "0.1.0"
 authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
-description = "A command line interface used in building and bootstrapping Amazon EKS AMIs"
+description = "A command line interface for interacting with EKS nodes"
 documentation = "https://github.com/clowdhaus/eksnode"
 homepage = "https://github.com/clowdhaus/eksnode"
 repository = "https://github.com/clowdhaus/eksnode"

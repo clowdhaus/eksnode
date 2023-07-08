@@ -27,8 +27,7 @@ struct Instance {
 
   /// The (theoretical) maximum number of pods
   ///
-  /// This is based off the maximum number of ENIs and the
-  /// maximum number of IPv4 addresses per ENI
+  /// This is based off the maximum number of ENIs and the maximum number of IPv4 addresses per ENI
   eni_maximum_pods: i32,
 
   /// The hypervisor (nitro | xen | unknown)
@@ -123,8 +122,8 @@ fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>
 
 /// Writes the EC2 instance details collected to a rust file
 ///
-/// This generates a static map that will be used by eksnode to lookup instance details
-/// without the need to re-query the EC2 API
+/// This generates a static map that will be used by eksnode to lookup instance details without the need to re-query the
+/// EC2 API
 fn write_ec2(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -> Result<()> {
   let mut handlebars = Handlebars::new();
   let template = cur_dir.join("eksnode-gen").join("templates").join("ec2.tpl");

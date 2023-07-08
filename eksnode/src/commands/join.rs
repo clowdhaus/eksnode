@@ -14,10 +14,10 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info};
 
-use crate::{ec2, eks, imds, kubelet, resource};
+use crate::{commands, ec2, eks, imds, kubelet, resource};
 
 #[derive(Args, Debug, Default, Serialize, Deserialize)]
-pub struct Bootstrap {
+pub struct Node {
   /// The EKS cluster API Server endpoint
   ///
   /// Only valid when used with --b64-cluster-ca. Bypasses calling "aws eks describe-cluster"
@@ -48,9 +48,9 @@ pub struct Bootstrap {
   #[arg(long)]
   pub dns_cluster_ip: Option<IpAddr>,
 
-  /// Execute the bootstrap process without making any changes to the system
+  /// Execute node join process without making any changes to the system
   ///
-  /// Useful for debugging - will display changes that are intended to be made during bootstrapping
+  /// Useful for debugging - will display changes that are intended to be made when joining node to cluster
   #[arg(long)]
   pub dry_run: bool,
 
@@ -116,19 +116,18 @@ struct KubeletKubeConfig {
   path: PathBuf,
 }
 
-impl Bootstrap {
+impl Node {
   /// Get the cluster details required to join the node to the cluster
-  async fn get_cluster_bootstrap(&self) -> Result<eks::ClusterBootstrap> {
+  async fn get_cluster(&self) -> Result<eks::Cluster> {
     let config = crate::get_sdk_config(None).await?;
     let imds_data = crate::imds::get_imds_data().await?;
     debug!("Instance metadata: {:#?}", imds_data);
 
     // Details required to join node to cluster
-    let cluster_bootstrap =
-      eks::collect_or_get_cluster_bootstrap(config, self, &imds_data.vpc_ipv4_cidr_blocks).await?;
-    debug!("Cluster bootstrap details: {:#?}", cluster_bootstrap);
+    let cluster = eks::collect_or_get_cluster(config, self, &imds_data.vpc_ipv4_cidr_blocks).await?;
+    debug!("Node details: {:#?}", cluster);
 
-    Ok(cluster_bootstrap)
+    Ok(cluster)
   }
 
   /// Get the configuration for kubelet
@@ -169,7 +168,7 @@ impl Bootstrap {
   /// TLS bootstrapping which downloads client X.509 certificate and generates kubelet kubeconfig file
   /// which uses the client cert. This allows the worker node can be authenticated through
   /// X.509 certificate which works for both connected and disconnected states.
-  fn get_kubelet_kubeconfig(&self, cluster: &eks::ClusterBootstrap, region: &str) -> Result<KubeletKubeConfig> {
+  fn get_kubelet_kubeconfig(&self, cluster: &eks::Cluster, region: &str) -> Result<KubeletKubeConfig> {
     let name = match self.is_local_cluster {
       true => self
         .cluster_id
@@ -220,7 +219,7 @@ impl Bootstrap {
       None => {
         info!("Instance type {instance_type} not found in static instance data. Attempting to derive max pods");
 
-        let max_pods = crate::cli::MaxPods {
+        let max_pods = commands::calc::MaxPods {
           instance_type: Some(instance_type.to_owned()),
           instance_type_from_imds: false,
           cni_version: "1.10.0".to_owned(),
@@ -236,19 +235,19 @@ impl Bootstrap {
   /// Configure the node to join the cluster
   pub async fn join_node_to_cluster(&self) -> Result<()> {
     let instance_metadata = imds::get_imds_data().await?;
-    let cluster_details = self.get_cluster_bootstrap().await?;
+    let cluster = self.get_cluster().await?;
     let kubelet_version = kubelet::get_kubelet_version()?;
     let max_pods = self.get_max_pods(&instance_metadata.instance_type).await?;
 
-    self.write_ca_cert(&cluster_details.b64_ca)?;
+    self.write_ca_cert(&cluster.b64_ca)?;
     if self.is_local_cluster {
-      self.update_etc_hosts(&cluster_details.endpoint, PathBuf::from("/etc/hosts"))?;
+      self.update_etc_hosts(&cluster.endpoint, PathBuf::from("/etc/hosts"))?;
     }
 
-    let kubelet_kubeconfig = self.get_kubelet_kubeconfig(&cluster_details, &instance_metadata.region)?;
+    let kubelet_kubeconfig = self.get_kubelet_kubeconfig(&cluster, &instance_metadata.region)?;
     kubelet_kubeconfig.config.write(kubelet_kubeconfig.path)?;
 
-    let kubelet_config = self.get_kubelet_config(cluster_details.dns_cluster_ip, max_pods, &kubelet_version)?;
+    let kubelet_config = self.get_kubelet_config(cluster.dns_cluster_ip, max_pods, &kubelet_version)?;
     kubelet_config.write(Path::new("/etc/kubernetes/kubelet/kubelet-config.json"))?;
 
     Ok(())
@@ -263,12 +262,12 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_config_122() {
-    let bootstrap = Bootstrap {
+    let cluster = Node {
       use_max_pods: true,
-      ..Bootstrap::default()
+      ..Node::default()
     };
 
-    let kubelet_config = bootstrap
+    let kubelet_config = cluster
       .get_kubelet_config(
         IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
         110,
@@ -284,9 +283,9 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_config_126() {
-    let bootstrap = Bootstrap::default();
+    let cluster = Node::default();
 
-    let kubelet_config = bootstrap
+    let kubelet_config = cluster
       .get_kubelet_config(
         IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
         110,
@@ -302,9 +301,9 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_config_127() {
-    let bootstrap = Bootstrap::default();
+    let cluster = Node::default();
 
-    let kubelet_config = bootstrap
+    let kubelet_config = cluster
       .get_kubelet_config(
         IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
         110,
@@ -320,13 +319,13 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_kubeconfig_local() {
-    let bootstrap = Bootstrap {
+    let node = Node {
       is_local_cluster: true,
       cluster_id: Some("6B29FC40-CA47-1067-B31D-00DD010662DA".to_string()),
-      ..Bootstrap::default()
+      ..Node::default()
     };
 
-    let cluster = eks::ClusterBootstrap {
+    let cluster = eks::Cluster {
       name: "example".to_string(),
       endpoint: "http://localhost:8080".to_string(),
       b64_ca: "YmFzZTY0IGNh".to_string(),
@@ -334,7 +333,7 @@ mod tests {
       dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
     };
 
-    let kubelet_kubeconfig = bootstrap.get_kubelet_kubeconfig(&cluster, "us-west-2").unwrap();
+    let kubelet_kubeconfig = node.get_kubelet_kubeconfig(&cluster, "us-west-2").unwrap();
 
     assert_eq!(
       kubelet_kubeconfig.path,
@@ -345,8 +344,8 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_kubeconfig_eks() {
-    let bootstrap = Bootstrap::default();
-    let cluster = eks::ClusterBootstrap {
+    let node = Node::default();
+    let cluster = eks::Cluster {
       name: "example".to_string(),
       endpoint: "http://localhost:8080".to_string(),
       b64_ca: "YmFzZTY0IGNh".to_string(),
@@ -354,7 +353,7 @@ mod tests {
       dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
     };
 
-    let kubelet_kubeconfig = bootstrap.get_kubelet_kubeconfig(&cluster, "eu-west-1").unwrap();
+    let kubelet_kubeconfig = node.get_kubelet_kubeconfig(&cluster, "eu-west-1").unwrap();
 
     assert_eq!(kubelet_kubeconfig.path, PathBuf::from("/var/lib/kubelet/kubeconfig"));
     insta::assert_debug_snapshot!(kubelet_kubeconfig.config);

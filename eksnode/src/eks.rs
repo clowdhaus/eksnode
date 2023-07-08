@@ -4,13 +4,12 @@ use anyhow::{bail, Result};
 use aws_config::SdkConfig;
 use aws_sdk_eks::{
   config::{self, retry::RetryConfig},
-  types::Cluster,
   Client,
 };
 use ipnet::{IpNet, Ipv4Net};
 use tracing::{debug, info};
 
-use crate::bootstrap::{Bootstrap, IpvFamily};
+use crate::commands::join::{IpvFamily, Node};
 
 /// Get the EKS client
 async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
@@ -24,8 +23,8 @@ async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
   Ok(client)
 }
 
-/// Describe the cluster to extract the relevant details for bootstrapping
-async fn describe_cluster(client: &Client, name: &str) -> Result<Cluster> {
+/// Describe the cluster to extract the relevant details to join the cluster
+async fn describe_cluster(client: &Client, name: &str) -> Result<aws_sdk_eks::types::Cluster> {
   let request = client.describe_cluster().name(name);
   let response = request.send().await?;
 
@@ -98,11 +97,9 @@ fn derive_dns_cluster_ip(
   }
 }
 
-/// The EKS cluster bootstrap details
-///
-/// The details required to bootstrap a node to the cluster
+/// EKS cluster details required to join a node to the cluster
 #[derive(Debug)]
-pub struct ClusterBootstrap {
+pub struct Cluster {
   /// Name of the cluster
   pub name: String,
   /// Cluster API server endpoint
@@ -115,11 +112,11 @@ pub struct ClusterBootstrap {
   pub dns_cluster_ip: IpAddr,
 }
 
-/// Collect the cluster bootstrap details from input passed into boostrap Command
-fn collect_cluster_bootstrap(cli_input: &Bootstrap, dns_cluster_ip: IpAddr) -> Result<Option<ClusterBootstrap>> {
+/// Return the cluster details from the input collected
+fn collect_cluster(cli_input: &Node, dns_cluster_ip: IpAddr) -> Result<Option<Cluster>> {
   if let Some(endpoint) = cli_input.apiserver_endpoint.to_owned() {
     if let Some(b64_ca) = cli_input.b64_cluster_ca.to_owned() {
-      return Ok(Some(ClusterBootstrap {
+      return Ok(Some(Cluster {
         name: cli_input.cluster_name.to_owned(),
         endpoint,
         b64_ca,
@@ -132,15 +129,15 @@ fn collect_cluster_bootstrap(cli_input: &Bootstrap, dns_cluster_ip: IpAddr) -> R
   Ok(None)
 }
 
-/// Extract cluster bootstrap details from CLI input, or get directly from cluster
+/// Extract cluster details from CLI input, or get directly from cluster
 ///
-/// If all the necessary details required to bootstrap a node to the cluster are provided, then
+/// If all the necessary details required to join a node to the cluster are provided, then
 /// we can save an API call. Otherwise, we need to describe the cluster to get the details.
-pub async fn collect_or_get_cluster_bootstrap(
+pub async fn collect_or_get_cluster(
   config: SdkConfig,
-  cli_input: &Bootstrap,
+  cli_input: &Node,
   vpc_ipv4_cidr_blocks: &[Ipv4Net],
-) -> Result<ClusterBootstrap> {
+) -> Result<Cluster> {
   // DNS cluster IP is not related to cluster - if it cannot be derived, it should fail
   let dns_cluster_ip = match cli_input.dns_cluster_ip {
     Some(ip) => ip,
@@ -150,17 +147,17 @@ pub async fn collect_or_get_cluster_bootstrap(
 
   let cluster_name = &cli_input.cluster_name.clone();
 
-  match collect_cluster_bootstrap(cli_input, dns_cluster_ip)? {
-    Some(bootstrap) => {
-      debug!("Cluster bootstrap details collected from CLI input - no describe API call required");
-      Ok(bootstrap)
+  match collect_cluster(cli_input, dns_cluster_ip)? {
+    Some(cluster) => {
+      debug!("Cluster details collected from CLI input - no describe API call required");
+      Ok(cluster)
     }
     None => {
-      debug!("Cluster bootstrap details are insufficient - describing cluster to get details");
+      debug!("Cluster details are insufficient - describing cluster to get details");
       let client = get_client(config, 3).await?;
       let describe = describe_cluster(&client, cluster_name).await?;
 
-      Ok(ClusterBootstrap {
+      Ok(Cluster {
         name: describe.name.unwrap(),
         endpoint: describe.endpoint.unwrap(),
         b64_ca: describe.certificate_authority.unwrap().data.unwrap(),
