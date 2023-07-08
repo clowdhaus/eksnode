@@ -2,9 +2,9 @@ pub mod cli;
 pub mod commands;
 pub mod containerd;
 pub mod ec2;
+pub mod ecr;
 pub mod eks;
 pub mod gpu;
-pub mod image;
 pub mod imds;
 pub mod kubelet;
 pub mod resource;
@@ -16,6 +16,7 @@ use anyhow::Result;
 use aws_config::{meta::region::RegionProviderChain, SdkConfig};
 use aws_types::region::Region;
 pub use cli::{Cli, Commands};
+use rust_embed::RustEmbed;
 
 /// Get the configuration to authn/authz with AWS that will be used across AWS clients
 pub async fn get_sdk_config(region: Option<String>) -> Result<SdkConfig> {
@@ -28,3 +29,12 @@ pub async fn get_sdk_config(region: Option<String>) -> Result<SdkConfig> {
 
   Ok(aws_config::from_env().region(region_provider).load().await)
 }
+
+/// Embeds the contents of the `templates/` directory into the binary
+///
+/// This struct contains both the templates used for rendering the playbook
+/// as well as the static data used for populating the playbook templates
+/// embedded into the binary for distribution
+#[derive(RustEmbed)]
+#[folder = "templates/"]
+pub struct Templates;

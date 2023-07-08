@@ -131,16 +131,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-KUBELET_VERSION=$(kubelet --version | grep -Eo '[0-9]\.[0-9]+\.[0-9]+')
-log "INFO: Using kubelet version $KUBELET_VERSION"
-
-# ecr-credential-provider only implements credentialprovider.kubelet.k8s.io/v1alpha1 prior to 1.27.1: https://github.com/kubernetes/cloud-provider-aws/pull/597
-# TODO: remove this when 1.26 is EOL
-if vercmp "$KUBELET_VERSION" lt "1.27.0"; then
-  IMAGE_CREDENTIAL_PROVIDER_CONFIG=/etc/eks/image-credential-provider/config.json
-  echo "$(jq '.apiVersion = "kubelet.config.k8s.io/v1alpha1"' $IMAGE_CREDENTIAL_PROVIDER_CONFIG)" > $IMAGE_CREDENTIAL_PROVIDER_CONFIG
-  echo "$(jq '.providers[].apiVersion = "credentialprovider.kubelet.k8s.io/v1alpha1"' $IMAGE_CREDENTIAL_PROVIDER_CONFIG)" > $IMAGE_CREDENTIAL_PROVIDER_CONFIG
-fi
 
 if [[ ! -z ${LOCAL_DISKS} ]]; then
   setup-local-disks "${LOCAL_DISKS}"
@@ -154,77 +144,6 @@ PAUSE_CONTAINER_IMAGE=${PAUSE_CONTAINER_IMAGE:-$ECR_URI/eks/pause}
 PAUSE_CONTAINER="$PAUSE_CONTAINER_IMAGE:$PAUSE_CONTAINER_VERSION"
 
 ### kubelet kubeconfig
-
-CA_CERTIFICATE_DIRECTORY=/etc/kubernetes/pki
-CA_CERTIFICATE_FILE_PATH=$CA_CERTIFICATE_DIRECTORY/ca.crt
-mkdir -p $CA_CERTIFICATE_DIRECTORY
-if [[ -z "${B64_CLUSTER_CA}" ]] || [[ -z "${APISERVER_ENDPOINT}" ]]; then
-  log "INFO: --cluster-ca or --api-server-endpoint is not defined, describing cluster..."
-  DESCRIBE_CLUSTER_RESULT="/tmp/describe_cluster_result.txt"
-
-  # Retry the DescribeCluster API for API_RETRY_ATTEMPTS
-  for attempt in $(seq 0 $API_RETRY_ATTEMPTS); do
-    rc=0
-    if [[ $attempt -gt 0 ]]; then
-      log "INFO: Attempt $attempt of $API_RETRY_ATTEMPTS"
-    fi
-
-    aws eks wait cluster-active \
-      --region=${AWS_DEFAULT_REGION} \
-      --name=${CLUSTER_NAME}
-
-    aws eks describe-cluster \
-      --region=${AWS_DEFAULT_REGION} \
-      --name=${CLUSTER_NAME} \
-      --output=text \
-      --query 'cluster.{certificateAuthorityData: certificateAuthority.data, endpoint: endpoint, serviceIpv4Cidr: kubernetesNetworkConfig.serviceIpv4Cidr, serviceIpv6Cidr: kubernetesNetworkConfig.serviceIpv6Cidr, clusterIpFamily: kubernetesNetworkConfig.ipFamily, outpostArn: outpostConfig.outpostArns[0], id: id}' > $DESCRIBE_CLUSTER_RESULT || rc=$?
-    if [[ $rc -eq 0 ]]; then
-      break
-    fi
-    if [[ $attempt -eq $API_RETRY_ATTEMPTS ]]; then
-      log "ERROR: Exhausted retries while describing cluster!"
-      exit $rc
-    fi
-    jitter=$((1 + RANDOM % 10))
-    sleep_sec="$(($((5 << $((1 + $attempt)))) + $jitter))"
-    sleep $sleep_sec
-  done
-  B64_CLUSTER_CA=$(cat $DESCRIBE_CLUSTER_RESULT | awk '{print $1}')
-  APISERVER_ENDPOINT=$(cat $DESCRIBE_CLUSTER_RESULT | awk '{print $3}')
-  CLUSTER_ID_IN_DESCRIBE_CLUSTER_RESULT=$(cat $DESCRIBE_CLUSTER_RESULT | awk '{print $4}')
-  OUTPOST_ARN=$(cat $DESCRIBE_CLUSTER_RESULT | awk '{print $5}')
-  SERVICE_IPV4_CIDR=$(cat $DESCRIBE_CLUSTER_RESULT | awk '{print $6}')
-  SERVICE_IPV6_CIDR=$(cat $DESCRIBE_CLUSTER_RESULT | awk '{print $7}')
-
-  if [[ -z "${IP_FAMILY}" ]]; then
-    IP_FAMILY=$(cat $DESCRIBE_CLUSTER_RESULT | awk '{print $2}')
-  fi
-
-  # Automatically detect local cluster in outpost
-  if [[ -z "${OUTPOST_ARN}" ]] || [[ "${OUTPOST_ARN}" == "None" ]]; then
-    IS_LOCAL_OUTPOST_DETECTED=false
-  else
-    IS_LOCAL_OUTPOST_DETECTED=true
-  fi
-
-  # If the cluster id is returned from describe cluster, let us use it no matter whether cluster id is passed from option
-  if [[ ! -z "${CLUSTER_ID_IN_DESCRIBE_CLUSTER_RESULT}" ]] && [[ "${CLUSTER_ID_IN_DESCRIBE_CLUSTER_RESULT}" != "None" ]]; then
-    CLUSTER_ID=${CLUSTER_ID_IN_DESCRIBE_CLUSTER_RESULT}
-  fi
-fi
-
-echo $B64_CLUSTER_CA | base64 -d > $CA_CERTIFICATE_FILE_PATH
-
-sed -i s,MASTER_ENDPOINT,$APISERVER_ENDPOINT,g /var/lib/kubelet/kubeconfig
-sed -i s,AWS_REGION,$AWS_DEFAULT_REGION,g /var/lib/kubelet/kubeconfig
-
-if [[ -z "$ENABLE_LOCAL_OUTPOST" ]]; then
-  # Only when "--enable-local-outpost" option is not set explicity on calling bootstrap.sh, it will be assigned with
-  #    - the result of auto-detectection through describe-cluster
-  #    - or "false" when describe-cluster is bypassed.
-  #  This also means if "--enable-local-outpost" option is set explicity, it will override auto-detection result
-  ENABLE_LOCAL_OUTPOST="${IS_LOCAL_OUTPOST_DETECTED:-false}"
-fi
 
 ### To support worker nodes to continue to communicate and connect to local cluster even when the Outpost
 ### is disconnected from the parent AWS Region, the following specific setup are required:
@@ -257,55 +176,6 @@ else
 fi
 
 ### kubelet.service configuration
-
-MAC=$(imds 'latest/meta-data/mac')
-
-KUBELET_CONFIG=/etc/kubernetes/kubelet/kubelet-config.json
-echo "$(jq ".clusterDNS=[\"$DNS_CLUSTER_IP\"]" $KUBELET_CONFIG)" > $KUBELET_CONFIG
-
-if [[ "${IP_FAMILY}" == "ipv4" ]]; then
-  INTERNAL_IP=$(imds 'latest/meta-data/local-ipv4')
-else
-  INTERNAL_IP_URI=latest/meta-data/network/interfaces/macs/$MAC/ipv6s
-  INTERNAL_IP=$(imds $INTERNAL_IP_URI)
-fi
-INSTANCE_TYPE=$(imds 'latest/meta-data/instance-type')
-
-if vercmp "$KUBELET_VERSION" gteq "1.22.0" && vercmp "$KUBELET_VERSION" lt "1.27.0"; then
-  # for K8s versions that suport API Priority & Fairness, increase our API server QPS
-  # in 1.27, the default is already increased to 50/100, so use the higher defaults
-  echo $(jq ".kubeAPIQPS=( .kubeAPIQPS // 10)|.kubeAPIBurst=( .kubeAPIBurst // 20)" $KUBELET_CONFIG) > $KUBELET_CONFIG
-fi
-
-# Sets kubeReserved and evictionHard in /etc/kubernetes/kubelet/kubelet-config.json for worker nodes. The following two function
-# calls calculate the CPU and memory resources to reserve for kubeReserved based on the instance type of the worker node.
-# Note that allocatable memory and CPU resources on worker nodes is calculated by the Kubernetes scheduler
-# with this formula when scheduling pods: Allocatable = Capacity - Reserved - Eviction Threshold.
-
-#calculate the max number of pods per instance type
-MAX_PODS_FILE="/etc/eks/eni-max-pods.txt"
-set +o pipefail
-MAX_PODS=$(cat $MAX_PODS_FILE | awk "/^${INSTANCE_TYPE:-unset}/"' { print $2 }')
-set -o pipefail
-if [ -z "$MAX_PODS" ] || [ -z "$INSTANCE_TYPE" ]; then
-  log "INFO: No entry for type '$INSTANCE_TYPE' in $MAX_PODS_FILE. Will attempt to auto-discover value."
-  # When determining the value of maxPods, we're using the legacy calculation by default since it's more restrictive than
-  # the PrefixDelegation based alternative and is likely to be in-use by more customers.
-  # The legacy numbers also maintain backwards compatibility when used to calculate `kubeReserved.memory`
-  MAX_PODS=$(/etc/eks/max-pods-calculator.sh --instance-type-from-imds --cni-version 1.10.0 --show-max-allowed)
-fi
-
-# calculates the amount of each resource to reserve
-mebibytes_to_reserve=$(get_memory_mebibytes_to_reserve $MAX_PODS)
-cpu_millicores_to_reserve=$(get_cpu_millicores_to_reserve)
-# writes kubeReserved and evictionHard to the kubelet-config using the amount of CPU and memory to be reserved
-echo "$(jq '. += {"evictionHard": {"memory.available": "100Mi", "nodefs.available": "10%", "nodefs.inodesFree": "5%"}}' $KUBELET_CONFIG)" > $KUBELET_CONFIG
-echo "$(jq --arg mebibytes_to_reserve "${mebibytes_to_reserve}Mi" --arg cpu_millicores_to_reserve "${cpu_millicores_to_reserve}m" \
-  '. += {kubeReserved: {"cpu": $cpu_millicores_to_reserve, "ephemeral-storage": "1Gi", "memory": $mebibytes_to_reserve}}' $KUBELET_CONFIG)" > $KUBELET_CONFIG
-
-if [[ "$USE_MAX_PODS" = "true" ]]; then
-  echo "$(jq ".maxPods=$MAX_PODS" $KUBELET_CONFIG)" > $KUBELET_CONFIG
-fi
 
 KUBELET_ARGS="--node-ip=$INTERNAL_IP --pod-infra-container-image=$PAUSE_CONTAINER --v=2"
 

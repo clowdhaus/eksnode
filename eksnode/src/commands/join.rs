@@ -14,7 +14,7 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info};
 
-use crate::{commands, ec2, eks, imds, kubelet, resource};
+use crate::{commands, containerd, ec2, ecr, eks, imds, kubelet, resource};
 
 #[derive(Args, Debug, Default, Serialize, Deserialize)]
 pub struct Node {
@@ -190,6 +190,18 @@ impl Node {
     })
   }
 
+  async fn get_containerd_config(&self, imds: imds::InstanceMetadata) -> Result<containerd::ContainerdConfiguration> {
+    let uri = format!("{}/eks/pause:3.9", ecr::get_ecr_uri(&imds.region, &imds.domain, false)?);
+    let sandbox_img = match &self.pause_container_image {
+      Some(img) => img,
+      None => &uri,
+    };
+
+    let config = containerd::ContainerdConfiguration::new(sandbox_img)?;
+
+    Ok(config)
+  }
+
   /// Decode the base64 encoded CA certificate and write it to disk
   fn write_ca_cert(&self, base64_ca: &str) -> Result<()> {
     let decoded = general_purpose::STANDARD_NO_PAD.decode(base64_ca.clone())?;
@@ -249,6 +261,9 @@ impl Node {
 
     let kubelet_config = self.get_kubelet_config(cluster.dns_cluster_ip, max_pods, &kubelet_version)?;
     kubelet_config.write(Path::new("/etc/kubernetes/kubelet/kubelet-config.json"))?;
+
+    let containerd_config = self.get_containerd_config(instance_metadata).await?;
+    containerd_config.write(Path::new("/etc/containerd/config.toml"))?;
 
     Ok(())
   }

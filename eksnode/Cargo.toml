@@ -31,6 +31,7 @@ clap = { version = "4.2", features = ["derive", "color", "unstable-styles"] }
 clap-verbosity-flag = "2.0"
 config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
+rust-embed = { version = "6.4", features = ["compression"] }
 http = "0.2"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.16"

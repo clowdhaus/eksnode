@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 /// Config provides containerd configuration data for the server
 ///
 /// https://github.com/containerd/containerd/blob/main/services/server/config/config.go
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ContainerdConfiguration {
   /// Version of the config file
   version: i32,
@@ -45,13 +45,13 @@ pub struct ContainerdConfiguration {
 
   /// DisabledPlugins are IDs of plugins to disable. Disabled plugins won't be
   /// initialized and started.
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  disabled_plugins: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  disabled_plugins: Option<Vec<String>>,
 
   /// RequiredPlugins are IDs of required plugins. Containerd exits if any
   /// required plugin doesn't exist or fails to be initialized or started.
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  required_plugins: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  required_plugins: Option<Vec<String>>,
 
   /// Plugins provides plugin specific configuration for the initialization of a plugin
   #[serde(flatten, skip_serializing_if = "Option::is_none")]
@@ -74,8 +74,8 @@ pub struct ContainerdConfiguration {
   timeouts: Option<BTreeMap<String, String>>,
 
   /// Imports are additional file path list to config files that can overwrite main config file fields
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  imports: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  imports: Option<Vec<String>>,
 
   /// StreamProcessors configuration
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,23 +83,29 @@ pub struct ContainerdConfiguration {
 }
 
 impl ContainerdConfiguration {
-  pub fn load<P: AsRef<Path>>(path: P) -> Result<Self> {
-    let file = std::fs::read_to_string(path)?;
-    let conf: ContainerdConfiguration = toml::from_str(&file)?;
+  pub fn new(sandbox_image: &str) -> Result<Self> {
+    let templ = crate::Templates::get("containerd-config.toml").unwrap();
+    let contents = std::str::from_utf8(templ.data.as_ref())?.replace("{{SANDBOX_IMAGE}}", sandbox_image);
+    let config: ContainerdConfiguration = toml::from_str(&contents)?;
 
-    Ok(conf)
+    Ok(config)
+  }
+
+  pub fn read<P: AsRef<Path>>(path: P) -> Result<Self> {
+    let file = std::fs::read_to_string(path)?;
+    let config: ContainerdConfiguration = toml::from_str(&file)?;
+
+    Ok(config)
   }
 
   pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
     let conf = toml::to_string_pretty(self)?;
-    std::fs::write(path, conf)?;
-
-    Ok(())
+    std::fs::write(path, conf).map_err(anyhow::Error::from)
   }
 }
 
 /// GRPCConfig provides GRPC configuration for the socket
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 struct GrpcConfig {
   #[serde(skip_serializing_if = "Option::is_none")]
   address: Option<String>,
@@ -122,7 +128,7 @@ struct GrpcConfig {
 }
 
 /// TTRPCConfig provides TTRPC configuration for the socket
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 struct TtrpcConfig {
   address: String,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -132,7 +138,7 @@ struct TtrpcConfig {
 }
 
 /// Debug provides debug configuration
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 struct DebugConfig {
   address: String,
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,7 +150,7 @@ struct DebugConfig {
   format: DebugFormat,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 enum DebugFormat {
   Text,
   #[default]
@@ -152,20 +158,20 @@ enum DebugFormat {
 }
 
 /// MetricsConfig provides metrics configuration
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 struct MetricsConfig {
   address: String,
   grpc_histogram: bool,
 }
 
 // CgroupConfig provides cgroup configuration
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 struct CgroupConfig {
   path: String,
 }
 
 // ProxyPlugin provides a proxy plugin configuration
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 struct ProxyPlugin {
   #[serde(rename = "type")]
   type_: String,
@@ -173,7 +179,7 @@ struct ProxyPlugin {
   platform: String,
 }
 /// StreamProcessor provides configuration for diff content processors
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 struct StreamProcessor {
   /// Accepts specific media-types
   accepts: Vec<String>,
@@ -182,15 +188,19 @@ struct StreamProcessor {
   /// Path or name of the binary
   path: String,
   /// Args to the binary
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  args: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  args: Option<Vec<String>>,
   /// Environment variables for the binary
-  #[serde(skip_serializing_if = "Vec::is_empty", default)]
-  env: Vec<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  env: Option<Vec<String>>,
 }
 
 #[cfg(test)]
 mod tests {
+  use std::io::{Read, Seek, SeekFrom};
+
+  use tempfile::NamedTempFile;
+
   use super::*;
 
   #[test]
@@ -228,5 +238,23 @@ mod tests {
 
     let serialized = toml::to_string_pretty(&deserialized).unwrap();
     insta::assert_debug_snapshot!(serialized);
+  }
+
+  #[test]
+  fn it_creates_containerd_config() {
+    let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9";
+    let config = ContainerdConfiguration::new(sandbox_img).unwrap();
+    insta::assert_debug_snapshot!(config);
+
+    let mut file = NamedTempFile::new().unwrap();
+    config.write(&file).unwrap();
+
+    // Seek to start
+    file.seek(SeekFrom::Start(0)).unwrap();
+
+    // Read
+    let mut buf = String::new();
+    file.read_to_string(&mut buf).unwrap();
+    insta::assert_debug_snapshot!(buf);
   }
 }
