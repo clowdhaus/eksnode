@@ -1,6 +1,38 @@
 use anyhow::Result;
 use tracing::error;
 
+use aws_config::SdkConfig;
+use aws_sdk_ecr::{
+  config::{self, retry::RetryConfig},
+  Client,
+};
+
+/// Get the ECR client
+pub async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
+  let client = Client::from_conf(
+    // Start with the shared environment configuration
+    config::Builder::from(&config)
+      // Set max attempts
+      .retry_config(RetryConfig::standard().with_max_attempts(retries))
+      .build(),
+  );
+  Ok(client)
+}
+
+pub async fn get_authorization_token(client: &Client) -> Result<String> {
+  let resp = client.get_authorization_token().send().await?;
+  let token = resp
+    .authorization_data
+    .expect("Failed to get ECR authorization data")
+    .pop()
+    .unwrap()
+    .authorization_token
+    .expect("Failed to get ECR authorization token");
+  println!("{}", token);
+
+  Ok(token)
+}
+
 /// Get the ECR URI for the given region and domain
 ///
 /// More details about the mappings in this file can be found here
