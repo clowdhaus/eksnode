@@ -1,11 +1,10 @@
 use anyhow::Result;
-use tracing::error;
-
 use aws_config::SdkConfig;
 use aws_sdk_ecr::{
   config::{self, retry::RetryConfig},
   Client,
 };
+use tracing::error;
 
 /// Get the ECR client
 pub async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {

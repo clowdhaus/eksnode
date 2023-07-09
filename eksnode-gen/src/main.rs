@@ -214,7 +214,5 @@ async fn main() -> Result<()> {
   let cur_exe = env::current_exe()?;
   let cur_dir = cur_exe.parent().unwrap().parent().unwrap().parent().unwrap();
   write_eni_max_pods(&instances, regions, cur_dir)?;
-  write_ec2(&instances, cur_dir)?;
-
-  Ok(())
+  write_ec2(&instances, cur_dir)
 }

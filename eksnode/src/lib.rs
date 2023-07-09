@@ -27,7 +27,6 @@ use rust_embed::RustEmbed;
 #[folder = "templates/"]
 pub struct Templates;
 
-
 /// Get the configuration to authn/authz with AWS that will be used across AWS clients
 pub async fn get_sdk_config(region: Option<String>) -> Result<SdkConfig> {
   let aws_region = match region {

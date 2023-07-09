@@ -5,7 +5,7 @@ locals {
 }
 
 data "amazon-parameterstore" "this" {
-  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-minimal-kernel-default-${var.source_ami_arch}"
+  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-minimal-kernel-6.1-${var.source_ami_arch}"
 }
 
 source "amazon-ebs" "this" {

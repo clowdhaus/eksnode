@@ -8,7 +8,7 @@ use std::{
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct KubeConfig {
   /// Kind is a string value representing the REST resource this object represents.
@@ -112,7 +112,7 @@ impl KubeConfig {
 }
 
 /// NamedCluster relates nicknames to cluster information
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct NamedCluster {
   /// Cluster holds the cluster information
   cluster: Cluster,
@@ -121,7 +121,7 @@ struct NamedCluster {
   name: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Cluster {
   /// Server is the address of the kubernetes cluster (https://hostname:port)
@@ -170,7 +170,7 @@ struct Cluster {
 }
 
 /// NamedExtension relates nicknames to extension information
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct NamedExtension {
   /// Name is the nickname for this Extension
   name: String,
@@ -180,7 +180,7 @@ struct NamedExtension {
 }
 
 /// NamedContext relates nicknames to context information
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct NamedContext {
   /// Name is the nickname for this Context
   name: String,
@@ -192,7 +192,7 @@ struct NamedContext {
 /// Context is a tuple of references to a cluster (how do I communicate
 /// with a kubernetes cluster), a user (how do I identify myself),
 /// and a namespace (what subset of resources do I want to work with)
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct Context {
   /// Cluster is the name of the cluster for this context
   cluster: String,
@@ -211,7 +211,7 @@ struct Context {
 }
 
 /// NamedAuthInfo relates nicknames to auth information
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct NamedAuthInfo {
   /// Name is the nickname for this AuthInfo
   name: String,
@@ -223,7 +223,7 @@ struct NamedAuthInfo {
 /// AuthInfo contains information that describes identity information
 ///
 /// This is use to tell the kubernetes cluster who you are
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct AuthInfo {
   /// ClientCertificate is the path to a client cert file for TLS
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -289,7 +289,7 @@ struct AuthInfo {
 }
 
 /// AuthProviderConfig holds the configuration for a specified auth provider
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct AuthProviderConfig {
   /// Name is the name of the auth provider
   name: String,
@@ -301,7 +301,7 @@ struct AuthProviderConfig {
 
 /// ExecConfig specifies a command to provide client credentials.
 /// The command is exec'd and outputs structured stdout holding credentials.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct ExecConfig {
   /// Preferred input version of the ExecInfo.
@@ -347,7 +347,7 @@ struct ExecConfig {
 }
 
 /// ExecEnvVar is used for setting environment variables when executing an exec-based credential plugin
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct EnvVar {
   /// Name of the environment variable
   name: String,
@@ -357,7 +357,7 @@ struct EnvVar {
 }
 
 /// ExecInteractiveMode is a string that describes an exec plugin's relationship with standard input.
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub enum ExecInteractiveMode {
   /// This exec plugin never uses standard input

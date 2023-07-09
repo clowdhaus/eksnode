@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use regex::Regex;
+use regex_lite::Regex;
 use semver::Version;
 
 /// Extract the semantic version from the version string provided
