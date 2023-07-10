@@ -3,7 +3,7 @@
 use std::{
   collections::{btree_map, BTreeMap},
   env, fs,
-  path::Path,
+  path::{Path, PathBuf},
 };
 
 use anyhow::Result;
@@ -114,7 +114,10 @@ fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>
     "instances": instances,
   });
   let rendered = handlebars.render("tpl", &data)?;
-  let dest_path = cur_dir.join("ami").join("files").join("eni-max-pods.txt");
+  let path: PathBuf = ["ami", "playbooks", "roles", "eks", "files", "eni-max-pods.txt"]
+    .iter()
+    .collect();
+  let dest_path = cur_dir.join(path);
   fs::write(dest_path, rendered)?;
 
   Ok(())

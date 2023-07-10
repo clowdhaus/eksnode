@@ -1,0 +1,8 @@
+---
+- name: 'Provision EKS Amazon Linux 2023 Node'
+  become: true
+  # hosts: default
+  hosts: single_ec2
+
+  roles:
+    - eks

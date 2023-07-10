@@ -204,7 +204,7 @@ impl Node {
 
   /// Decode the base64 encoded CA certificate and write it to disk
   fn write_ca_cert(&self, base64_ca: &str) -> Result<()> {
-    let decoded = general_purpose::STANDARD_NO_PAD.decode(base64_ca.clone())?;
+    let decoded = general_purpose::STANDARD_NO_PAD.decode(base64_ca)?;
 
     fs::create_dir_all("/etc/kubernetes/pki")?;
     Ok(fs::write("/etc/kubernetes/pki/ca.crt", decoded)?)

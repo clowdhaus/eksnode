@@ -1,0 +1,345 @@
+---
+- name: Install eksnode
+  copy:
+    src: ../../target/release/eksnode
+    dest: /usr/bin/eksnode
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install dnf packages
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - awscli
+    - iptables-legacy # needed by kubelet
+    - amazon-ssm-agent
+
+# ec2-net-utils interferes with the route setup on the instance
+- name: Remove the ec2-net-utils package
+  ansible.builtin.dnf:
+    name: ec2-net-utils
+    state: absent
+
+# - name: Hardening sshd
+#   block:
+#     - name: Editing sshd config
+#       lineinfile:
+#         dest: "/etc/ssh/sshd_config"
+#         regexp: "{{ item.regexp | default(omit) }}"
+#         line: "{{ item.line }}"
+#         state: "{{ item.state | default('present') }}"
+#         validate: "sshd -t -f %s"
+#       with_items:
+#         - line: "Protocol 2"
+#         - line: "Protocol 1"
+#           state: "absent"
+#         - line: "RSAAuthentication yes"
+#           state: "absent"
+#         - regexp: "^Port\ "
+#           line: "Port {{ ssh_port }}"
+#         - regexp: "^PermitRootLogin\ "
+#           line: "PermitRootLogin no"
+#         - regexp: "^PasswordAuthentication\ "
+#           line: "PasswordAuthentication no"
+#         - regexp: "^PermitEmptyPasswords\ "
+#           line: "PermitEmptyPasswords no"
+#         - regexp: "^StrictModes\ "
+#           line: "StrictModes yes"
+#         - regexp: "^IgnoreRhosts\ "
+#           line: "IgnoreRhosts yes"
+#         - regexp: "^RhostsAuthentication\ "
+#           line: "RhostsAuthentication no"
+#         - regexp: "^RhostsRSAAuthentication\ "
+#           line: "RhostsRSAAuthentication no"
+#         - regexp: "^ClientAliveInterval\ "
+#           line: "ClientAliveInterval 300"
+#         - regexp: "^ClientAliveCountMax\ "
+#           line: "ClientAliveCountMax 0"
+#         - regexp: "^AllowTcpForwarding\ "
+#           line: "AllowTcpForwarding no"
+#         - regexp: "^X11Forwarding\ "
+#           line: "X11Forwarding no"
+#         - regexp: "^KexAlgorithms\ "
+#           line: "KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
+#         - regexp: "^Ciphers\ "
+#           line: "Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+#         - regexp: "^MACs\ "
+#           line: "MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
+
+#     - name: Reload sshd
+#       service:
+#         name: sshd
+#         state: reloaded
+
+#########################################################
+# kube-proxy
+#########################################################
+
+- name: Create logrotate.conf file
+  copy:
+    src: files/logrotate.conf
+    dest: /etc/logrotate.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create /etc/logrotate.d/kube-proxy file
+  copy:
+    src: files/logrotate-kube-proxy
+    dest: /etc/logrotate.d/kube-proxy
+    mode: 0644
+    owner: root
+    group: root
+
+#########################################################
+# Kubernetes directories
+#########################################################
+
+- name: Create /etc/eks/ directory
+  ansible.builtin.file:
+    path: /etc/eks
+    state: directory
+    owner: root
+    group: root
+  register: eks_dir
+
+- name: Create /etc/kubernetes/manifests directory
+  ansible.builtin.file:
+    path: /etc/kubernetes/manifests
+    state: directory
+    owner: root
+    group: root
+
+# TODO - what does this do? Is it required?
+- name: Create /var/lib/kubernetes directory
+  ansible.builtin.file:
+    path: /var/lib/kubernetes
+    state: directory
+    owner: root
+    group: root
+
+#########################################################
+# RunC
+#########################################################
+
+- name: Install runc
+  ansible.builtin.get_url:
+    url: "{{ runc_url }}"
+    dest: /usr/local/sbin/runc
+    checksum: "{{ runc_checksum }}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Create runtime slice
+  copy:
+    src: files/runtime.slice
+    dest: /etc/systemd/system/runtime.slice
+
+#########################################################
+# containerd
+#########################################################
+
+- name: Create containerd directory
+  ansible.builtin.file:
+    path: /usr/local/bin/containerd
+    state: directory
+    owner: root
+    group: root
+  register: containerd_dir
+
+# This separate task is used to validate checksum
+- name: Download containerd
+  ansible.builtin.get_url:
+    url: "{{ containerd_url }}"
+    dest: "/tmp/{{ containerd_archive }}"
+    checksum: "{{ containerd_checksum }}"
+  register: containerd_archive_dl
+
+- name: Extract containerd
+  ansible.builtin.unarchive:
+    src: "{{ containerd_archive_dl.dest }}"
+    dest: "{{ containerd_dir.path }}"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+    keep_newer: yes
+
+- name: Create "{{ eks_dir.path }}/containerd"
+  ansible.builtin.file:
+    path: "{{ eks_dir.path }}/containerd"
+    state: directory
+    owner: root
+    group: root
+  register: eks_containerd_dir
+
+# - name: Create sandbox image service
+#   copy:
+#     src: files/sandbox-image.service
+#     dest: "{{ eks_containerd_dir.path }}/sandbox-image.service"
+
+- name: Create /etc/systemd/system/containerd.service.d directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/containerd.service.d
+    state: directory
+    owner: root
+    group: root
+
+- name: Create /etc/modules-load.d/containerd.conf file
+  blockinfile:
+    state: present
+    dest: /etc/modules-load.d/containerd.conf
+    create: true
+    insertafter: EOF
+    content: |
+      br_netfilter
+      overlay
+
+- name: Create /etc/sysctl.d/99-kubernetes-cri.conf file
+  blockinfile:
+    state: present
+    dest: /etc/sysctl.d/99-kubernetes-cri.conf
+    create: true
+    insertafter: EOF
+    content: |
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.bridge.bridge-nf-call-iptables = 1
+      net.ipv4.ip_forward = 1
+
+#########################################################
+# CNI
+#########################################################
+
+- name: Create /opt/cni/bin
+  ansible.builtin.file:
+    path: /opt/cni/bin
+    state: directory
+    owner: root
+    group: root
+  register: cni_dir
+
+# This separate task is used to validate checksum
+- name: Download CNI
+  ansible.builtin.get_url:
+    url: "{{ cni_plugin_url}}"
+    dest: "/tmp/{{ cni_plugin_archive }}"
+    checksum: "{{ cni_plugin_checksum }}"
+  register: cni_archive
+
+- name: Extract CNI
+  ansible.builtin.unarchive:
+    src: "{{ cni_archive.dest }}"
+    dest: "{{ cni_dir.path }}"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+    keep_newer: yes
+
+#########################################################
+# IAM authenticator / ECR credential provider
+#########################################################
+
+- name: Download aws-iam-authenticator binary
+  ansible.builtin.get_url:
+    url: "https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator"
+    dest: "/usr/bin/aws-iam-authenticator"
+    checksum: "sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator.sha256"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create ECR credential provider directory
+  ansible.builtin.file:
+    path: "{{ eks_dir.path }}/image-credential-provider"
+    state: directory
+    owner: root
+    group: root
+  register: image_credential_provider_dir
+
+- name: Download ecr-credential-provider binary
+  ansible.builtin.get_url:
+    url: "https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider"
+    dest: "{{ image_credential_provider_dir.path }}/ecr-credential-provider"
+    checksum: "sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider.sha256"
+    owner: root
+    group: root
+    mode: 0755
+
+# TODO - create /etc/eks/release AMI build metadata file
+
+#########################################################
+# sysctl
+#########################################################
+
+- name: Create /etc/sysctl.d/99-amazon.conf
+  blockinfile:
+    state: present
+    dest: /etc/sysctl.d/99-amazon.conf
+    create: true
+    insertafter: EOF
+    content: |
+      vm.overcommit_memory=1
+      kernel.panic=10
+      kernel.panic_on_oops=1
+
+- name: Add to /etc/sysctl.conf
+  blockinfile:
+    state: present
+    dest: /etc/sysctl.conf
+    create: true
+    insertafter: EOF
+    content: |
+      fs.inotify.max_user_watches=524288
+      fs.inotify.max_user_instances=8192
+      vm.max_map_count=524288
+
+- name: Create "{{ eks_dir.path }}/eni-max-pods.txt"
+  copy:
+    src: files/eni-max-pods.txt
+    dest: "{{ eks_dir.path }}/eni-max-pods.txt"
+    owner: root
+    group: root
+
+# TODO - create psuedo bootstrap.sh script for backwards compat
+
+#########################################################
+# Kubelet
+#########################################################
+
+- name: Download kubelet binary
+  ansible.builtin.get_url:
+    url: "https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet"
+    dest: "/usr/bin/kubelet"
+    checksum: "sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet.sha256"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create /var/lib/kubelet directory
+  ansible.builtin.file:
+    path: /var/lib/kubelet
+    state: directory
+    owner: root
+    group: root
+
+# Kubelet config will be saved here
+# TODO - why not save to /var/lib/kubelet?
+# kubelet kubeconfig is stored in /var/lib/kubelet
+
+- name: Create /etc/kubernetes/kubelet directory
+  ansible.builtin.file:
+    path: /etc/kubernetes/kubelet
+    state: directory
+    owner: root
+    group: root
+
+- name: Create /etc/systemd/system/kubelet.service.d directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/kubelet.service.d
+    state: directory
+    owner: root
+    group: root

@@ -46,7 +46,7 @@ pub struct InstanceMetadata {
   /// this refers to the eth0 device (the device for which the device number is 0)
   pub local_ipv4: Option<Ipv4Addr>,
   /// The IPv6 addresses associated with the interface
-  pub ipv6_addresses: Vec<Ipv6Addr>,
+  pub ipv6_addresses: Option<Vec<Ipv6Addr>>,
   /// The instance type of the instance.
   pub instance_type: String,
   /// The ID of the instance.
@@ -75,13 +75,14 @@ pub async fn get_imds_data() -> Result<InstanceMetadata> {
     Err(_) => None,
   };
   let ipv6s_uri = format!("/latest/meta-data/network/interfaces/macs/{mac_address}/ipv6s");
-  let ipv6_addresses = client
-    .get(&ipv6s_uri)
-    .await
-    .expect("Failed to get IPv6 addresses")
-    .split('\n')
-    .map(|s| s.parse::<Ipv6Addr>().expect("Failed to parse IPv6 address"))
-    .collect();
+  let ipv6_addresses = match client.get(&ipv6s_uri).await {
+    Ok(s) => Some(
+      s.split('\n')
+        .map(|s| s.parse::<Ipv6Addr>().expect("Failed to parse IPv6 address"))
+        .collect(),
+    ),
+    Err(_) => None,
+  };
   let instance_type = client.get("/latest/meta-data/instance-type").await?;
   let instance_id = client.get("/latest/meta-data/instance-id").await?;
 

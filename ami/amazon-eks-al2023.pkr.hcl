@@ -13,7 +13,7 @@ source "amazon-ebs" "this" {
     delete_on_termination = true
     device_name           = "/dev/sdb"
     volume_size           = var.data_volume_size
-    volume_type           = "gp2"
+    volume_type           = "gp3"
   }
 
   ami_description         = var.ami_description
@@ -47,7 +47,7 @@ source "amazon-ebs" "this" {
   subnet_id    = var.subnet_id
 
   tags = {
-    os_version        = "Amazon Linux 2"
+    os_version        = "Amazon Linux 2023"
     source_image_name = "{{ .SourceAMIName }}"
     ami_type          = "al2023"
   }
