@@ -1,6 +1,7 @@
 use std::{
-  fs::File,
+  fs::{File, OpenOptions},
   io::{BufReader, BufWriter},
+  os::unix::fs::{chown, OpenOptionsExt},
   path::Path,
 };
 
@@ -107,10 +108,12 @@ impl CredentialProviderConfig {
     Ok(conf)
   }
 
-  pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
-    let file = File::create(path)?;
+  pub fn write<P: AsRef<Path>>(&self, path: P, id: Option<u32>) -> Result<()> {
+    let file = OpenOptions::new().write(true).create(true).mode(0o644).open(&path)?;
     let writer = BufWriter::new(file);
-    serde_json::to_writer_pretty(writer, self).map_err(anyhow::Error::from)
+
+    serde_json::to_writer_pretty(writer, self).map_err(anyhow::Error::from)?;
+    Ok(chown(path, id, id)?)
   }
 }
 
@@ -158,7 +161,7 @@ mod tests {
     assert_eq!(new.api_version, "credentialprovider.kubelet.k8s.io/v1alpha1".to_owned());
 
     let mut file = NamedTempFile::new().unwrap();
-    new.write(&file).unwrap();
+    new.write(&file, None).unwrap();
 
     // Seek to start
     file.seek(SeekFrom::Start(0)).unwrap();
@@ -176,13 +179,12 @@ mod tests {
     insta::assert_debug_snapshot!(new);
     assert_eq!(new.api_version, "credentialprovider.kubelet.k8s.io/v1".to_owned());
 
+    // Write to file
     let mut file = NamedTempFile::new().unwrap();
-    new.write(&file).unwrap();
-
-    // Seek to start
+    new.write(&file, None).unwrap();
     file.seek(SeekFrom::Start(0)).unwrap();
 
-    // Read
+    // Read back contents written to file
     let mut buf = String::new();
     file.read_to_string(&mut buf).unwrap();
     insta::assert_debug_snapshot!(buf);

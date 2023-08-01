@@ -1,5 +1,10 @@
 # Amazon Machine Image (AMI) Packer Configuration(s)
 
+```sh
+packer init .
+packer build -var-file=al2023_x86_64.pkrvars.hcl -var 'subnet_id=subnet-xxx' .
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

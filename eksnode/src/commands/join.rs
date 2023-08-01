@@ -2,7 +2,7 @@ use std::{
   fs,
   io::Write,
   net::IpAddr,
-  path::{Path, PathBuf},
+  path::PathBuf,
 };
 
 use anyhow::Result;
@@ -14,7 +14,7 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info};
 
-use crate::{commands, containerd, ec2, ecr, eks, imds, kubelet, resource};
+use crate::{commands, containerd, ec2, ecr, eks, imds, kubelet, resource, utils};
 
 #[derive(Args, Debug, Default, Serialize, Deserialize)]
 pub struct Node {
@@ -47,12 +47,6 @@ pub struct Node {
   /// Defaults to 10.100.0.10 or 172.20.0.10 based on the IP address of the primary interface
   #[arg(long)]
   pub dns_cluster_ip: Option<IpAddr>,
-
-  /// Execute node join process without making any changes to the system
-  ///
-  /// Useful for debugging - will display changes that are intended to be made when joining node to cluster
-  #[arg(long)]
-  pub dry_run: bool,
 
   /// Specifies cluster is a local cluster on Outpost
   #[arg(long)]
@@ -121,11 +115,11 @@ impl Node {
   async fn get_cluster(&self) -> Result<eks::Cluster> {
     let config = crate::get_sdk_config(None).await?;
     let imds_data = crate::imds::get_imds_data().await?;
-    debug!("Instance metadata: {:#?}", imds_data);
+    debug!("Instance metadata: {imds_data:#?}");
 
     // Details required to join node to cluster
     let cluster = eks::collect_or_get_cluster(config, self, &imds_data.vpc_ipv4_cidr_blocks).await?;
-    debug!("Node details: {:#?}", cluster);
+    debug!("Node details: {cluster:#?}");
 
     Ok(cluster)
   }
@@ -206,8 +200,7 @@ impl Node {
   fn write_ca_cert(&self, base64_ca: &str) -> Result<()> {
     let decoded = general_purpose::STANDARD_NO_PAD.decode(base64_ca)?;
 
-    fs::create_dir_all("/etc/kubernetes/pki")?;
-    Ok(fs::write("/etc/kubernetes/pki/ca.crt", decoded)?)
+    utils::write_file(&decoded, None, "/etc/kubernetes/pki/ca.crt")
   }
 
   /// Update /etc/hosts for the cluster endpoint IPs for Outpost local cluster
@@ -257,13 +250,13 @@ impl Node {
     }
 
     let kubelet_kubeconfig = self.get_kubelet_kubeconfig(&cluster, &instance_metadata.region)?;
-    kubelet_kubeconfig.config.write(kubelet_kubeconfig.path)?;
+    kubelet_kubeconfig.config.write(kubelet_kubeconfig.path, Some(0))?;
 
     let kubelet_config = self.get_kubelet_config(cluster.dns_cluster_ip, max_pods, &kubelet_version)?;
-    kubelet_config.write(Path::new("/etc/kubernetes/kubelet/kubelet-config.json"))?;
+    kubelet_config.write("/etc/kubernetes/kubelet/kubelet-config.json", Some(0))?;
 
     let containerd_config = self.get_containerd_config(instance_metadata).await?;
-    containerd_config.write(Path::new("/etc/containerd/config.toml"))?;
+    containerd_config.write("/etc/containerd/config.toml")?;
 
     Ok(())
   }
@@ -343,7 +336,7 @@ mod tests {
     let cluster = eks::Cluster {
       name: "example".to_string(),
       endpoint: "http://localhost:8080".to_string(),
-      b64_ca: "YmFzZTY0IGNh".to_string(),
+      b64_ca: "c3VwZXIgc2VjcmV0IGNsdXN0ZXIgY2VydGlmaWNhdGU".to_string(),
       is_local_cluster: true,
       dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
     };
@@ -363,7 +356,7 @@ mod tests {
     let cluster = eks::Cluster {
       name: "example".to_string(),
       endpoint: "http://localhost:8080".to_string(),
-      b64_ca: "YmFzZTY0IGNh".to_string(),
+      b64_ca: "c3VwZXIgc2VjcmV0IGNsdXN0ZXIgY2VydGlmaWNhdGU".to_string(),
       is_local_cluster: false,
       dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
     };

@@ -12,3 +12,13 @@ output "ansible_connect" {
   description = "Connect via Ansible"
   value       = "ansible-playbook al2023_playbook.yaml -i ansible_hosts --user ec2-user --key-file ${local_sensitive_file.key_pair.filename} -e key=${local_sensitive_file.pub_key_pair.filename}"
 }
+
+output "private_subnets" {
+  description = "Private subnets"
+  value       = module.vpc.private_subnets
+}
+
+output "public_subnets" {
+  description = "Public subnets"
+  value       = module.vpc.public_subnets
+}

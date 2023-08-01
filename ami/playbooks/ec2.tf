@@ -54,7 +54,7 @@ module "ec2" {
 
   name = local.name
 
-  ami                    = data.aws_ssm_parameter.al2023[local.arch].value
+  ami                    = "ami-076184579b6fac53d" # data.aws_ssm_parameter.al2023[local.arch].value
   instance_type          = "t3.large"
   availability_zone      = element(module.vpc.azs, 0)
   subnet_id              = element(module.vpc.public_subnets, 0)
@@ -71,11 +71,11 @@ module "ec2" {
   associate_public_ip_address = true
   key_name                    = module.key_pair.key_pair_name
 
-  user_data                   = <<-EOT
-    #!/bin/bash
+  # user_data                   = <<-EOT
+  #   #!/bin/bash
 
-    dnf install rust cargo -y
-  EOT
+  #   dnf install rust cargo -y
+  # EOT
   user_data_replace_on_change = true
 
   metadata_options = {
@@ -156,6 +156,9 @@ module "vpc" {
   azs             = local.azs
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
   public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
+
+  enable_nat_gateway = true
+  single_nat_gateway = true
 
   tags = module.tags.tags
 }

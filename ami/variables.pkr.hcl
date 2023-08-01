@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "Region where AMI will be created"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
 }
 
 variable "data_volume_size" {
@@ -58,7 +58,7 @@ variable "source_ami_owner_govcloud" {
   default     = "219670896067"
 }
 
-variable "source_ami_ssh_user" {
+variable "ssh_username" {
   description = "The SSH user used when connecting to the AMI for provisioning"
   type        = string
   default     = "ec2-user"

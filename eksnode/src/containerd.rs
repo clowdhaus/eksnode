@@ -3,6 +3,8 @@ use std::{collections::BTreeMap, path::Path};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
+use crate::utils;
+
 /// Config provides containerd configuration data for the server
 ///
 /// https://github.com/containerd/containerd/blob/main/services/server/config/config.go
@@ -100,7 +102,7 @@ impl ContainerdConfiguration {
 
   pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
     let conf = toml::to_string_pretty(self)?;
-    std::fs::write(path, conf).map_err(anyhow::Error::from)
+    utils::write_file(conf.as_bytes(), Some(0o644), path)
   }
 }
 

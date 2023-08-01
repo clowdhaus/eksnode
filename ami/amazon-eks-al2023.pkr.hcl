@@ -5,7 +5,8 @@ locals {
 }
 
 data "amazon-parameterstore" "this" {
-  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-minimal-kernel-6.1-${var.source_ami_arch}"
+  name   = "/aws/service/ami-amazon-linux-latest/al2023-ami-minimal-kernel-6.1-${var.source_ami_arch}"
+  region = var.aws_region
 }
 
 source "amazon-ebs" "this" {
@@ -41,10 +42,22 @@ source "amazon-ebs" "this" {
     Name = local.target_ami_name
   }
 
-  source_ami   = data.amazon-parameterstore.this.value
-  ssh_pty      = true
-  ssh_username = var.source_ami_ssh_user
-  subnet_id    = var.subnet_id
+  source_ami = data.amazon-parameterstore.this.value
+  subnet_id = var.subnet_id
+
+  communicator  = "ssh"
+  ssh_interface = "public_dns"
+  ssh_username = var.ssh_username
+  associate_public_ip_address = true
+
+  // temporary_iam_instance_profile_policy_document {
+  //   Statement {
+  //     Action   = ["*"]
+  //     Effect   = "Allow"
+  //     Resource = ["*"]
+  //   }
+  //   Version = "2012-10-17"
+  // }
 
   tags = {
     os_version        = "Amazon Linux 2023"
@@ -56,39 +69,40 @@ source "amazon-ebs" "this" {
 build {
   sources = ["source.amazon-ebs.this"]
 
-  provisioner "shell" {
-    execute_command   = "echo 'packer' | {{ .Vars }} sudo -S -E bash -eux '{{ .Path }}'"
-    expect_disconnect = true
-    pause_after       = "15s"
-    script            = "scripts/update.sh"
+  provisioner "ansible" {
+    playbook_file = "./playbooks/al2023_playbook.yaml"
   }
 
-  provisioner "shell" {
-    execute_command = "echo 'packer' | {{ .Vars }} sudo -S -E bash -eux '{{ .Path }}'"
+  // provisioner "shell" {
+  //   execute_command   = "echo 'packer' | {{ .Vars }} sudo -S -E bash -eux '{{ .Path }}'"
+  //   expect_disconnect = true
+  //   pause_after       = "15s"
+  //   script            = "scripts/update.sh"
+  // }
 
-    environment_vars = [
-      "HTTP_PROXY=${var.http_proxy}",
-      "HTTPS_PROXY=${var.https_proxy}",
-      "NO_PROXY=${var.no_proxy}",
-    ]
+  // provisioner "shell" {
+  //   execute_command = "echo 'packer' | {{ .Vars }} sudo -S -E bash -eux '{{ .Path }}'"
 
-    expect_disconnect = true
-    pause_after       = "15s"
-    scripts = [
-      "scripts/partition-disks.sh",
-      "scripts/configure-proxy.sh",
-      "scripts/configure-containers.sh",
-    ]
-  }
+  //   environment_vars = [
+  //     "HTTP_PROXY=${var.http_proxy}",
+  //     "HTTPS_PROXY=${var.https_proxy}",
+  //     "NO_PROXY=${var.no_proxy}",
+  //   ]
 
-  provisioner "shell" {
-    execute_command = "echo 'packer' | {{ .Vars }} sudo -S -E bash -eux '{{ .Path }}'"
+  //   expect_disconnect = true
+  //   pause_after       = "15s"
+  //   scripts = [
+  //     "scripts/partition-disks.sh",
+  //     "scripts/configure-proxy.sh",
+  //     "scripts/configure-containers.sh",
+  //   ]
+  // }
 
-    scripts = [
-      "scripts/cis-benchmark.sh",
-      "scripts/cis-docker.sh",
-      "scripts/cis-eks.sh",
-      "scripts/cleanup.sh",
-    ]
-  }
+  // provisioner "shell" {
+  //   execute_command = "echo 'packer' | {{ .Vars }} sudo -S -E bash -eux '{{ .Path }}'"
+
+  //   scripts = [
+  //     "scripts/cleanup.sh",
+  //   ]
+  // }
 }

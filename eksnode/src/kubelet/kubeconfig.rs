@@ -1,7 +1,8 @@
 use std::{
   collections::BTreeMap,
-  fs::File,
+  fs::{File, OpenOptions},
   io::{BufReader, BufWriter},
+  os::unix::fs::{chown, OpenOptionsExt},
   path::{Path, PathBuf},
 };
 
@@ -104,10 +105,12 @@ impl KubeConfig {
     Ok(conf)
   }
 
-  pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
-    let file = File::create(path)?;
+  pub fn write<P: AsRef<Path>>(&self, path: P, id: Option<u32>) -> Result<()> {
+    let file = OpenOptions::new().write(true).create(true).mode(0o644).open(&path)?;
     let writer = BufWriter::new(file);
-    serde_yaml::to_writer(writer, self).map_err(anyhow::Error::from)
+
+    serde_yaml::to_writer(writer, self).map_err(anyhow::Error::from)?;
+    Ok(chown(path, id, id)?)
   }
 }
 
@@ -421,13 +424,12 @@ mod tests {
     let new = KubeConfig::new("http://localhost:8080", "example", "us-west-2").unwrap();
     insta::assert_debug_snapshot!(new);
 
+    // Write to file
     let mut file = NamedTempFile::new().unwrap();
-    new.write(&file).unwrap();
-
-    // Seek to start
+    new.write(&file, None).unwrap();
     file.seek(SeekFrom::Start(0)).unwrap();
 
-    // Read
+    // Read back contents written to file
     let mut buf = String::new();
     file.read_to_string(&mut buf).unwrap();
     insta::assert_debug_snapshot!(buf);

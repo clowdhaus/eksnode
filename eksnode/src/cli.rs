@@ -31,18 +31,9 @@ fn get_styles() -> clap::builder::Styles {
     )
 }
 
-const ABOUT: &str = r"
-       _                        _
-   ___| | _____ _ __   ___   __| | ___
-  / _ \ |/ / __| '_ \ / _ \ / _` |/ _ \
- |  __/   <\__ \ | | | (_) | (_| |  __/
-  \___|_|\_\___/_| |_|\___/ \__,_|\___|
-
-";
-
 #[derive(Debug, Parser)]
 #[command(author, about, version)]
-#[command(author, version, about, long_about = ABOUT)]
+#[command(author, version, about)]
 #[command(propagate_version = true)]
 #[command(styles=get_styles())]
 pub struct Cli {

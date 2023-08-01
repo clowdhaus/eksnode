@@ -1,3 +1,10 @@
+use std::{
+  fs::OpenOptions,
+  io::Write,
+  os::unix::fs::{chown, OpenOptionsExt},
+  path::Path,
+};
+
 use anyhow::{anyhow, Result};
 use regex_lite::Regex;
 use semver::Version;
@@ -28,6 +35,18 @@ pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<String> {
     }
     Err(e) => Err(anyhow!("Error executing command {}: {}", cmd, e)),
   }
+}
+
+/// Write a file to disk, setting the file mode and owner (gid/uid)
+pub fn write_file<P: AsRef<Path>>(contents: &[u8], mode: Option<u32>, path: P) -> Result<()> {
+  let mut file = OpenOptions::new()
+    .write(true)
+    .create(true)
+    .mode(mode.unwrap_or(0o644))
+    .open(&path)?;
+
+  file.write_all(contents)?;
+  Ok(chown(&path, Some(0), Some(0))?)
 }
 
 #[cfg(test)]

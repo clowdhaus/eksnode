@@ -142,7 +142,14 @@
 # containerd
 #########################################################
 
-- name: Create containerd directory
+- name: Create /etc/containerd directory
+  ansible.builtin.file:
+    path: /etc/containerd
+    state: directory
+    owner: root
+    group: root
+
+- name: Create /usr/local/bin/containerd directory
   ansible.builtin.file:
     path: /usr/local/bin/containerd
     state: directory
@@ -189,21 +196,21 @@
     group: root
 
 - name: Create /etc/modules-load.d/containerd.conf file
-  blockinfile:
-    state: present
+  copy:
     dest: /etc/modules-load.d/containerd.conf
-    create: true
-    insertafter: EOF
+    mode: 0644
+    owner: root
+    group: root
     content: |
       br_netfilter
       overlay
 
 - name: Create /etc/sysctl.d/99-kubernetes-cri.conf file
-  blockinfile:
-    state: present
+  copy:
     dest: /etc/sysctl.d/99-kubernetes-cri.conf
-    create: true
-    insertafter: EOF
+    mode: 0644
+    owner: root
+    group: root
     content: |
       net.bridge.bridge-nf-call-ip6tables = 1
       net.bridge.bridge-nf-call-iptables = 1
@@ -276,31 +283,29 @@
 #########################################################
 
 - name: Create /etc/sysctl.d/99-amazon.conf
-  blockinfile:
-    state: present
+  copy:
     dest: /etc/sysctl.d/99-amazon.conf
-    create: true
-    insertafter: EOF
+    mode: 0644
+    owner: root
+    group: root
     content: |
       vm.overcommit_memory=1
       kernel.panic=10
       kernel.panic_on_oops=1
 
 - name: Add to /etc/sysctl.conf
-  blockinfile:
-    state: present
+  copy:
+    src: files/sysctl.conf
     dest: /etc/sysctl.conf
-    create: true
-    insertafter: EOF
-    content: |
-      fs.inotify.max_user_watches=524288
-      fs.inotify.max_user_instances=8192
-      vm.max_map_count=524288
+    mode: 0644
+    owner: root
+    group: root
 
 - name: Create "{{ eks_dir.path }}/eni-max-pods.txt"
   copy:
     src: files/eni-max-pods.txt
     dest: "{{ eks_dir.path }}/eni-max-pods.txt"
+    mode: 0644
     owner: root
     group: root
 
@@ -340,6 +345,13 @@
 - name: Create /etc/systemd/system/kubelet.service.d directory
   ansible.builtin.file:
     path: /etc/systemd/system/kubelet.service.d
+    state: directory
+    owner: root
+    group: root
+
+- name: Create /etc/kubernetes/pki directory
+  ansible.builtin.file:
+    path: /etc/kubernetes/pki
     state: directory
     owner: root
     group: root
