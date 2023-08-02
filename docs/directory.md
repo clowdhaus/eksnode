@@ -2,10 +2,9 @@
 
 ```sh
 /etc/
-  ├─ [0644] logrotate.conf
-  ├─ logrotate.d/
-  │   ├─ [0644] kube-proxy # kube-proxy logrotate configuration file
-  │   └─ ...
+  ├─ cni
+  │   └─ [0700] net.d/                      # Folder containing CNI configuration files
+  │       └─ [0644] 10-aws.conflist         # CNI configuration file for AWS VPC CNI ( who created this, VPC CNI?)
   ├─ eks
   │   ├─ [0755] bootstrap.sh # Psuedo script for joining node to cluster
   │   ├─ containerd/
@@ -22,16 +21,17 @@
   │   ├─ [0644] iptables-restore.service
   │   ├─ [0755] max-pods-calculator.sh # Psuedo script for calculating max pods
   │   └─ [0644] release
-  ├─ cni
-  │   └─ [0700] net.d/                      # Folder containing CNI configuration files
-  │       └─ [0644] 10-aws.conflist         # CNI configuration file for AWS VPC CNI ( who created this, VPC CNI?)
-  └─ kubernetes/
-      ├─ kubelet/
-      │   └─ [0644] kubelet-config.json   # kubelet configuration file
-      ├─ manifests/
-      │   └─ ...
-      └─ pki/                             # Public Key Infrastructure for Kubernetes
-          └─ [0644] ca.crt                # Cluster Certificate Authority certificate
+  ├─ kubernetes/
+  │   ├─ kubelet/
+  │   │   └─ [0644] kubelet-config.json   # kubelet configuration file
+  │   ├─ manifests/
+  │   │   └─ ...
+  │   └─ pki/                             # Public Key Infrastructure for Kubernetes
+  │       └─ [0644] ca.crt                # Cluster Certificate Authority certificate
+  └─ [0644] logrotate.conf
+    └─ logrotate.d/
+        ├─ [0644] kube-proxy # kube-proxy logrotate configuration file
+        └─ ...
 
 /var/
   └─ lib/

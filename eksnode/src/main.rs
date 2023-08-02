@@ -13,7 +13,6 @@ async fn main() -> Result<()> {
   let subscriber = FmtSubscriber::builder()
     .with_max_level(cli.verbose.log_level_filter().as_trace())
     .without_time()
-    .pretty()
     .finish();
   tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
 
@@ -26,6 +25,13 @@ async fn main() -> Result<()> {
       }
     },
     Commands::CalcMaxPods(maxpods) => match maxpods.calc().await {
+      Ok(_) => Ok(()),
+      Err(err) => {
+        eprintln!("{err}");
+        process::exit(2);
+      }
+    },
+    Commands::Validate(validate) => match validate.validate().await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");

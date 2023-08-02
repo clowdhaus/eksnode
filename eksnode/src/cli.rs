@@ -55,6 +55,9 @@ pub enum Commands {
   /// this function calculates the actual limit based on all of the preceding factors including
   /// the theoretical max pods limit.
   CalcMaxPods(commands::calc::MaxPods),
+
+  /// Validate the node configuration
+  Validate(commands::validate::Validation),
 }
 
 #[cfg(test)]
