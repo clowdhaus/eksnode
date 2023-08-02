@@ -4,7 +4,6 @@ pub mod containerd;
 pub mod ec2;
 pub mod ecr;
 pub mod eks;
-pub mod gpu;
 pub mod imds;
 pub mod kubelet;
 pub mod resource;

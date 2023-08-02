@@ -1,9 +1,4 @@
-use std::{
-  fs,
-  io::Write,
-  net::IpAddr,
-  path::PathBuf,
-};
+use std::{fs, io::Write, net::IpAddr, path::PathBuf};
 
 use anyhow::Result;
 use base64::{engine::general_purpose, Engine as _};
