@@ -1,7 +1,9 @@
-use std::{
-  fs,
-  os::{linux::fs::MetadataExt, unix::fs::PermissionsExt},
-};
+#[cfg(target_os = "linux")]
+use std::os::linux::fs::MetadataExt;
+// For development on macOS
+#[cfg(target_os = "macos")]
+use std::os::macos::fs::MetadataExt;
+use std::{fs, os::unix::fs::PermissionsExt};
 
 use anyhow::{anyhow, Result};
 use clap::Args;
