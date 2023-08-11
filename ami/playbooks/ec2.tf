@@ -54,7 +54,7 @@ module "ec2" {
 
   name = local.name
 
-  ami                    = "ami-076184579b6fac53d" # data.aws_ssm_parameter.al2023[local.arch].value
+  ami                    = "ami-0eb252c5e91f4bc91" # data.aws_ssm_parameter.al2023[local.arch].value
   instance_type          = "t3.large"
   availability_zone      = element(module.vpc.azs, 0)
   subnet_id              = element(module.vpc.public_subnets, 0)
@@ -71,11 +71,15 @@ module "ec2" {
   associate_public_ip_address = true
   key_name                    = module.key_pair.key_pair_name
 
-  # user_data                   = <<-EOT
-  #   #!/bin/bash
+  user_data                   = <<-EOT
+    #!/bin/bash
 
-  #   dnf install rust cargo -y
-  # EOT
+    eksnode join --apiserver-endpoint http://localhost:8080 \
+      --b64-cluster-ca c3VwZXIgc2VjcmV0IGNsdXN0ZXIgY2VydGlmaWNhdGU \
+      --cluster-name example \
+      --dns-cluster-ip 10.1.0.10 \
+      -vv
+  EOT
   user_data_replace_on_change = true
 
   metadata_options = {

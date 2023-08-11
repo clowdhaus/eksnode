@@ -28,10 +28,10 @@
   │   │   └─ ...
   │   └─ pki/                             # Public Key Infrastructure for Kubernetes
   │       └─ [0644] ca.crt                # Cluster Certificate Authority certificate
-  └─ [0644] logrotate.conf
-    └─ logrotate.d/
-        ├─ [0644] kube-proxy # kube-proxy logrotate configuration file
-        └─ ...
+  ├─ [0644] logrotate.conf
+  └─ logrotate.d/
+      ├─ [0644] kube-proxy # kube-proxy logrotate configuration file
+      └─ ...
 
 /var/
   └─ lib/
@@ -113,4 +113,13 @@
 
 [0755] (ec2-user:ec2-user) /usr/bin/aws-iam-authenticator
 [0755] (ec2-user:ec2-user) /usr/bin/kubelet
+```
+
+```
+ERROR eksnode::commands::validate: /etc/cni/net.d: No such file or directory (os error 2)
+ERROR eksnode::commands::validate: /etc/eks/containerd/containerd-config.toml: No such file or directory (os error 2)
+ERROR eksnode::commands::validate: /etc/eks/kubelet-containerd.service: No such file or directory (os error 2)
+ERROR eksnode::commands::validate: /etc/eks/sandbox-image.service: No such file or directory (os error 2)
+ERROR eksnode::commands::validate: /etc/eks/image-credential-provider/config.json: No such file or directory (os error 2)
+ERROR eksnode::commands::validate: /etc/eks/iptables-restore.service: No such file or directory (os error 2)
 ```
