@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "eksnode",
+    "eksnode-cis",
     "eksnode-gen",
 ]
 resolver = "2"

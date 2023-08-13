@@ -807,6 +807,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "eksnode-cis"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "eksnode",
+ "serde",
+ "tracing",
+]
+
+[[package]]
 name = "eksnode-gen"
 version = "0.1.0"
 dependencies = [

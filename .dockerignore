@@ -1,6 +1,0 @@
-.github
-target
-tests
-.gitignore
-README.md
-rustfmt.toml

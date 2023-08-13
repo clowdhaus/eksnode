@@ -1,0 +1,21 @@
+[package]
+name = "eksnode-cis"
+version = "0.1.0"
+authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
+description = "EKS node CIS Benchmark checks"
+documentation = "https://github.com/clowdhaus/eksnode"
+homepage = "https://github.com/clowdhaus/eksnode"
+repository = "https://github.com/clowdhaus/eksnode"
+license = "Apache-2.0"
+edition = "2021"
+categories = [
+  "kubernetes",
+]
+exclude = [".*"]
+include = ["/src", "Cargo.toml", "REAMDE.md"]
+
+[dependencies]
+anyhow = "1.0"
+eksnode = { path = "../eksnode", version ="*"}
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+tracing = {version = "0.1", default-features = false, features = ["log-always"] }
