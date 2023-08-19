@@ -1,4 +1,15 @@
-ami_name_prefix = "amazon-eks-node"
-ami_description = "Amazon EKS arm6 AL2023 image"
-instance_type   = "c6g.large"
-source_ami_arch = "arm64"
+ami_description  = "Amazon EKS arm64 AL2023 image"
+instance_type    = "c6g.large"
+cpu_architecture = "arm64"
+
+ami_block_device_mappings = [
+  {
+    device_name = "/dev/xvda"
+  },
+]
+
+launch_block_device_mappings = [
+  {
+    device_name = "/dev/xvda"
+  },
+]

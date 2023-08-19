@@ -4,16 +4,17 @@
 
 1. Fresh slate to build using the latest technologies
     - AL2 AMI -> AL2023
-    - Cgroupsv1 -> Cgroupsv2
-    - Docker is removed and only containerd is considered
-      - Additional volume for containerd only
+    - cgroup v1 -> v2
+    - Docker is removed and containerd is the default
+      - Option to add additional volume for containerd only
     - Add https://github.com/awslabs/soci-snapshotter by default
-    - Change default max PIDs (increase)
+    - Add support for "profiles" for different workload types
+      - Change default max PIDs
     - Add support for network proxy https://github.com/awslabs/amazon-eks-ami/issues/1182
-    - Add crictl by default
 
 2. Improve the development process and increase confidence in changes
     - Bash scripts -> Rust binary
+      - Reduce the amount of additional tools that need to be installed to facilitate bootstrap process
     - Introduce unit tests, snapshot tests, and various integration tests
     - CLI provides ability to run various commands both locally and on host all through same interface/executable
       - Bootstrap, calc max pods, collect logs, validate configs, etc.
@@ -23,8 +24,8 @@
     - Improved validation of input parameters
     - Support for customizing the AMI using a configuration file
     - Support for specifying core component versions
-      - containerd & runc & CNI
-      - NVIDIA drivers & CUDA
+      - containerd, runc, CNI
+      - NVIDIA driver, EFA, etc.
     - Support for providing a kubelet config file
       - Either replace or merge with default kubelet config
       - https://github.com/awslabs/amazon-eks-ami/issues/661
@@ -60,8 +61,12 @@ There are tradeoffs when it comes to determining if a change should be made to t
   - Move as many kubelet args to the kubelet config file as possible
     - https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/
     - https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/
-- Instance store volume mount and configuration
-- Containerd and kubelet mount location
+- Mount/partition instance store volumes
+- Containerd and kubelet path location
+- Enable EFA interfaces
+  - Configuration provided will allow customization of the EFA(s)
+- Add node labels
+  - NFD & GFD common labels
 
 #### Order of Operations
 
