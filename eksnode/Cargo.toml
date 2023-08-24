@@ -25,15 +25,15 @@ path = "src/main.rs"
 anstyle = "1.0.0"
 anyhow = "1.0"
 aws-config = "0.56"
-aws-sdk-ecr = "0.29"
-aws-sdk-eks = "0.29"
+aws-sdk-ecr = "0.30"
+aws-sdk-eks = "0.30"
 aws-types = "0.56"
 base64 = "0.21.2"
 clap = { version = "4.2", features = ["derive", "color", "unstable-styles"] }
 clap-verbosity-flag = "2.0"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
-rust-embed = { version = "6.4", features = ["compression"] }
+rust-embed = { version = "8.0", features = ["compression"] }
 http = "0.2"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.16"

@@ -16,7 +16,7 @@ categories = [
 [dependencies]
 anyhow = "1.0"
 aws-config = "0.56"
-aws-sdk-ec2 = "0.29"
+aws-sdk-ec2 = "0.30"
 aws-types = "0.56"
 eksnode = { path = "../eksnode", version ="*"}
 handlebars = "4.3"
