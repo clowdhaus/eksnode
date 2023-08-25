@@ -96,5 +96,4 @@ Captures changes made during AMI creation (static) versus instance creation (dyn
   - https://github.com/kubernetes/enhancements/issues/2400
 - sudo ufw disable ?
 - iptables-legacy ? - https://kubernetes.io/blog/2022/09/07/iptables-chains-not-api/
-- Do we need to install `device-mapper-persistent-data` and `lvm2` with containerd only (docker runtime removed)?
 - What about containerd service [file](https://raw.githubusercontent.com/containerd/containerd/main/containerd.service)?
