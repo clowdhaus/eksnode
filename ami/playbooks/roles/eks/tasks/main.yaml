@@ -112,7 +112,6 @@
     owner: root
     group: root
 
-# TODO - what does this do? Is it required?
 - name: Create /var/lib/kubernetes directory
   ansible.builtin.file:
     path: /var/lib/kubernetes
