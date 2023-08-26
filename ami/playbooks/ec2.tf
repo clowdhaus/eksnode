@@ -54,7 +54,7 @@ module "ec2" {
 
   name = local.name
 
-  ami                    = "ami-0eb252c5e91f4bc91" # data.aws_ssm_parameter.al2023[local.arch].value
+  ami                    = "ami-0fa50f54e1b8664c2" # data.aws_ssm_parameter.al2023[local.arch].value
   instance_type          = "t3.large"
   availability_zone      = element(module.vpc.azs, 0)
   subnet_id              = element(module.vpc.public_subnets, 0)

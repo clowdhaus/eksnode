@@ -1,93 +1,48 @@
 #[cfg(target_os = "linux")]
 use std::os::linux::fs::MetadataExt;
-// For development on macOS
+// For development on macOS system
 #[cfg(target_os = "macos")]
 use std::os::macos::fs::MetadataExt;
 use std::{fs, os::unix::fs::PermissionsExt};
 
 use anyhow::{anyhow, Result};
 use clap::Args;
+use rust_embed::RustEmbed;
+use serde::{Deserialize, Serialize};
 use tracing::{error, info};
 
+#[derive(RustEmbed)]
+#[folder = "files"]
+struct ValidateAsset;
+
+#[derive(Debug, Serialize, Deserialize)]
 struct Metadata<'a> {
   path: &'a str,
   // Mode in octal format which shows both permissions
   // as well as additional details such as file type
   mode: &'a str,
-  // User and group ID
-  id: u32,
+  // User ID
+  uid: u32,
+  // Group ID
+  gid: u32,
 }
 
-/// Array of files and their expected properties
-static FILES: [Metadata; 12] = [
-  Metadata {
-    path: "/etc/cni/net.d",
-    mode: "40755",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/eks/containerd/containerd-config.toml",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/eks/kubelet-containerd.service",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/eks/sandbox-image.service",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/eks/eni-max-pods.txt",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/eks/image-credential-provider/config.json",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/eks/image-credential-provider/ecr-credential-provider",
-    mode: "100755",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/eks/iptables-restore.service",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/kubernetes/kubelet/kubelet-config.json",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/kubernetes/pki/ca.crt",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/logrotate.conf",
-    mode: "100644",
-    id: 0,
-  },
-  Metadata {
-    path: "/etc/logrotate.d/kube-proxy",
-    mode: "100644",
-    id: 0,
-  },
-];
+#[derive(Debug, Serialize, Deserialize)]
+struct Validate<'a> {
+  #[serde(borrow)]
+  files: Vec<Metadata<'a>>,
+}
 
 #[derive(Args, Debug)]
 pub struct Validation {}
 
 impl Validation {
   pub async fn validate(&self) -> Result<()> {
-    validate(FILES.iter()).await
+    let file = ValidateAsset::get("validate.yaml").unwrap();
+    let contents = std::str::from_utf8(file.data.as_ref())?;
+    let validation: Validate = serde_yaml::from_str(contents)?;
+
+    validate(validation.files.iter()).await
   }
 }
 
@@ -111,12 +66,12 @@ where
             pass = false;
           }
 
-          if uid != f.id {
+          if uid != f.uid {
             error!("{} has incorrect uid: {uid}", f.path);
             pass = false;
           }
 
-          if gid != f.id {
+          if gid != f.gid {
             error!("{} has incorrect gid: {gid}", f.path);
             pass = false;
           }
@@ -171,7 +126,8 @@ mod tests {
       Metadata {
         path: path.to_str().unwrap(),
         mode: "100644",
-        id: 1000,
+        uid: 1000,
+        gid: 1000,
       },
       // TODO - figure out why this is failing
       // Metadata {

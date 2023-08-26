@@ -1,0 +1,38 @@
+# File paths to validate the values specified here match what is on the node.
+files:
+  - path: /etc/cni/net.d
+    mode: 40755
+    uid: 0
+    gid: 0
+  - path: /etc/eks/sandbox-image.service
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/eks/eni-max-pods.txt
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/eks/image-credential-provider/config.json
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/eks/image-credential-provider/ecr-credential-provider
+    mode: 100755
+    uid: 0
+    gid: 0
+  - path: /etc/kubernetes/kubelet/kubelet-config.json
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/kubernetes/pki/ca.crt
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/logrotate.conf
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/logrotate.d/kube-proxy
+    mode: 100644
+    uid: 0
+    gid: 0

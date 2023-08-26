@@ -13,3 +13,6 @@ launch_block_device_mappings = [
     device_name = "/dev/xvda"
   },
 ]
+
+# TODO - figure out SSM access
+associate_public_ip_address = true

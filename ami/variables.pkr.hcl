@@ -243,7 +243,7 @@ variable "profile" {
 variable "region" {
   description = "The name of the region, such as us-east-1, in which to launch the EC2 instance to create the AMI"
   type        = string
-  default     = "eu-central-1"
+  default     = "us-east-1"
 }
 
 variable "secret_key" {

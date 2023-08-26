@@ -7,7 +7,7 @@ use ipnet::IpNet;
 use rand::{seq::SliceRandom, thread_rng};
 use semver::Version;
 use serde::{Deserialize, Serialize};
-use tracing::{debug, info};
+use tracing::{debug, error, info};
 
 use crate::{commands, containerd, ec2, ecr, eks, imds, kubelet, resource, utils};
 
@@ -248,7 +248,14 @@ impl Node {
     kubelet_kubeconfig.config.write(kubelet_kubeconfig.path, Some(0))?;
 
     let kubelet_config = self.get_kubelet_config(cluster.dns_cluster_ip, max_pods, &kubelet_version)?;
-    kubelet_config.write("/etc/kubernetes/kubelet/kubelet-config.json", Some(0))?;
+    let kubelet_config_path = "/etc/kubernetes/kubelet/kubelet-config.json";
+    match kubelet_config.write(kubelet_config_path, Some(0)) {
+      Ok(_) => (info!("created kubelet config at {kubelet_config_path}"),),
+      Err(e) => {
+        error!("failed to write kubelet config at {kubelet_config_path}");
+        return Err(e);
+      }
+    };
 
     let containerd_config = self.get_containerd_config(instance_metadata).await?;
     containerd_config.write("/etc/containerd/config.toml")?;

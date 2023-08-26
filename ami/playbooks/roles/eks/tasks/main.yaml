@@ -219,6 +219,13 @@
 # CNI
 #########################################################
 
+- name: Create /etc/cni/net.d directory
+  ansible.builtin.file:
+    path: /etc/cni/net.d
+    state: directory
+    owner: root
+    group: root
+
 - name: Create /opt/cni/bin
   ansible.builtin.file:
     path: /opt/cni/bin
