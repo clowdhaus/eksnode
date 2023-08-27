@@ -7,13 +7,10 @@ use std::{fs, os::unix::fs::PermissionsExt};
 
 use anyhow::{anyhow, Result};
 use clap::Args;
-use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 use tracing::{error, info};
 
-#[derive(RustEmbed)]
-#[folder = "files"]
-struct ValidateAsset;
+use crate::Assets;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Metadata<'a> {
@@ -38,7 +35,7 @@ pub struct Validation {}
 
 impl Validation {
   pub async fn validate(&self) -> Result<()> {
-    let file = ValidateAsset::get("validate.yaml").unwrap();
+    let file = Assets::get("validate.yaml").unwrap();
     let contents = std::str::from_utf8(file.data.as_ref())?;
     let validation: Validate = serde_yaml::from_str(contents)?;
 

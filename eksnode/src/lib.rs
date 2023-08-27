@@ -5,7 +5,6 @@ pub mod ec2;
 pub mod ecr;
 pub mod eks;
 pub mod gpu;
-pub mod imds;
 pub mod kubelet;
 pub mod resource;
 pub mod utils;
@@ -26,6 +25,13 @@ use rust_embed::RustEmbed;
 #[derive(RustEmbed)]
 #[folder = "templates/"]
 pub struct Templates;
+
+/// Embeds the contents of the `files/` directory into the binary
+///
+/// This struct contains the static data used within `eksnode`
+#[derive(RustEmbed)]
+#[folder = "files/"]
+pub struct Assets;
 
 /// Get the configuration to authn/authz with AWS that will be used across AWS clients
 pub async fn get_sdk_config(region: Option<String>) -> Result<SdkConfig> {

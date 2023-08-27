@@ -37,7 +37,6 @@ rust-embed = { version = "8.0", features = ["compression"] }
 http = "0.2"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.16"
-phf = { version = "0.11", features = ["macros"] }
 rand = "0.8"
 regex-lite = "0.1"
 semver = "1.0"

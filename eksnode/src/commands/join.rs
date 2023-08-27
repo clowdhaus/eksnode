@@ -9,7 +9,7 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, error, info};
 
-use crate::{commands, containerd, ec2, ecr, eks, imds, kubelet, resource, utils};
+use crate::{commands, containerd, ec2, ecr, eks, kubelet, resource, utils};
 
 #[derive(Args, Debug, Default, Serialize, Deserialize)]
 pub struct Node {
@@ -109,7 +109,7 @@ impl Node {
   /// Get the cluster details required to join the node to the cluster
   async fn get_cluster(&self) -> Result<eks::Cluster> {
     let config = crate::get_sdk_config(None).await?;
-    let imds_data = crate::imds::get_imds_data().await?;
+    let imds_data = ec2::get_imds_data().await?;
     debug!("Instance metadata: {imds_data:#?}");
 
     // Details required to join node to cluster
@@ -179,7 +179,7 @@ impl Node {
     })
   }
 
-  async fn get_containerd_config(&self, imds: imds::InstanceMetadata) -> Result<containerd::ContainerdConfiguration> {
+  async fn get_containerd_config(&self, imds: ec2::InstanceMetadata) -> Result<containerd::ContainerdConfiguration> {
     let uri = format!("{}/eks/pause:3.9", ecr::get_ecr_uri(&imds.region, &imds.domain, false)?);
     let sandbox_img = match &self.pause_container_image {
       Some(img) => img,
@@ -214,7 +214,7 @@ impl Node {
 
   /// Get the max pods for the instance
   async fn get_max_pods(&self, instance_type: &str) -> Result<i32> {
-    match ec2::INSTANCES.get(instance_type) {
+    match ec2::get_instance(instance_type)? {
       Some(instance) => Ok(instance.eni_maximum_pods),
       None => {
         info!("Instance type {instance_type} not found in static instance data. Attempting to derive max pods");
@@ -234,7 +234,7 @@ impl Node {
 
   /// Configure the node to join the cluster
   pub async fn join_node_to_cluster(&self) -> Result<()> {
-    let instance_metadata = imds::get_imds_data().await?;
+    let instance_metadata = ec2::get_imds_data().await?;
     let cluster = self.get_cluster().await?;
     let kubelet_version = kubelet::get_kubelet_version()?;
     let max_pods = self.get_max_pods(&instance_metadata.instance_type).await?;

@@ -37,11 +37,11 @@ pub struct MaxPods {
 impl MaxPods {
   pub async fn calc(&self) -> Result<i32> {
     let instance_type = if self.instance_type_from_imds {
-      crate::imds::get_instance_type().await?
+      ec2::get_instance_type().await?
     } else {
       self.instance_type.to_owned().unwrap()
     };
-    let instance = match ec2::INSTANCES.get(&instance_type) {
+    let instance = match ec2::get_instance(&instance_type)? {
       Some(instance) => instance,
       None => return Err(anyhow!("Instance type {} is not supported or invalid", &instance_type)),
     };

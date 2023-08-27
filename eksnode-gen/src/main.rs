@@ -50,6 +50,7 @@ async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
       .retry_config(RetryConfig::standard().with_max_attempts(retries))
       .build(),
   );
+
   Ok(client)
 }
 
@@ -129,12 +130,12 @@ fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>
 /// EC2 API
 fn write_ec2(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -> Result<()> {
   let mut handlebars = Handlebars::new();
-  let template = cur_dir.join("eksnode-gen").join("templates").join("ec2.tpl");
+  let template = cur_dir.join("eksnode-gen").join("templates").join("ec2-instances.tpl");
   handlebars.register_template_file("tpl", template)?;
 
   let data = json!({"instances": instances});
   let rendered = handlebars.render("tpl", &data)?;
-  let dest_path = cur_dir.join("eksnode").join("src").join("ec2.rs");
+  let dest_path = cur_dir.join("eksnode").join("files").join("ec2-instances.yaml");
   fs::write(dest_path, rendered)?;
 
   Ok(())

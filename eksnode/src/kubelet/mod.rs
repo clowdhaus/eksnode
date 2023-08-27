@@ -13,7 +13,7 @@ use crate::utils;
 
 pub fn get_kubelet_version() -> Result<Version> {
   let cmd_output = utils::cmd_exec("kubelet", vec!["--version"])?;
-  debug!("kubelet version: {}", cmd_output);
+  debug!("kubelet version: {cmd_output}");
 
   utils::get_semver(&cmd_output)
 }
