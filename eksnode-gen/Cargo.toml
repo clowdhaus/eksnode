@@ -1,32 +1,29 @@
 [package]
 name = "eksnode-gen"
 version = "0.1.0"
-authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
-description = "Script-like crate for generating files used by `eksnode` or image creation process"
+authors.workspace = true
+description = "Script-like crate for generating files used by `eksnode` and/or image creation process"
 documentation = "https://github.com/clowdhaus/eksnode"
-homepage = "https://github.com/clowdhaus/eksnode"
-repository = "https://github.com/clowdhaus/eksnode"
-license = "Apache-2.0"
-edition = "2021"
-categories = [
-  "command-line-utilities",
-  "kubernetes",
-]
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+edition.workspace = true
+categories.workspace = true
 
 [dependencies]
-anstyle = "1.0"
-anyhow = "1.0"
-aws-config = "0.56"
+anstyle.workspace = true
+anyhow.workspace = true
+aws-config.workspace = true
 aws-sdk-ec2 = "0.30"
-aws-types = "0.56"
-clap = { version = "4.2", features = ["derive", "color", "unstable-styles"] }
-clap-verbosity-flag = "2.0"
+aws-types.workspace = true
+clap.workspace = true
+clap-verbosity-flag.workspace = true
 eksnode = { path = "../eksnode", version ="*"}
 handlebars = "4.3"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-tracing = {version = "0.1", default-features = false, features = ["log-always"] }
-tracing-log = "0.1"
-tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "std", "ansi"] }
-tokio = { version = "1.23", features = ["full"] }
-tokio-stream = "0.1"
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-log.workspace = true
+tracing-subscriber.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true

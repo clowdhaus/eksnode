@@ -1,33 +1,30 @@
-use clap::{Parser, Subcommand};
+use anstyle::{AnsiColor, Color, Style};
+use clap::{builder::Styles, Parser, Subcommand};
 use clap_verbosity_flag::Verbosity;
 
 use crate::commands;
 
 /// Styles for CLI
-fn get_styles() -> clap::builder::Styles {
-  clap::builder::Styles::styled()
+fn get_styles() -> Styles {
+  Styles::styled()
     .header(
-      anstyle::Style::new()
+      Style::new()
         .bold()
         .underline()
-        .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green))),
+        .fg_color(Some(Color::Ansi(AnsiColor::Green))),
     )
-    .literal(
-      anstyle::Style::new()
-        .bold()
-        .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Cyan))),
-    )
+    .literal(Style::new().bold().fg_color(Some(Color::Ansi(AnsiColor::Cyan))))
     .usage(
-      anstyle::Style::new()
+      Style::new()
         .bold()
         .underline()
-        .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green))),
+        .fg_color(Some(Color::Ansi(AnsiColor::Green))),
     )
     .placeholder(
-      anstyle::Style::new()
+      Style::new()
         .bold()
         .underline()
-        .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Yellow))),
+        .fg_color(Some(Color::Ansi(AnsiColor::Yellow))),
     )
 }
 

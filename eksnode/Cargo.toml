@@ -1,19 +1,16 @@
 [package]
 name = "eksnode"
 version = "0.1.0"
-authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
+authors.workspace = true
 description = "A command line interface for interacting with EKS nodes"
 documentation = "https://github.com/clowdhaus/eksnode"
-homepage = "https://github.com/clowdhaus/eksnode"
-repository = "https://github.com/clowdhaus/eksnode"
-license = "Apache-2.0"
-edition = "2021"
-categories = [
-  "command-line-utilities",
-  "kubernetes",
-]
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+edition.workspace = true
+categories.workspace = true
 exclude = [".*"]
-include = ["/src", "/templates", "Cargo.toml", "REAMDE.md"]
+include = ["/files", "/src", "/templates", "Cargo.toml", "REAMDE.md"]
 
 default-run = "eksnode"
 
@@ -22,15 +19,15 @@ name = "eksnode"
 path = "src/main.rs"
 
 [dependencies]
-anstyle = "1.0.0"
-anyhow = "1.0"
-aws-config = "0.56"
+anstyle.workspace = true
+anyhow.workspace = true
+aws-config.workspace = true
 aws-sdk-ecr = "0.30"
 aws-sdk-eks = "0.30"
-aws-types = "0.56"
+aws-types.workspace = true
 base64 = "0.21.2"
-clap = { version = "4.2", features = ["derive", "color", "unstable-styles"] }
-clap-verbosity-flag = "2.0"
+clap.workspace = true
+clap-verbosity-flag.workspace = true
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
 rust-embed = { version = "8.0", features = ["compression"] }
@@ -40,14 +37,14 @@ num_cpus = "1.16"
 rand = "0.8"
 regex-lite = "0.1"
 semver = "1.0"
-serde = { version = "1.0", default-features = false, features = ["derive"] }
-serde_json = "1.0"
-serde_yaml = "0.9"
-tokio = { version = "1.23", default-features = false, features = ["macros", "rt-multi-thread"] }
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+tokio.workspace = true
 toml = "0.7"
-tracing = {version = "0.1", default-features = false, features = ["log-always"] }
-tracing-log = "0.1"
-tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "std", "ansi"] }
+tracing.workspace = true
+tracing-log.workspace = true
+tracing-subscriber.workspace = true
 
 [dev-dependencies]
 assert_cmd = "2.0"

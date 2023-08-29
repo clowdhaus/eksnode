@@ -6,6 +6,33 @@ members = [
 ]
 resolver = "2"
 
+[workspace.package]
+authors = ["Bryant Biggs <bryantbiggs@gmail.com>"]
+homepage = "https://github.com/clowdhaus/eksnode"
+repository = "https://github.com/clowdhaus/eksnode"
+license = "Apache-2.0"
+edition = "2021"
+categories = [
+  "command-line-utilities",
+  "kubernetes",
+]
+
+[workspace.dependencies]
+anstyle = "1.0"
+anyhow = "1.0"
+aws-config = "0.56"
+aws-types = "0.56"
+clap = { version = "4.2", features = ["derive", "color", "unstable-styles"] }
+clap-verbosity-flag = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+tracing = {version = "0.1", default-features = false, features = ["log-always"] }
+tracing-log = "0.1"
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "std", "ansi"] }
+tokio = { version = "1.23", features = ["full"] }
+tokio-stream = "0.1"
+
 [profile.release]
 strip = true
 opt-level = "z"
