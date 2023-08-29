@@ -24,7 +24,7 @@ async fn main() -> Result<()> {
         process::exit(2);
       }
     },
-    Commands::CalcMaxPods(maxpods) => match maxpods.calc().await {
+    Commands::CalculateMaxPods(maxpods) => match maxpods.calculate().await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");

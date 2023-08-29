@@ -1,12 +1,13 @@
-use std::collections::HashMap;
+use std::{
+  collections::HashMap,
+  net::{Ipv4Addr, Ipv6Addr},
+};
 
 use anyhow::Result;
-use serde::{Deserialize, Serialize};
-use std::net::{Ipv4Addr, Ipv6Addr};
-
 use aws_config::{imds::client::Client, provider_config::ProviderConfig};
 use http::Uri;
 use ipnet::Ipv4Net;
+use serde::{Deserialize, Serialize};
 use tokio::time::Duration;
 
 use crate::Assets;
@@ -41,7 +42,6 @@ pub fn get_instance(instance: &str) -> Result<Option<Instance>> {
 
   Ok(instances.get(instance).cloned())
 }
-
 
 /// Get the IMDS client
 async fn get_client() -> Result<Client> {

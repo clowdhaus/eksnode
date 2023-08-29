@@ -219,7 +219,7 @@ impl Node {
       None => {
         info!("Instance type {instance_type} not found in static instance data. Attempting to derive max pods");
 
-        let max_pods = commands::calc::MaxPods {
+        let max_pods = commands::calculate::MaxPods {
           instance_type: Some(instance_type.to_owned()),
           instance_type_from_imds: false,
           cni_version: "1.10.0".to_owned(),
@@ -227,7 +227,7 @@ impl Node {
           cni_prefix_delegation_enabled: false,
           cni_max_enis: None,
         };
-        max_pods.calc().await
+        max_pods.calculate().await
       }
     }
   }

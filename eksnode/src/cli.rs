@@ -54,7 +54,7 @@ pub enum Commands {
   /// Unlike `calculate_eni_max_pods` which calculates the theoretical limit based on ENIs,
   /// this function calculates the actual limit based on all of the preceding factors including
   /// the theoretical max pods limit.
-  CalcMaxPods(commands::calc::MaxPods),
+  CalculateMaxPods(commands::calculate::MaxPods),
 
   /// Validate the node configuration
   Validate(commands::validate::Validation),

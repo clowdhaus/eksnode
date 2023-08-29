@@ -1,7 +1,6 @@
 # TODO
 
 - [ ] Add Ansible role for NVIDIA GPU drivers and supporting software
-- [ ] Change `calc-max-pods` to simply `calc` or `calculate` with `--max-pods` as a flag
 - [ ] Add log collection functionality
   - Expand on this - this should be created from the perspective of `eksnode debug` perspective where `--collect-logs` can be used to collect logs from the node similar to current AMI functionality
 - [ ] Add validate functionality
@@ -10,7 +9,8 @@
 - [ ] Add Ansible role for CIS hardening
 - [ ] Add Ansible role for FedRAMP hardening
 - [ ] Add checks and reporting of CIS, STIG, FedRAMP hardening with OpenSCAP
-- [ ] Add SBOM generation capability
+- [ ] Add functionality to generate SBOM
+  - [ ] Both locally and remotely in S3 for use in AMI pipeline
 
 ## Validate Output
 

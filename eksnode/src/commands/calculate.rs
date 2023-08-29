@@ -35,7 +35,7 @@ pub struct MaxPods {
 }
 
 impl MaxPods {
-  pub async fn calc(&self) -> Result<i32> {
+  pub async fn calculate(&self) -> Result<i32> {
     let instance_type = if self.instance_type_from_imds {
       ec2::get_instance_type().await?
     } else {
