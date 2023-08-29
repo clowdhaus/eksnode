@@ -9,6 +9,7 @@ use clap::{builder::Styles, Parser, Subcommand};
 use clap_verbosity_flag::Verbosity;
 
 pub mod ec2;
+pub mod versions;
 
 /// Construct and return the EC2 client
 pub(crate) async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
@@ -62,4 +63,7 @@ pub struct Cli {
 pub enum Commands {
   /// Update the EC2 files `eni-max-pods.txt` and `ec2-instances.yaml` with the latest data
   UpdateEc2,
+
+  /// Update the Ansible playbook variables `versions.yaml` with the latest artifact data from S3
+  UpdateArtifactVersions,
 }

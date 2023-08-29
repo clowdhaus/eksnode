@@ -3,27 +3,27 @@ arch: amd64
 region: "us-east-1"
 
 # aws s3 ls s3://amazon-eks/1.27.3/2023-06-30/bin/linux/amd64/
-kubernetes_version: "1.27.3"
-kubernetes_build_date: "2023-06-30"
+kubernetes_version: "{{ [version]| map('extract', versions, 'kubernetes_version') | last}}"
+kubernetes_build_date: "{{ [version]| map('extract', versions, 'kubernetes_build_date') | last}}"
 s3_binary_bucket: "amazon-eks"
 s3_binary_path: "{{ kubernetes_version }}/{{ kubernetes_build_date }}/bin/linux/{{ arch }}"
 
 #### runc ####
 
-runc_version: "1.1.7"
+runc_version: "{{ [version]| map('extract', versions, 'runc_version') | last}}"
 runc_url: "https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.{{ arch }}"
 runc_checksum: "sha256:https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.sha256sum"
 
 #### containerd ####
 
-containerd_version: "1.7.2"
+containerd_version: "{{ [version]| map('extract', versions, 'containerd_version') | last}}"
 containerd_archive: "containerd-{{ containerd_version }}-linux-{{ arch }}.tar.gz"
 containerd_url: "https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}"
 containerd_checksum: "sha256:https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}.sha256sum"
 
 #### CNI ####
 
-cni_plugin_version: "v1.3.0"
+cni_plugin_version: "{{ [version]| map('extract', versions, 'cni_plugin_version') | last}}"
 cni_plugin_archive: "cni-plugins-linux-{{ arch }}-{{ cni_plugin_version }}.tgz"
 cni_plugin_url: "https://github.com/containernetworking/plugins/releases/download/{{ cni_plugin_version }}/{{ cni_plugin_archive }}"
 cni_plugin_checksum: "sha256:https://github.com/containernetworking/plugins/releases/download/{{ cni_plugin_version }}/{{ cni_plugin_archive }}.sha256"

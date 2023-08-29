@@ -38,6 +38,7 @@ struct Instance {
 
 /// Collects all instances and their details from the region provided
 async fn get_instances(region: Region) -> Result<Vec<InstanceTypeInfo>> {
+  // Using region specific client to pull instance data for that region
   let config = aws_config::from_env().region(region).load().await;
   let client = crate::get_client(config, 3).await.unwrap();
 

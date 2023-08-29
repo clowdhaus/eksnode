@@ -248,6 +248,10 @@ build {
 
   provisioner "ansible" {
     playbook_file = "./playbooks/al2023_playbook.yaml"
+
+    extra_arguments = [
+      "--extra-vars", "version=${var.eks_version}"
+    ]
   }
 
   provisioner "shell" {

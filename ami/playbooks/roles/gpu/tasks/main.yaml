@@ -1,0 +1,6 @@
+---
+- name: Get the versions map
+  debug: msg={{ [version]| map('extract', versions ) }}
+
+- name: Extract the value of the attribute in the selected map
+  debug: msg={{ [version]| map('extract', versions, 'runc_version') | last}}

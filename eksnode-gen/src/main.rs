@@ -3,7 +3,7 @@ use std::{env, process};
 
 use anyhow::Result;
 use clap::Parser;
-use eksnode_gen::{ec2, Cli, Commands};
+use eksnode_gen::{ec2, versions, Cli, Commands};
 use tracing_log::AsTrace;
 use tracing_subscriber::FmtSubscriber;
 
@@ -30,6 +30,14 @@ async fn main() -> Result<()> {
     // as well as the `ec2-instances.yaml` which embeds EC2 details into the `eksnode` binary
     // to reduce the number of AWS API calls when provisioning a node and joining it to a cluster
     Commands::UpdateEc2 => match ec2::write_files(cur_dir).await {
+      Ok(_) => Ok(()),
+      Err(err) => {
+        eprintln!("{err}");
+        process::exit(2);
+      }
+    },
+
+    Commands::UpdateArtifactVersions => match versions::update_artifact_versions(cur_dir).await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");

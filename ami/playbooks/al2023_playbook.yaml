@@ -4,5 +4,8 @@
   hosts: default
   # hosts: single_ec2
 
+  vars_files:
+    - vars/versions.yaml
+
   roles:
     - eks

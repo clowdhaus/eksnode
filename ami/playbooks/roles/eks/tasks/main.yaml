@@ -9,7 +9,7 @@
 
 - name: Install dnf packages
   ansible.builtin.dnf:
-    name: "{{ item }}"
+    name: '{{ item }}'
     state: present
   loop:
     - awscli
@@ -123,11 +123,11 @@
 # RunC
 #########################################################
 
-- name: Install runc
+- name: Install runc {{ runc_version }}
   ansible.builtin.get_url:
-    url: "{{ runc_url }}"
+    url: '{{ runc_url }}'
     dest: /usr/local/sbin/runc
-    checksum: "{{ runc_checksum }}"
+    checksum: '{{ runc_checksum }}'
     mode: 0755
     owner: root
     group: root
@@ -157,26 +157,26 @@
   register: containerd_dir
 
 # This separate task is used to validate checksum
-- name: Download containerd
+- name: Download containerd {{ containerd_version }}
   ansible.builtin.get_url:
-    url: "{{ containerd_url }}"
-    dest: "/tmp/{{ containerd_archive }}"
-    checksum: "{{ containerd_checksum }}"
+    url: '{{ containerd_url }}'
+    dest: '/tmp/{{ containerd_archive }}'
+    checksum: '{{ containerd_checksum }}'
   register: containerd_archive_dl
 
 - name: Extract containerd
   ansible.builtin.unarchive:
-    src: "{{ containerd_archive_dl.dest }}"
-    dest: "{{ containerd_dir.path }}"
+    src: '{{ containerd_archive_dl.dest }}'
+    dest: '{{ containerd_dir.path }}'
     mode: 0755
     owner: root
     group: root
     remote_src: yes
     keep_newer: yes
 
-- name: Create "{{ eks_dir.path }}/containerd"
+- name: Create {{ eks_dir.path }}/containerd
   ansible.builtin.file:
-    path: "{{ eks_dir.path }}/containerd"
+    path: '{{ eks_dir.path }}/containerd'
     state: directory
     owner: root
     group: root
@@ -235,17 +235,17 @@
   register: cni_dir
 
 # This separate task is used to validate checksum
-- name: Download CNI
+- name: Download CNI {{ cni_plugin_version }}
   ansible.builtin.get_url:
-    url: "{{ cni_plugin_url}}"
-    dest: "/tmp/{{ cni_plugin_archive }}"
-    checksum: "{{ cni_plugin_checksum }}"
+    url: '{{ cni_plugin_url}}'
+    dest: '/tmp/{{ cni_plugin_archive }}'
+    checksum: '{{ cni_plugin_checksum }}'
   register: cni_archive
 
-- name: Extract CNI
+- name: Extract CNI {{ cni_plugin_version }}
   ansible.builtin.unarchive:
-    src: "{{ cni_archive.dest }}"
-    dest: "{{ cni_dir.path }}"
+    src: '{{ cni_archive.dest }}'
+    dest: '{{ cni_dir.path }}'
     mode: 0755
     owner: root
     group: root
@@ -256,28 +256,28 @@
 # IAM authenticator / ECR credential provider
 #########################################################
 
-- name: Download aws-iam-authenticator binary
+- name: Download aws-iam-authenticator binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
   ansible.builtin.get_url:
-    url: "https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator"
-    dest: "/usr/bin/aws-iam-authenticator"
-    checksum: "sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator.sha256"
+    url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator'
+    dest: '/usr/bin/aws-iam-authenticator'
+    checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator.sha256'
     owner: root
     group: root
     mode: 0755
 
 - name: Create ECR credential provider directory
   ansible.builtin.file:
-    path: "{{ eks_dir.path }}/image-credential-provider"
+    path: '{{ eks_dir.path }}/image-credential-provider'
     state: directory
     owner: root
     group: root
   register: image_credential_provider_dir
 
-- name: Download ecr-credential-provider binary
+- name: Download ecr-credential-provider binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
   ansible.builtin.get_url:
-    url: "https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider"
-    dest: "{{ image_credential_provider_dir.path }}/ecr-credential-provider"
-    checksum: "sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider.sha256"
+    url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider'
+    dest: '{{ image_credential_provider_dir.path }}/ecr-credential-provider'
+    checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider.sha256'
     owner: root
     group: root
     mode: 0755
@@ -310,7 +310,7 @@
 - name: Create "{{ eks_dir.path }}/eni-max-pods.txt"
   copy:
     src: files/eni-max-pods.txt
-    dest: "{{ eks_dir.path }}/eni-max-pods.txt"
+    dest: '{{ eks_dir.path }}/eni-max-pods.txt'
     mode: 0644
     owner: root
     group: root
@@ -321,11 +321,11 @@
 # Kubelet
 #########################################################
 
-- name: Download kubelet binary
+- name: Download kubelet binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
   ansible.builtin.get_url:
-    url: "https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet"
-    dest: "/usr/bin/kubelet"
-    checksum: "sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet.sha256"
+    url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet'
+    dest: '/usr/bin/kubelet'
+    checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet.sha256'
     owner: root
     group: root
     mode: 0755
