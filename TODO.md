@@ -12,6 +12,17 @@
 - [ ] Add functionality to generate SBOM
   - [ ] Both locally and remotely in S3 for use in AMI pipeline
 
+## Max Pods
+
+- [ ] Modify the max-pods calculation
+  - One pod on a large instance should not carve out enough mem/cpu as if that instance will host the `max-pods` when its only intended to host a single pod (Spark workloads)
+  - When utilizing GPUs/accelerators, `max-pods` is a combination of the number of GPUs attached to the instance and any concurrency configuration (time-slicing, MiG, etc.)
+  - What algorithm is appropriate for allowing users to maximize the number of pods on an instance (i.e - can they schedule 737 pods on an instance safely and without resource contention?)
+  - What tests can be used or constructed to test/validate these changes?
+  - Karpenter
+    - [Provisioners: Pod Density](https://karpenter.sh/preview/concepts/provisioners/#pod-density)
+    - [Support for density optimized memory overhead](https://github.com/aws/karpenter/issues/1295)
+
 ## Validate Output
 
 ```sh
