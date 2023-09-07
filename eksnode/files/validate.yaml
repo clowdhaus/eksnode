@@ -4,10 +4,26 @@ files:
     mode: 40755
     uid: 0
     gid: 0
+  - path: /etc/containerd
+    mode: 40755
+    uid: 0
+    gid: 0
+  - path: /etc/systemd/system/containerd.service.d
+    mode: 40755
+    uid: 0
+    gid: 0
+  - path: /etc/containerd/config.toml
+    mode: 100644
+    uid: 0
+    gid: 0
   - path: /etc/eks/sandbox-image.service
     mode: 100644
     uid: 0
     gid: 0
+  # - path: /etc/systemd/system/sandbox-image.service
+  #   mode: 100644
+  #   uid: 0
+  #   gid: 0
   - path: /etc/eks/eni-max-pods.txt
     mode: 100644
     uid: 0
@@ -24,6 +40,15 @@ files:
     mode: 100644
     uid: 0
     gid: 0
+  - path: /var/lib/kubelet/kubeconfig
+    mode: 100644
+    uid: 0
+    gid: 0
+  # # Only valid on local clusters on Outpost
+  # - path: /var/lib/kubelet/bootstrap-kubeconfig
+  #   mode: 100644
+  #   uid: 0
+  #   gid: 0
   - path: /etc/kubernetes/pki/ca.crt
     mode: 100644
     uid: 0
@@ -33,6 +58,18 @@ files:
     uid: 0
     gid: 0
   - path: /etc/logrotate.d/kube-proxy
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/systemd/system/kubelet.service
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/systemd/system/kubelet.service.d/10-kubelet-args.conf
+    mode: 100644
+    uid: 0
+    gid: 0
+  - path: /etc/systemd/system/kubelet.service.d/30-kubelet-extra-args.conf
     mode: 100644
     uid: 0
     gid: 0

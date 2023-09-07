@@ -110,9 +110,6 @@ if [[ "$CONTAINER_RUNTIME" = "containerd" ]]; then
   if vercmp "$KUBELET_VERSION" lt "1.27.0"; then
     KUBELET_ARGS="$KUBELET_ARGS --container-runtime=remote"
   fi
-else
-  log "ERROR: unsupported container runtime: '${CONTAINER_RUNTIME}'"
-  exit 1
 fi
 
 mkdir -p /etc/systemd/system/kubelet.service.d
