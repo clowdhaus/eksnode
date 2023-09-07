@@ -75,6 +75,7 @@ source "amazon-ebs" "this" {
 
   region_kms_key_ids     = var.region_kms_key_ids
   run_volume_tags        = var.run_volume_tags
+  skip_create_ami        = var.skip_create_ami
   skip_region_validation = var.skip_region_validation
   skip_save_build_region = var.skip_save_build_region
   sriov_support          = var.sriov_support
@@ -211,7 +212,25 @@ source "amazon-ebs" "this" {
     }
   }
 
-  subnet_id                                 = var.subnet_id
+  subnet_id = var.subnet_id
+
+  dynamic "temporary_iam_instance_profile_policy_document" {
+    for_each = length(var.temporary_iam_instance_profile_policy_document) > 0 ? [var.temporary_iam_instance_profile_policy_document] : []
+
+    content {
+      dynamic "Statement" {
+        for_each = temporary_iam_instance_profile_policy_document.value
+
+        content {
+          Action   = try(Statement.value.Action, [])
+          Effect   = try(Statement.value.Effect, "Allow")
+          Resource = try(Statement.value.Resource, ["*"])
+        }
+      }
+      Version = "2012-10-17"
+    }
+  }
+
   temporary_security_group_source_cidrs     = var.temporary_security_group_source_cidrs
   temporary_security_group_source_public_ip = var.temporary_security_group_source_public_ip
   user_data                                 = var.user_data
@@ -248,6 +267,8 @@ build {
 
   provisioner "ansible" {
     playbook_file = "./playbooks/al2023_playbook.yaml"
+    # Required for connecting via AWS Session Manager
+    use_proxy = false
 
     extra_arguments = [
       "--extra-vars", "version=${var.eks_version}"

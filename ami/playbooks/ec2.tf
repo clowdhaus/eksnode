@@ -54,7 +54,7 @@ module "ec2" {
 
   name = local.name
 
-  ami                    = "ami-0fa50f54e1b8664c2" # data.aws_ssm_parameter.al2023[local.arch].value
+  ami                    = "ami-031cbd6833dec72fb" # data.aws_ssm_parameter.al2023[local.arch].value
   instance_type          = "t3.large"
   availability_zone      = element(module.vpc.azs, 0)
   subnet_id              = element(module.vpc.public_subnets, 0)
@@ -189,6 +189,53 @@ module "security_group" {
     },
   ]
   egress_rules = ["all-all"]
+
+  tags = module.tags.tags
+}
+
+################################################################################
+# VPC Endpoints Module
+################################################################################
+
+module "vpc_endpoints" {
+  source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  version = "~> 5.0"
+
+  vpc_id = module.vpc.vpc_id
+
+  create_security_group      = true
+  security_group_name_prefix = "${local.name}-vpc-endpoints-"
+  security_group_description = "VPC endpoint security group"
+  security_group_rules = {
+    ingress_https = {
+      description = "HTTPS from VPC"
+      cidr_blocks = [module.vpc.vpc_cidr_block]
+    }
+  }
+
+  endpoints = merge(
+    {
+      s3 = {
+        service         = "s3"
+        service_type    = "Gateway"
+        route_table_ids = module.vpc.private_route_table_ids
+        tags = {
+          Name = "${local.name}-s3"
+        }
+      }
+    },
+    {
+      # https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-vpc.html#sysman-setting-up-vpc-create
+      for service in toset(["ec2", "ec2messages", "ssm", "ssmmessages"]) :
+      replace(service, ".", "_") =>
+      {
+        service             = service
+        subnet_ids          = module.vpc.private_subnets
+        private_dns_enabled = true
+        tags                = { Name = "${local.name}-${service}" }
+      }
+    }
+  )
 
   tags = module.tags.tags
 }

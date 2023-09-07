@@ -142,6 +142,12 @@ variable "run_volume_tags" {
   default     = null
 }
 
+variable "skip_create_ami" {
+  description = "If `true`, Packer will not create the AMI. Useful for setting to `true` during a build test stage. Default `false`"
+  type        = bool
+  default     = null
+}
+
 variable "skip_region_validation" {
   description = "Set to `true` if you want to skip validation of the `ami_regions` configuration option. Default `false`"
   type        = bool
@@ -293,7 +299,7 @@ variable "pause_before_connecting" {
 variable "ssh_agent_auth" {
   description = "If true, the local SSH agent will be used to authenticate connections to the source instance. No temporary keypair will be created, and the values of `ssh_password` and `ssh_private_key_file` will be ignored. The environment variable `SSH_AUTH_SOCK` must be set for this option to work properly"
   type        = bool
-  default     = null
+  default     = false
 }
 
 variable "ssh_bastion_agent_auth" {
@@ -387,9 +393,9 @@ variable "ssh_host" {
 }
 
 variable "ssh_interface" {
-  description = "One of `public_ip`, `private_ip`, `public_dns`, `private_dns` or `session_manager`. If set, either the public IP address, private IP address, public DNS name or private DNS name will be used as the host for SSH. The default behaviour if inside a VPC is to use the public IP address if available, otherwise the private IP address will be used. If not in a VPC the public DNS name will be used"
+  description = "One of `public_ip`, `private_ip`, `public_dns`, `private_dns` or `session_manager`. If set, either the public IP address, private IP address, public DNS name or private DNS name will be used as the host for SSH. The default behavior if inside a VPC is to use the public IP address if available, otherwise the private IP address will be used. If not in a VPC the public DNS name will be used"
   type        = string
-  default     = "public_dns"
+  default     = "session_manager"
 }
 
 variable "ssh_keep_alive_interval" {
@@ -489,9 +495,9 @@ variable "ssh_username" {
 }
 
 variable "temporary_key_pair_type" {
-  description = "Specifies the type of key to create. The possible values are 'dsa', 'ecdsa', 'ed25519', or 'rsa'. Default is `rsa`"
+  description = "Specifies the type of key to create. The possible values are 'dsa', 'ecdsa', 'ed25519', or 'rsa'. Default is `ed25519`"
   type        = string
-  default     = null
+  default     = "ed25519"
 }
 
 variable "temporary_key_pair_bits" {
@@ -626,6 +632,55 @@ variable "subnet_id" {
   description = "f using VPC, the ID of the subnet, such as subnet-12345def, where Packer will launch the EC2 instance. This field is required if you are using an non-default VPC"
   type        = string
   default     = null
+}
+
+variable "temporary_iam_instance_profile_policy_document" {
+  description = "Creates a temporary instance profile policy document to grant Systems Manager permissions to the Ec2 instance. This is an alternative to using an existing `iam_instance_profile`"
+  default = [
+    {
+      Effect = "Allow"
+      Action = [
+        "ssm:DescribeAssociation",
+        "ssm:GetDeployablePatchSnapshotForInstance",
+        "ssm:GetDocument",
+        "ssm:DescribeDocument",
+        "ssm:GetManifest",
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:ListAssociations",
+        "ssm:ListInstanceAssociations",
+        "ssm:PutInventory",
+        "ssm:PutComplianceItems",
+        "ssm:PutConfigurePackageResult",
+        "ssm:UpdateAssociationStatus",
+        "ssm:UpdateInstanceAssociationStatus",
+        "ssm:UpdateInstanceInformation",
+      ]
+      Resource = ["*"]
+    },
+    {
+      Effect = "Allow"
+      Action = [
+        "ssmmessages:CreateControlChannel",
+        "ssmmessages:CreateDataChannel",
+        "ssmmessages:OpenControlChannel",
+        "ssmmessages:OpenDataChannel",
+      ]
+      Resource = ["*"]
+    },
+    {
+      Effect = "Allow"
+      Action = [
+        "ec2messages:AcknowledgeMessage",
+        "ec2messages:DeleteMessage",
+        "ec2messages:FailMessage",
+        "ec2messages:GetEndpoint",
+        "ec2messages:GetMessages",
+        "ec2messages:SendReply",
+      ]
+      Resource = ["*"]
+    }
+  ]
 }
 
 variable "temporary_security_group_source_cidrs" {
