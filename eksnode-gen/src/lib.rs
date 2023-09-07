@@ -61,7 +61,7 @@ pub struct Cli {
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-  /// Update the EC2 files `eni-max-pods.txt` and `ec2-instances.yaml` with the latest data
+  /// Update the EC2 file `ec2-instances.yaml` with the latest data
   UpdateEc2,
 
   /// Update the Ansible playbook variables `versions.yaml` with the latest artifact data from S3

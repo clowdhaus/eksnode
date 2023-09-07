@@ -66,9 +66,8 @@ Captures changes made during AMI creation (static) versus instance creation (dyn
 34. Add to `/etc/sysctl.d/99-amazon.conf` file for "protectKernelDefaults=true"
 35. Add to `/etc/sysctl.conf` file for sysctl settings
   - [Reference](https://github.com/kubernetes/kops/blob/master/nodeup/pkg/model/sysctls.go)
-36. Create `/etc/eks/eni-max-pods.txt` file
-37. TODO - `/etc/eks/bootstrap.sh` psuedo bootstrap file for backwards compatibility
-38. Create `/etc/eks/log-collector-script/` file
+36. TODO - `/etc/eks/bootstrap.sh` psuedo bootstrap file for backwards compatibility
+37. Create `/etc/eks/log-collector-script/` file
   - TODO: replace this with `eksnode`
 
 ## Instance

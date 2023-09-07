@@ -26,8 +26,7 @@ async fn main() -> Result<()> {
   let cur_dir = cur_exe.parent().unwrap().parent().unwrap().parent().unwrap();
 
   match &cli.command {
-    // Creates `eni-max-pods.txt` that is stored on the AMI created
-    // as well as the `ec2-instances.yaml` which embeds EC2 details into the `eksnode` binary
+    // Creates the `ec2-instances.yaml` which embeds EC2 details into the `eksnode` binary
     // to reduce the number of AWS API calls when provisioning a node and joining it to a cluster
     Commands::UpdateEc2 => match ec2::write_files(cur_dir).await {
       Ok(_) => Ok(()),

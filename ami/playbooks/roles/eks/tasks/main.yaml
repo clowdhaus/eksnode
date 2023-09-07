@@ -307,14 +307,6 @@
     owner: root
     group: root
 
-- name: Create "{{ eks_dir.path }}/eni-max-pods.txt"
-  copy:
-    src: files/eni-max-pods.txt
-    dest: '{{ eks_dir.path }}/eni-max-pods.txt'
-    mode: 0644
-    owner: root
-    group: root
-
 # TODO - create psuedo bootstrap.sh script for backwards compat
 
 #########################################################

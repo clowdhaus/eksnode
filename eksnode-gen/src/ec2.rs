@@ -1,7 +1,7 @@
 use std::{
   collections::{btree_map, BTreeMap},
   fs,
-  path::{Path, PathBuf},
+  path::Path,
 };
 
 use anyhow::Result;
@@ -85,30 +85,6 @@ fn get_manual_instances() -> Result<BTreeMap<String, Instance>> {
   Ok(result)
 }
 
-/// Writes the max pods per instance type to text file
-///
-/// This file will be copied to the instance when creating the AMI
-/// Based off of the VPC CNI go equivalent:
-/// https://github.com/aws/amazon-vpc-cni-k8s/blob/master/scripts/gen_vpc_ip_limits.go
-fn write_eni_max_pods(instances: &BTreeMap<String, Instance>, regions: Vec<&str>, cur_dir: &Path) -> Result<()> {
-  let mut handlebars = Handlebars::new();
-  let template = cur_dir.join("eksnode-gen").join("templates").join("eni-max-pods.tpl");
-  handlebars.register_template_file("tpl", template)?;
-
-  let data = json!({
-    "regions": regions,
-    "instances": instances,
-  });
-  let rendered = handlebars.render("tpl", &data)?;
-  let path: PathBuf = ["ami", "playbooks", "roles", "eks", "files", "eni-max-pods.txt"]
-    .iter()
-    .collect();
-  let dest_path = cur_dir.join(path);
-  fs::write(dest_path, rendered)?;
-
-  Ok(())
-}
-
 /// Writes the EC2 instance details collected to a rust file
 ///
 /// This generates a static map that will be used by eksnode to lookup instance details without the need to re-query the
@@ -190,6 +166,5 @@ pub async fn write_files(cur_dir: &Path) -> Result<()> {
       .collect::<Vec<_>>();
   }
 
-  write_eni_max_pods(&instances, regions, cur_dir)?;
   write_ec2(&instances, cur_dir)
 }

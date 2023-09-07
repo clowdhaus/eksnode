@@ -24,10 +24,6 @@ files:
   #   mode: 100644
   #   uid: 0
   #   gid: 0
-  - path: /etc/eks/eni-max-pods.txt
-    mode: 100644
-    uid: 0
-    gid: 0
   - path: /etc/eks/image-credential-provider/config.json
     mode: 100644
     uid: 0
