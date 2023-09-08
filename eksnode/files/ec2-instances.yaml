@@ -4400,6 +4400,62 @@ r7gd.xlarge:
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
   maximum_network_interfaces: 4
+r7iz.12xlarge:
+  default_vcpus: 48
+  eni_maximum_pods: 234
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 30
+  maximum_network_interfaces: 8
+r7iz.16xlarge:
+  default_vcpus: 64
+  eni_maximum_pods: 737
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
+r7iz.2xlarge:
+  default_vcpus: 8
+  eni_maximum_pods: 58
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 15
+  maximum_network_interfaces: 4
+r7iz.32xlarge:
+  default_vcpus: 128
+  eni_maximum_pods: 737
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
+r7iz.4xlarge:
+  default_vcpus: 16
+  eni_maximum_pods: 234
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 30
+  maximum_network_interfaces: 8
+r7iz.8xlarge:
+  default_vcpus: 32
+  eni_maximum_pods: 234
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 30
+  maximum_network_interfaces: 8
+r7iz.large:
+  default_vcpus: 2
+  eni_maximum_pods: 29
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 10
+  maximum_network_interfaces: 3
+r7iz.xlarge:
+  default_vcpus: 4
+  eni_maximum_pods: 58
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 15
+  maximum_network_interfaces: 4
 t1.micro:
   default_vcpus: 1
   eni_maximum_pods: 4
