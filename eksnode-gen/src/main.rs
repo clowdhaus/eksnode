@@ -10,7 +10,7 @@ use tracing_subscriber::FmtSubscriber;
 /// Generates files that are consumed by the `eksnode` project
 ///
 /// ```bash
-/// cargo run --bin eksnode-gen
+/// cargo run --bin eksnode-gen <COMMAND>
 // / ```
 #[cfg(not(tarpaulin_include))]
 #[tokio::main]
@@ -36,6 +36,10 @@ async fn main() -> Result<()> {
       }
     },
 
+    // Updates the `versions.yaml` file which is used by the AMI build process to map the correct
+    // artifact version to the given Kubernetes version. EKS vended artifacts are built and stored in S3
+    // and are not available via a public API. This file is used to map the Kubernetes version to the
+    // correct artifact version.
     Commands::UpdateArtifactVersions => match versions::update_artifact_versions(cur_dir).await {
       Ok(_) => Ok(()),
       Err(err) => {

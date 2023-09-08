@@ -4,14 +4,6 @@ Script-like crate for generating files used by `eksnode` or image creation proce
 
 ## Usage
 
-If running from within the `eksnode-gen` directory, you can simply use:
-
 ```bash
-cargo run
-```
-
-From anywhere else in the project, you can use:
-
-```bash
-cargo run --bin eksnode-gen
+cargo run --bin eksnode-gen <COMMAND>
 ```

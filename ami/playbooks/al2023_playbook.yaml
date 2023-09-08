@@ -2,9 +2,9 @@
 - name: 'Provision EKS Amazon Linux 2023 Node'
   become: true
   hosts: default
-  # hosts: single_ec2
 
   vars_files:
+    # Generated map of versions that map Kubernetes version to artifact version
     - vars/versions.yaml
 
   roles:
