@@ -1,6 +1,6 @@
 use std::{
   collections::HashMap,
-  net::{Ipv4Addr, Ipv6Addr},
+  net::{IpAddr, Ipv4Addr, Ipv6Addr},
 };
 
 use anyhow::Result;
@@ -87,6 +87,23 @@ pub struct InstanceMetadata {
   pub instance_type: String,
   /// The ID of the instance.
   pub instance_id: String,
+}
+
+impl InstanceMetadata {
+  pub fn get_node_ip(&self, ip_family: &crate::IpvFamily) -> Result<String> {
+    let node_ip = match ip_family {
+      crate::IpvFamily::Ipv4 => IpAddr::V4(self.local_ipv4.expect("Failed to get node local IPv4 address")),
+      crate::IpvFamily::Ipv6 => {
+        let ips = self
+          .ipv6_addresses
+          .clone()
+          .expect("No IPv6 addresses found for the instance");
+        IpAddr::V6(ips.first().cloned().expect("Failed to get node IPv6 address"))
+      }
+    };
+
+    Ok(node_ip.to_string())
+  }
 }
 
 /// Get data from the IMDS endpoint

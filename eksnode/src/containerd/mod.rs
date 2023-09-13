@@ -100,9 +100,9 @@ impl ContainerdConfiguration {
     Ok(config)
   }
 
-  pub fn write<P: AsRef<Path>>(&self, path: P) -> Result<()> {
+  pub fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
     let conf = toml::to_string_pretty(self)?;
-    utils::write_file(conf.as_bytes(), Some(0o644), path)
+    utils::write_file(conf.as_bytes(), path, Some(0o644), chown)
   }
 }
 
@@ -249,7 +249,7 @@ mod tests {
     insta::assert_debug_snapshot!(config);
 
     let mut file = NamedTempFile::new().unwrap();
-    config.write(&file).unwrap();
+    config.write(&file, false).unwrap();
 
     // Seek to start
     file.seek(SeekFrom::Start(0)).unwrap();

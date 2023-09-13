@@ -9,7 +9,7 @@ use aws_sdk_eks::{
 use ipnet::{IpNet, Ipv4Net};
 use tracing::{debug, info};
 
-use crate::commands::join::{IpvFamily, Node};
+use crate::{commands::join::Node, IpvFamily};
 
 /// Get the EKS client
 async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {

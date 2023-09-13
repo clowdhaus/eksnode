@@ -49,13 +49,13 @@ pub struct Node {
 
   /// Specify ip family of the cluster
   #[arg(long, value_enum, default_value_t)]
-  pub ip_family: IpvFamily,
+  pub ip_family: crate::IpvFamily,
 
   /// Extra arguments to add to the kubelet
   ///
   /// Useful for adding labels or taints
   #[arg(long)]
-  pub kubelet_extra_args: Option<String>,
+  pub kubelet_extra_args: Option<Vec<String>>,
 
   /// Setup instance storage NVMe disks in raid0 or mount the individual disks for use by pods
   #[arg(long, value_enum)]
@@ -72,18 +72,6 @@ pub struct Node {
   /// Sets --max-pods for the kubelet when true (default: true)
   #[arg(long, default_value = "true")]
   pub use_max_pods: bool,
-}
-
-#[derive(Clone, Debug, ValueEnum, Serialize, Deserialize)]
-pub enum IpvFamily {
-  Ipv4,
-  Ipv6,
-}
-
-impl Default for IpvFamily {
-  fn default() -> Self {
-    Self::Ipv4
-  }
 }
 
 #[derive(Clone, Debug, ValueEnum, Serialize, Deserialize)]
@@ -179,14 +167,68 @@ impl Node {
     })
   }
 
-  async fn get_containerd_config(&self, imds: ec2::InstanceMetadata) -> Result<containerd::ContainerdConfiguration> {
+  fn get_kubelet_args(&self, imds: &ec2::InstanceMetadata, kubelet_version: &semver::Version) -> Result<kubelet::Args> {
+    let node_ip = imds.get_node_ip(&self.ip_family)?;
+    let pod_infra_container_image = self.get_pause_container_image(imds)?;
+
+    let cloud_provider = match kubelet_version.lt(&Version::parse("1.26.0")?) {
+      true => "aws".to_owned(),
+      false => "external".to_owned(),
+    };
+
+    // When the external cloud provider is used, kubelet will use /etc/hostname as the name of the Node object.
+    // If the VPC has a custom `domain-name` in its DHCP options set, and the VPC has `enableDnsHostnames` set to
+    // `true`, then /etc/hostname is not the same as EC2's PrivateDnsName.
+    // The name of the Node object must be equal to EC2's PrivateDnsName for the aws-iam-authenticator to allow kubelet
+    // to manage it.
+    let hostname_override = match cloud_provider.as_str() {
+      "external" => Some(imds.domain.clone()),
+      _ => None,
+    };
+
+    // TODO --container-runtime flag is removed in 1.27+
+    let container_runtime = match kubelet_version.lt(&Version::parse("1.27.0")?) {
+      true => Some("remote".to_owned()),
+      false => None,
+    };
+
+    let args = kubelet::Args {
+      node_ip,
+      pod_infra_container_image,
+      hostname_override,
+      cloud_provider,
+      container_runtime, // TODO
+    };
+
+    Ok(args)
+  }
+
+  fn get_kubelet_extra_args(&self) -> Result<kubelet::ExtraArgs> {
+    let args = match self.kubelet_extra_args.to_owned() {
+      Some(args) => args,
+      None => vec![],
+    };
+
+    Ok(kubelet::ExtraArgs::new(args))
+  }
+
+  /// Get the pause container image
+  ///
+  /// Use the container image specified if provided by the user, otherwise default to the ECR image
+  fn get_pause_container_image(&self, imds: &ec2::InstanceMetadata) -> Result<String> {
     let uri = format!("{}/eks/pause:3.9", ecr::get_ecr_uri(&imds.region, &imds.domain, false)?);
     let sandbox_img = match &self.pause_container_image {
       Some(img) => img,
       None => &uri,
     };
 
-    let config = containerd::ContainerdConfiguration::new(sandbox_img)?;
+    Ok(sandbox_img.to_string())
+  }
+
+  /// Get the rendered containerd configuration
+  async fn get_containerd_config(&self, imds: ec2::InstanceMetadata) -> Result<containerd::ContainerdConfiguration> {
+    let sandbox_img = self.get_pause_container_image(&imds)?;
+    let config = containerd::ContainerdConfiguration::new(&sandbox_img)?;
 
     Ok(config)
   }
@@ -195,7 +237,7 @@ impl Node {
   fn write_ca_cert(&self, base64_ca: &str) -> Result<()> {
     let decoded = general_purpose::STANDARD_NO_PAD.decode(base64_ca)?;
 
-    utils::write_file(&decoded, None, "/etc/kubernetes/pki/ca.crt")
+    utils::write_file(&decoded, "/etc/kubernetes/pki/ca.crt", Some(0o644), true)
   }
 
   /// Update /etc/hosts for the cluster endpoint IPs for Outpost local cluster
@@ -256,9 +298,13 @@ impl Node {
         return Err(e);
       }
     };
+    let kubelet_args = self.get_kubelet_args(&instance_metadata, &kubelet_version)?;
+    kubelet_args.write(kubelet::ARGS_PATH, true)?;
+    let kubelet_extra_args = self.get_kubelet_extra_args()?;
+    kubelet_extra_args.write(kubelet::EXTRA_ARGS_PATH, true)?;
 
     let containerd_config = self.get_containerd_config(instance_metadata).await?;
-    containerd_config.write("/etc/containerd/config.toml")?;
+    containerd_config.write("/etc/containerd/config.toml", true)?;
 
     Ok(())
   }

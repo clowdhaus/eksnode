@@ -1,8 +1,10 @@
+mod args;
 mod config;
 mod credential;
 mod kubeconfig;
 
 use anyhow::Result;
+pub use args::{Args, ExtraArgs, ARGS_PATH, EXTRA_ARGS_PATH};
 pub use config::KubeletConfiguration;
 pub use credential::CredentialProviderConfig;
 pub use kubeconfig::KubeConfig;

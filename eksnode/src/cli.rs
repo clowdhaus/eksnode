@@ -256,7 +256,7 @@ mod tests {
     let mut cmd = bin_under_test.command();
 
     cmd
-      .arg("calc-max-pods")
+      .arg("calculate-max-pods")
       .arg("--instance-type")
       .arg(instance_type)
       .arg("--cni-version")

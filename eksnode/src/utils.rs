@@ -1,7 +1,7 @@
 use std::{
   fs::OpenOptions,
   io::Write,
-  os::unix::fs::{chown, OpenOptionsExt},
+  os::unix::fs::{self, OpenOptionsExt},
   path::Path,
 };
 
@@ -38,15 +38,19 @@ pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<String> {
 }
 
 /// Write a file to disk, setting the file mode and owner (gid/uid)
-pub fn write_file<P: AsRef<Path>>(contents: &[u8], mode: Option<u32>, path: P) -> Result<()> {
+pub fn write_file<P: AsRef<Path>>(contents: &[u8], path: P, mode: Option<u32>, chown: bool) -> Result<()> {
   let mut file = OpenOptions::new()
     .write(true)
     .create(true)
     .mode(mode.unwrap_or(0o644))
     .open(&path)?;
-
   file.write_all(contents)?;
-  Ok(chown(&path, Some(0), Some(0))?)
+
+  if chown {
+    fs::chown(&path, Some(0), Some(0))?
+  }
+
+  Ok(())
 }
 
 #[cfg(test)]

@@ -1,0 +1,5 @@
+---
+source: eksnode/src/kubelet/args.rs
+expression: buf
+---
+"[Service]\nEnvironment='KUBELET_EXTRA_ARGS=\"\"'\n"

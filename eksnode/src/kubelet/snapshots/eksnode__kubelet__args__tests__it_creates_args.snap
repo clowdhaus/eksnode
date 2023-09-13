@@ -1,0 +1,5 @@
+---
+source: eksnode/src/kubelet/args.rs
+expression: buf
+---
+"[Service]\nEnvironment='KUBELET_ARGS=--v=2\\n--node-ip=10.0.0.1\\n--pod-infra-container-image=k8s.gcr.io/pause:3.1\\n--cloud-provider=external\\n--container-runtime=remote'\n"
