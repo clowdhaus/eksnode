@@ -55,7 +55,7 @@ pub struct Node {
   ///
   /// Useful for adding labels or taints
   #[arg(long)]
-  pub kubelet_extra_args: Option<Vec<String>>,
+  pub kubelet_extra_args: Option<String>,
 
   /// Setup instance storage NVMe disks in raid0 or mount the individual disks for use by pods
   #[arg(long, value_enum)]
@@ -204,10 +204,7 @@ impl Node {
   }
 
   fn get_kubelet_extra_args(&self) -> Result<kubelet::ExtraArgs> {
-    let args = match self.kubelet_extra_args.to_owned() {
-      Some(args) => args,
-      None => vec![],
-    };
+    let args = self.kubelet_extra_args.to_owned();
 
     Ok(kubelet::ExtraArgs::new(args))
   }

@@ -34,6 +34,11 @@ impl Args {
       args.push_str(&format!("\t--container-runtime={}{end}", container_runtime));
     }
 
+    // To ensure file content integrity
+    if path.as_ref().is_file() {
+      std::fs::remove_file(&path)?;
+    }
+
     let args = args.strip_suffix(end).unwrap();
     let content = format!("[Service]\nEnvironment='KUBELET_ARGS={args}'\n",);
     utils::write_file(content.as_bytes(), path, Some(0o644), chown)
@@ -42,19 +47,25 @@ impl Args {
 
 #[derive(Debug, Default)]
 pub struct ExtraArgs {
-  pub args: Vec<String>,
+  pub args: Option<String>,
 }
 
 impl ExtraArgs {
-  pub fn new(args: Vec<String>) -> Self {
+  pub fn new(args: Option<String>) -> Self {
     Self { args }
   }
 
   pub fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
-    let args = match self.args.len() {
-      0 => r#""""#.to_string(),
-      _ => self.args.join(" \\\n"),
+    let args = match self.args {
+      Some(ref args) => args,
+      None => "",
     };
+
+    // To ensure file content integrity
+    if path.as_ref().is_file() {
+      std::fs::remove_file(&path)?;
+    }
+
     let contents = format!("[Service]\nEnvironment='KUBELET_EXTRA_ARGS={args}'\n");
     utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
   }
@@ -91,7 +102,23 @@ mod tests {
 
   #[test]
   fn it_creates_empty_extrargs() {
-    let args = ExtraArgs::new(vec![]);
+    let args = ExtraArgs::new(None);
+
+    // Write to file
+    let mut file = NamedTempFile::new().unwrap();
+    args.write(file.path(), false).unwrap();
+    file.seek(SeekFrom::Start(0)).unwrap();
+
+    // Read back contents written to file
+    let mut buf = String::new();
+    file.read_to_string(&mut buf).unwrap();
+    insta::assert_debug_snapshot!(buf);
+  }
+
+  #[test]
+  fn it_creates_extrargs() {
+    let args = ExtraArgs::new(Some("--max-pods=true".to_string()));
+    println!("{:#?}", args);
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();
