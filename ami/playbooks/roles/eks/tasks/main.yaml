@@ -182,10 +182,10 @@
     group: root
   register: eks_containerd_dir
 
-# - name: Create sandbox image service
-#   copy:
-#     src: files/sandbox-image.service
-#     dest: "{{ eks_containerd_dir.path }}/sandbox-image.service"
+- name: Create /etc/systemd/system/sandbox-image.service
+  copy:
+    src: files/sandbox-image.service
+    dest: /etc/systemd/system/sandbox-image.service
 
 - name: Create /etc/systemd/system/containerd.service.d directory
   ansible.builtin.file:
@@ -193,6 +193,16 @@
     state: directory
     owner: root
     group: root
+
+- name: Create /etc/systemd/system/containerd.service.d/00-runtime-slice.conf
+  copy:
+    dest: /etc/systemd/system/containerd.service.d/00-runtime-slice.conf
+    mode: 0644
+    owner: root
+    group: root
+    content: |
+      [Service]
+      Slice=runtime.slice
 
 - name: Create /etc/modules-load.d/containerd.conf file
   copy:

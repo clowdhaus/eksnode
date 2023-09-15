@@ -118,7 +118,6 @@ mod tests {
   #[test]
   fn it_creates_extrargs() {
     let args = ExtraArgs::new(Some("--max-pods=true".to_string()));
-    println!("{:#?}", args);
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();

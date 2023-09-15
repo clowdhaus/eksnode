@@ -116,7 +116,7 @@ mod tests {
       .unwrap();
 
     file.write_all(b"hello world").unwrap();
-    chown(&dir, Some(1000), Some(1000)).unwrap();
+    // chown(&dir, Some(1000), Some(1000)).unwrap();
     chown(&path, Some(1000), Some(1000)).unwrap();
 
     let files = [

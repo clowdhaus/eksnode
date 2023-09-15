@@ -1,9 +1,23 @@
 use std::{collections::BTreeMap, path::Path};
 
-use anyhow::Result;
+use anyhow::{bail, Result};
 use serde::{Deserialize, Serialize};
 
 use crate::utils;
+
+pub const SANDBOX_IMAGE_SERVICE_PATH: &str = "/etc/systemd/system/sandbox-image.service";
+
+pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
+  let tmpl_file = "sandbox-image.service";
+  let exec_start = format!("eksnode fetch --image {pause_image} --namespace k8s.io");
+
+  if let Some(tmpl) = crate::Templates::get(tmpl_file) {
+    let contents = std::str::from_utf8(tmpl.data.as_ref())?.replace("{{EXEC_START}}", &exec_start);
+    utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
+  } else {
+    bail!("Unable to load template file {tmpl_file}")
+  }
+}
 
 /// Config provides containerd configuration data for the server
 ///
@@ -255,6 +269,21 @@ mod tests {
     file.seek(SeekFrom::Start(0)).unwrap();
 
     // Read
+    let mut buf = String::new();
+    file.read_to_string(&mut buf).unwrap();
+    insta::assert_debug_snapshot!(buf);
+  }
+
+  #[test]
+  fn it_creates_sandbox_image_service() {
+    let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9";
+
+    // Write to file
+    let mut file = NamedTempFile::new().unwrap();
+    create_sandbox_image_service(&file, sandbox_img, false).unwrap();
+    file.seek(SeekFrom::Start(0)).unwrap();
+
+    // Read back contents written to file
     let mut buf = String::new();
     file.read_to_string(&mut buf).unwrap();
     insta::assert_debug_snapshot!(buf);

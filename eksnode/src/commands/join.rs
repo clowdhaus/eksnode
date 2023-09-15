@@ -277,6 +277,7 @@ impl Node {
     let cluster = self.get_cluster().await?;
     let kubelet_version = kubelet::get_kubelet_version()?;
     let max_pods = self.get_max_pods(&instance_metadata.instance_type).await?;
+    let pause_image = self.get_pause_container_image(&instance_metadata)?;
 
     self.write_ca_cert(&cluster.b64_ca)?;
     if self.is_local_cluster {
@@ -305,6 +306,8 @@ impl Node {
 
     let containerd_config = self.get_containerd_config(instance_metadata).await?;
     containerd_config.write("/etc/containerd/config.toml", true)?;
+
+    containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true)?;
 
     Ok(())
   }

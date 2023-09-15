@@ -1,0 +1,5 @@
+---
+source: eksnode/src/containerd/mod.rs
+expression: buf
+---
+"[Unit]\nDescription=Fetch sandbox image used by containerd\nAfter=containerd.service\nRequires=containerd.service\n\n[Service]\nType=oneshot\nExecStart=eksnode fetch --image 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9 --namespace k8s.io\n\n[Install]\nWantedBy=multi-user.target\n"

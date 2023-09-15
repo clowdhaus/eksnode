@@ -28,6 +28,7 @@ aws-types.workspace = true
 base64 = "0.21.2"
 clap.workspace = true
 clap-verbosity-flag.workspace = true
+containerd-client = "0.4"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
 rust-embed = { version = "8.0", features = ["compression"] }
@@ -41,7 +42,7 @@ serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
 tokio.workspace = true
-toml = "0.7"
+toml = "0.8"
 tracing.workspace = true
 tracing-log.workspace = true
 tracing-subscriber.workspace = true

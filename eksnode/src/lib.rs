@@ -37,6 +37,7 @@ pub struct Assets;
 
 /// Get the configuration to authn/authz with AWS that will be used across AWS clients
 pub async fn get_sdk_config(region: Option<String>) -> Result<SdkConfig> {
+  // TODO - fall back to IMDS for region if not provided or found
   let aws_region = match region {
     Some(region) => Some(Region::new(region)),
     None => env::var("AWS_DEFAULT_REGION").ok().map(Region::new),

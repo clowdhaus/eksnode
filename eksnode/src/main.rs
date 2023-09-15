@@ -17,14 +17,28 @@ async fn main() -> Result<()> {
   tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
 
   match &cli.command {
-    Commands::Join(node) => match node.join_node_to_cluster().await {
+    Commands::CalculateMaxPods(maxpods) => match maxpods.calculate().await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");
         process::exit(2);
       }
     },
-    Commands::CalculateMaxPods(maxpods) => match maxpods.calculate().await {
+    Commands::Fetch(image) => match image.exists().await {
+      Ok(true) => Ok(()),
+      Ok(false) => match image.fetch().await {
+        Ok(_) => Ok(()),
+        Err(err) => {
+          eprintln!("{err}");
+          process::exit(2);
+        }
+      },
+      Err(err) => {
+        eprintln!("{err}");
+        process::exit(2);
+      }
+    },
+    Commands::Join(node) => match node.join_node_to_cluster().await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");

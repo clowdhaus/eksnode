@@ -29,6 +29,5 @@
 ```sh
 [ec2-user@ip-10-0-48-62 ~]$ eksnode validate
 ERROR eksnode::commands::validate: /etc/eks/sandbox-image.service: No such file or directory (os error 2)
-ERROR eksnode::commands::validate: /etc/eks/image-credential-provider/config.json: No such file or directory (os error 2)
 ERROR eksnode::commands::validate: /etc/systemd/system/kubelet.service: No such file or directory (os error 2)
 ```

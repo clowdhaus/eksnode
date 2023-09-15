@@ -14,8 +14,8 @@ use tracing::debug;
 use crate::utils;
 
 pub fn get_kubelet_version() -> Result<Version> {
-  let cmd_output = utils::cmd_exec("kubelet", vec!["--version"])?;
-  debug!("kubelet version: {cmd_output}");
+  let cmd = utils::cmd_exec("kubelet", vec!["--version"])?;
+  debug!("kubelet version: {}", cmd.stdout);
 
-  utils::get_semver(&cmd_output)
+  utils::get_semver(&cmd.stdout)
 }

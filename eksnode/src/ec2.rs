@@ -49,7 +49,7 @@ async fn get_client() -> Result<Client> {
   let mut client = Client::builder()
     .configure(&config)
     .max_attempts(5)
-    .token_ttl(Duration::from_secs(900))
+    .token_ttl(Duration::from_secs(90))
     .connect_timeout(Duration::from_secs(5))
     .read_timeout(Duration::from_secs(5));
 

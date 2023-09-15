@@ -1,21 +1,25 @@
 use anyhow::Result;
-use aws_config::SdkConfig;
 use aws_sdk_ecr::{
-  config::{self, retry::RetryConfig},
+  config::{self, retry::RetryConfig, timeout::TimeoutConfig},
   Client,
 };
+use tokio::time::Duration;
 use tracing::error;
 
 /// Get the ECR client
-pub async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
-  let client = Client::from_conf(
-    // Start with the shared environment configuration
-    config::Builder::from(&config)
-      // Set max attempts
-      .retry_config(RetryConfig::standard().with_max_attempts(retries))
-      .build(),
-  );
-  Ok(client)
+pub async fn get_client() -> Result<Client> {
+  // TODO - standardize this across AWS clients
+  let sdk_config = crate::get_sdk_config(None).await?;
+  let timeout_config = TimeoutConfig::builder()
+    .operation_attempt_timeout(Duration::from_secs(5))
+    .build();
+
+  let config = config::Builder::from(&sdk_config)
+    .retry_config(RetryConfig::adaptive().with_max_attempts(3))
+    .timeout_config(timeout_config)
+    .build();
+
+  Ok(Client::from_conf(config))
 }
 
 pub async fn get_authorization_token(client: &Client) -> Result<String> {
@@ -27,7 +31,6 @@ pub async fn get_authorization_token(client: &Client) -> Result<String> {
     .unwrap()
     .authorization_token
     .expect("Failed to get ECR authorization token");
-  println!("{}", token);
 
   Ok(token)
 }

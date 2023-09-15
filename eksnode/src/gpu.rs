@@ -29,6 +29,7 @@ fn get_nvidia_max_clock(clock_type: &NvidiaGpuClock) -> Result<i32> {
   )?;
 
   let clock_speeds = output
+    .stdout
     .lines()
     .filter_map(|line| {
       let mut clock = line.split_whitespace();

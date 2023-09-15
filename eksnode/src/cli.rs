@@ -43,15 +43,18 @@ pub struct Cli {
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-  /// Join an instance to the cluster
-  Join(commands::join::Node),
-
   /// Calculate the maximum number of pods that can be scheduled on an instance
   ///
   /// Unlike `calculate_eni_max_pods` which calculates the theoretical limit based on ENIs,
   /// this function calculates the actual limit based on all of the preceding factors including
   /// the theoretical max pods limit.
   CalculateMaxPods(commands::calculate::MaxPods),
+
+  /// Fetch all content for the image into containerd
+  Fetch(commands::fetch::Image),
+
+  /// Join an instance to the cluster
+  Join(commands::join::Node),
 
   /// Validate the node configuration
   Validate(commands::validate::Validation),

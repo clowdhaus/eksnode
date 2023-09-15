@@ -1,0 +1,11 @@
+[Unit]
+Description=Fetch sandbox image used by containerd
+After=containerd.service
+Requires=containerd.service
+
+[Service]
+Type=oneshot
+ExecStart={{EXEC_START}}
+
+[Install]
+WantedBy=multi-user.target

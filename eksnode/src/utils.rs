@@ -24,16 +24,24 @@ pub fn get_semver(ver: &str) -> Result<Version> {
   };
 }
 
+pub struct CmdResult {
+  pub stdout: String,
+  pub status: i32,
+}
+
 /// Execute a command and return the output (stdout)
-pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<String> {
+pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<CmdResult> {
   let output = std::process::Command::new(cmd).args(args).output();
 
   match output {
     Ok(output) => {
       let stdout = String::from_utf8_lossy(&output.stdout);
-      Ok(stdout.to_string())
+      Ok(CmdResult {
+        stdout: stdout.to_string(),
+        status: output.status.code().unwrap_or(1),
+      })
     }
-    Err(e) => Err(anyhow!("Error executing command {}: {}", cmd, e)),
+    Err(e) => Err(anyhow!("Error executing command {cmd}: {e}")),
   }
 }
 
