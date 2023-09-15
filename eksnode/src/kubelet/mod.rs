@@ -6,7 +6,7 @@ mod kubeconfig;
 use anyhow::Result;
 pub use args::{Args, ExtraArgs, ARGS_PATH, EXTRA_ARGS_PATH};
 pub use config::KubeletConfiguration;
-pub use credential::CredentialProviderConfig;
+pub use credential::{CredentialProviderConfig, CREDENTIAL_PROVIDER_CONFIG_PATH};
 pub use kubeconfig::KubeConfig;
 use semver::Version;
 use tracing::debug;

@@ -283,6 +283,9 @@ impl Node {
       self.update_etc_hosts(&cluster.endpoint, PathBuf::from("/etc/hosts"))?;
     }
 
+    let cred_provider_config = kubelet::CredentialProviderConfig::new(&kubelet_version)?;
+    cred_provider_config.write(kubelet::CREDENTIAL_PROVIDER_CONFIG_PATH, true)?;
+
     let kubelet_kubeconfig = self.get_kubelet_kubeconfig(&cluster, &instance_metadata.region)?;
     kubelet_kubeconfig.config.write(kubelet_kubeconfig.path, Some(0))?;
 

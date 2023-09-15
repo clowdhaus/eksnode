@@ -1,13 +1,15 @@
 use std::{
   fs::{File, OpenOptions},
   io::{BufReader, BufWriter},
-  os::unix::fs::{chown, OpenOptionsExt},
+  os::unix::fs::{self, OpenOptionsExt},
   path::Path,
 };
 
 use anyhow::Result;
 use semver::Version;
 use serde::{Deserialize, Serialize};
+
+pub const CREDENTIAL_PROVIDER_CONFIG_PATH: &str = "/etc/eks/image-credential-provider/config.json";
 
 /// CredentialProviderConfig is the configuration containing information about each exec credential provider. Kubelet
 /// reads this configuration from disk and enables each provider as specified by the CredentialProvider type.
@@ -89,8 +91,8 @@ impl CredentialProviderConfig {
           "*.dkr.ecr.*.amazonaws.com".to_owned(),
           "*.dkr.ecr.*.amazonaws.com.cn".to_owned(),
           "*.dkr.ecr-fips.*.amazonaws.com".to_owned(),
-          "*.dkr.ecr.us-iso-east-1.c2s.ic.gov".to_owned(),
-          "*.dkr.ecr.us-isob-east-1.sc2s.sgov.gov".to_owned(),
+          "*.dkr.ecr.*.c2s.ic.gov".to_owned(),
+          "*.dkr.ecr.*.sc2s.sgov.gov".to_owned(),
         ],
         default_cache_duration: "12h".to_owned(),
         api_version: "credentialprovider.kubelet.k8s.io/v1".to_owned(),
@@ -108,12 +110,16 @@ impl CredentialProviderConfig {
     Ok(conf)
   }
 
-  pub fn write<P: AsRef<Path>>(&self, path: P, id: Option<u32>) -> Result<()> {
+  pub fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
     let file = OpenOptions::new().write(true).create(true).mode(0o644).open(&path)?;
     let writer = BufWriter::new(file);
 
     serde_json::to_writer_pretty(writer, self).map_err(anyhow::Error::from)?;
-    Ok(chown(path, id, id)?)
+    if chown {
+      fs::chown(&path, Some(0), Some(0))?
+    }
+
+    Ok(())
   }
 }
 
@@ -137,8 +143,8 @@ mod tests {
             "*.dkr.ecr.*.amazonaws.com",
             "*.dkr.ecr.*.amazonaws.com.cn",
             "*.dkr.ecr-fips.*.amazonaws.com",
-            "*.dkr.ecr.us-iso-east-1.c2s.ic.gov",
-            "*.dkr.ecr.us-isob-east-1.sc2s.sgov.gov"
+            "*.dkr.ecr.*.c2s.ic.gov",
+            "*.dkr.ecr.*.sc2s.sgov.gov"
           ],
           "defaultCacheDuration": "12h",
           "apiVersion": "credentialprovider.kubelet.k8s.io/v1"
@@ -161,7 +167,7 @@ mod tests {
     assert_eq!(new.api_version, "credentialprovider.kubelet.k8s.io/v1alpha1".to_owned());
 
     let mut file = NamedTempFile::new().unwrap();
-    new.write(&file, None).unwrap();
+    new.write(&file, false).unwrap();
 
     // Seek to start
     file.seek(SeekFrom::Start(0)).unwrap();
@@ -181,7 +187,7 @@ mod tests {
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();
-    new.write(&file, None).unwrap();
+    new.write(&file, false).unwrap();
     file.seek(SeekFrom::Start(0)).unwrap();
 
     // Read back contents written to file

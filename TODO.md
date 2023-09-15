@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Ability to enable/disable log colored output (plain text for cloud-init)
 - [ ] Add Ansible role for NVIDIA GPU drivers and supporting software
 - [ ] Add log collection functionality
   - Expand on this - this should be created from the perspective of `eksnode debug` perspective where `--collect-logs` can be used to collect logs from the node similar to current AMI functionality
@@ -30,6 +31,4 @@
 ERROR eksnode::commands::validate: /etc/eks/sandbox-image.service: No such file or directory (os error 2)
 ERROR eksnode::commands::validate: /etc/eks/image-credential-provider/config.json: No such file or directory (os error 2)
 ERROR eksnode::commands::validate: /etc/systemd/system/kubelet.service: No such file or directory (os error 2)
-ERROR eksnode::commands::validate: /etc/systemd/system/kubelet.service.d/10-kubelet-args.conf: No such file or directory (os error 2)
-ERROR eksnode::commands::validate: /etc/systemd/system/kubelet.service.d/30-kubelet-extra-args.conf: No such file or directory (os error 2)
 ```
