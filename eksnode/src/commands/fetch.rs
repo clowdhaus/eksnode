@@ -31,7 +31,11 @@ impl Image {
   /// This is used to cache images on the host
   /// Ref: https://github.com/containerd/containerd/pull/7922
   /// TODO: https://github.com/containerd/rust-extensions/issues/197
-  pub async fn fetch(&self) -> Result<utils::CmdResult> {
+  pub async fn fetch(&self) -> Result<()> {
+    if self.exists().await? {
+      return Ok(());
+    }
+
     let client = ecr::get_client().await?;
     let token = ecr::get_authorization_token(&client).await?;
 
@@ -47,11 +51,13 @@ impl Image {
         "--user",
         &format!("AWS:{token}"),
       ],
-    )
+    )?;
+
+    Ok(())
   }
 
   /// Check if the image exists in the namespace
-  pub async fn exists(&self) -> Result<bool> {
+  async fn exists(&self) -> Result<bool> {
     let channel = client::connect(CONTAINERD_SOCK).await?;
     let mut client = ImagesClient::new(channel);
     let img_req = GetImageRequest {

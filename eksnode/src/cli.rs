@@ -20,12 +20,8 @@ fn get_styles() -> Styles {
         .underline()
         .fg_color(Some(Color::Ansi(AnsiColor::Green))),
     )
-    .placeholder(
-      Style::new()
-        .bold()
-        .underline()
-        .fg_color(Some(Color::Ansi(AnsiColor::Yellow))),
-    )
+    .placeholder(Style::new().bold().fg_color(Some(Color::Ansi(AnsiColor::Yellow))))
+    .error(Style::new().bold().fg_color(Some(Color::Ansi(AnsiColor::BrightRed))))
 }
 
 #[derive(Debug, Parser)]
@@ -39,6 +35,10 @@ pub struct Cli {
 
   #[clap(flatten)]
   pub verbose: Verbosity,
+
+  /// Disable colors on logged output
+  #[arg(long, global = true, default_value = "false")]
+  pub no_color: bool,
 }
 
 #[derive(Debug, Subcommand)]

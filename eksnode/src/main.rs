@@ -13,6 +13,7 @@ async fn main() -> Result<()> {
   let subscriber = FmtSubscriber::builder()
     .with_max_level(cli.verbose.log_level_filter().as_trace())
     .without_time()
+    .with_ansi(!cli.no_color)
     .finish();
   tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
 
@@ -24,15 +25,8 @@ async fn main() -> Result<()> {
         process::exit(2);
       }
     },
-    Commands::Fetch(image) => match image.exists().await {
-      Ok(true) => Ok(()),
-      Ok(false) => match image.fetch().await {
-        Ok(_) => Ok(()),
-        Err(err) => {
-          eprintln!("{err}");
-          process::exit(2);
-        }
-      },
+    Commands::Fetch(image) => match image.fetch().await {
+      Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");
         process::exit(2);
