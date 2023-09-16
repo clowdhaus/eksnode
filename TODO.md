@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] Ability to enable/disable log colored output (plain text for cloud-init)
+- [ ] Pre-fetch images on AMI <https://github.com/awslabs/amazon-eks-ami/pull/938>
 - [ ] Add Ansible role for NVIDIA GPU drivers and supporting software
 - [ ] Add log collection functionality
   - Expand on this - this should be created from the perspective of `eksnode debug` perspective where `--collect-logs` can be used to collect logs from the node similar to current AMI functionality

@@ -6,7 +6,7 @@ use clap::{Args, ValueEnum};
 use ipnet::IpNet;
 use rand::{seq::SliceRandom, thread_rng};
 use semver::Version;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de};
 use tracing::{debug, error, info};
 
 use crate::{commands, containerd, ec2, ecr, eks, kubelet, resource, utils};
@@ -305,9 +305,22 @@ impl Node {
     kubelet_extra_args.write(kubelet::EXTRA_ARGS_PATH, true)?;
 
     let containerd_config = self.get_containerd_config(instance_metadata).await?;
+    // TODO - will need to handle case where existing containerd config is present from AMI build
     containerd_config.write("/etc/containerd/config.toml", true)?;
 
+    // Requries that containerd is running - should be running at boot from AMI build
     containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true)?;
+
+    // Enable & start systemd units - this should be the last step
+    let sys_rel = utils::cmd_exec("systemctl", vec!["daemon-reload"])?;
+    debug!("systemctl daemon-reload: {}", sys_rel.stdout);
+    let sys_enable = utils::cmd_exec("systemctl", vec!["enable", "containerd", "sandbox-image", "kubelet"])?;
+    debug!("systemctl enable: {}", sys_enable.stdout);
+    // Containerd will have been started at boot from AMI build
+    let sys_ctr_res = utils::cmd_exec("systemctl", vec!["reload-or-restart", "containerd"])?;
+    debug!("systemctl reload-or-restart containerd: {}", sys_ctr_res.stdout);
+    let sys_start = utils::cmd_exec("systemctl", vec!["start", "sandbox-image", "kubelet"])?;
+    debug!("systemctl start: {}", sys_start.stdout);
 
     Ok(())
   }
