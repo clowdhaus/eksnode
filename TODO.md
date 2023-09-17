@@ -13,6 +13,13 @@
 - [ ] Add functionality to generate SBOM
   - [ ] Both locally and remotely in S3 for use in AMI pipeline
 
+## Containerd/Kubelet
+
+- [ ] Merge default containerd config on host with config provided by users, if one is provided
+- [ ] [Drop-in directory for kubelet configuration files](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/#kubelet-conf-d)
+- [ ] Add support for running containerd snapshotter benchmarks <https://github.com/containerd/containerd/tree/main/contrib>
+  - Default snapshotter is overlayfs, are there any benefits with aufs/btrfs? What about when storage is located on instance store volume? Do we need to do anything additional for xfs when overlayfs is used?
+
 ## Max Pods
 
 - [ ] Modify the max-pods calculation
@@ -23,6 +30,12 @@
   - Karpenter
     - [Provisioners: Pod Density](https://karpenter.sh/preview/concepts/provisioners/#pod-density)
     - [Support for density optimized memory overhead](https://github.com/aws/karpenter/issues/1295)
+
+## Wasi
+
+- [ ] [WebAssembly and containerd: How it works](https://nigelpoulton.com/webassembly-and-containerd-how-it-works/)
+  - [WebAssembly on Kubernetes: The ultimate hands-on guide](https://nigelpoulton.com/webassembly-on-kubernetes-ultimate-hands-on/)
+  - [WebAssembly on Kubernetes: everything you need to know](https://nigelpoulton.com/webassembly-on-kubernetes-everything-you-need-to-know/)
 
 ## Validate Output
 
