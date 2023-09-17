@@ -727,7 +727,7 @@ impl KubeletConfiguration {
   pub fn new(cluster_dns: IpAddr, mebibytes_to_reserve: i32, cpu_millicores_to_reserve: i32) -> Self {
     KubeletConfiguration {
       kind: "KubeletConfiguration".to_string(),
-      api_version: "kubelet.config.k8s.io/v1".to_string(),
+      api_version: "kubelet.config.k8s.io/v1beta1".to_string(),
       address: Some("0.0.0.0".to_string()),
       authentication: Authentication {
         anonymous: AuthnAnonymous { enabled: false },

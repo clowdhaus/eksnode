@@ -39,6 +39,10 @@ struct Version {
   /// The version of containerd - this is not pulled from S3, but statically set in `versions.yaml`
   containerd_version: String,
 
+  /// The version of nerdctl - this is not pulled from S3, but statically set in `versions.yaml`
+  /// nerdctl is used in place of ctr
+  nerdctl_version: String,
+
   /// The version of the CNI plugin - this is not pulled from S3, but statically set in `versions.yaml`
   cni_plugin_version: String,
 }

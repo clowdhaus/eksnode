@@ -34,7 +34,7 @@ source "amazon-ebs" "this" {
       snapshot_id           = try(ami_block_device_mappings.value.snapshot_id, null)
       throughput            = try(ami_block_device_mappings.value.throughput, null)
       virtual_name          = try(ami_block_device_mappings.value.virtual_name, null)
-      volume_size           = try(ami_block_device_mappings.value.volume_size, 10)
+      volume_size           = try(ami_block_device_mappings.value.volume_size, 4)
       volume_type           = try(ami_block_device_mappings.value.volume_type, "gp3")
       kms_key_id            = try(ami_block_device_mappings.value.kms_key_id, null)
     }
@@ -68,7 +68,7 @@ source "amazon-ebs" "this" {
       snapshot_id           = try(launch_block_device_mappings.value.snapshot_id, null)
       throughput            = try(launch_block_device_mappings.value.throughput, null)
       virtual_name          = try(launch_block_device_mappings.value.virtual_name, null)
-      volume_size           = try(launch_block_device_mappings.value.volume_size, 10)
+      volume_size           = try(launch_block_device_mappings.value.volume_size, 4)
       volume_type           = try(launch_block_device_mappings.value.volume_type, "gp3")
     }
   }

@@ -12,6 +12,7 @@ versions: {
       kubernetes_build_date: '{{ version.kubernetes_build_date }}',
       runc_version: '{{ version.runc_version }}',
       containerd_version: '{{ version.containerd_version }}',
+      nerdctl_version: '{{ version.nerdctl_version }}',
       cni_plugin_version: '{{ version.cni_plugin_version }}',
   },
 {{ /each }}

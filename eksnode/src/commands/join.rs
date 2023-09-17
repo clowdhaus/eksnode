@@ -6,7 +6,7 @@ use clap::{Args, ValueEnum};
 use ipnet::IpNet;
 use rand::{seq::SliceRandom, thread_rng};
 use semver::Version;
-use serde::{Deserialize, Serialize, de};
+use serde::{Deserialize, Serialize};
 use tracing::{debug, error, info};
 
 use crate::{commands, containerd, ec2, ecr, eks, kubelet, resource, utils};

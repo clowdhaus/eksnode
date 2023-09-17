@@ -26,7 +26,7 @@ variable "ami_block_device_mappings" {
   default = [
     {
       device_name           = "/dev/xvda"
-      volume_size           = 10
+      volume_size           = 4
       volume_type           = "gp3"
       delete_on_termination = true
     },
@@ -123,7 +123,7 @@ variable "launch_block_device_mappings" {
   default = [
     {
       device_name           = "/dev/xvda"
-      volume_size           = 10
+      volume_size           = 8
       volume_type           = "gp3"
       delete_on_termination = true
     },

@@ -21,6 +21,12 @@ containerd_archive: "containerd-{{ containerd_version }}-linux-{{ arch }}.tar.gz
 containerd_url: "https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}"
 containerd_checksum: "sha256:https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}.sha256sum"
 
+#### nerdctl ####
+
+nerdctl_version: "{{ [version]| map('extract', versions, 'nerdctl_version') | last}}"
+nerdctl_archive: "nerdctl-{{ nerdctl_version }}-linux-{{ arch }}.tar.gz"
+nerdctl_url: "https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/{{ nerdctl_archive }}"
+
 #### CNI ####
 
 cni_plugin_version: "{{ [version]| map('extract', versions, 'cni_plugin_version') | last}}"
