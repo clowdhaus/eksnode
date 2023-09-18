@@ -76,14 +76,14 @@ struct ExecEnvVar {
 
 impl CredentialProviderConfig {
   pub fn new(kubelet_version: &Version) -> Result<Self> {
-    // ecr-credential-provider only implements credentialprovider.kubelet.k8s.io/v1alpha1 prior to 1.27.1: https://github.com/kubernetes/cloud-provider-aws/pull/597
+    // ecr-credential-provider only implements v1alpha1 prior to 1.27.1: https://github.com/kubernetes/cloud-provider-aws/pull/597
     let api_version = match kubelet_version.lt(&Version::parse("1.27.0")?) {
-      true => "credentialprovider.kubelet.k8s.io/v1alpha1".to_string(),
-      false => "credentialprovider.kubelet.k8s.io/v1".to_string(),
+      true => "v1alpha1",
+      false => "v1",
     };
 
     Ok(CredentialProviderConfig {
-      api_version,
+      api_version: format!("kubelet.config.k8s.io/{api_version}"),
       kind: "CredentialProviderConfig".to_owned(),
       providers: vec![CredentialProvider {
         name: "ecr-credential-provider".to_owned(),
@@ -95,7 +95,7 @@ impl CredentialProviderConfig {
           "*.dkr.ecr.*.sc2s.sgov.gov".to_owned(),
         ],
         default_cache_duration: "12h".to_owned(),
-        api_version: "credentialprovider.kubelet.k8s.io/v1".to_owned(),
+        api_version: format!("credentialprovider.kubelet.k8s.io/{api_version}"),
         args: None,
         env: None,
       }],
@@ -164,7 +164,11 @@ mod tests {
     let kubelet_version = Version::parse("1.26.0").unwrap();
     let new = CredentialProviderConfig::new(&kubelet_version).unwrap();
     insta::assert_debug_snapshot!(new);
-    assert_eq!(new.api_version, "credentialprovider.kubelet.k8s.io/v1alpha1".to_owned());
+    assert_eq!(new.api_version, "kubelet.config.k8s.io/v1alpha1".to_owned());
+    assert_eq!(
+      new.providers.get(0).unwrap().api_version,
+      "credentialprovider.kubelet.k8s.io/v1alpha1".to_owned()
+    );
 
     let mut file = NamedTempFile::new().unwrap();
     new.write(&file, false).unwrap();
@@ -183,7 +187,11 @@ mod tests {
     let kubelet_version = Version::parse("1.27.0").unwrap();
     let new = CredentialProviderConfig::new(&kubelet_version).unwrap();
     insta::assert_debug_snapshot!(new);
-    assert_eq!(new.api_version, "credentialprovider.kubelet.k8s.io/v1".to_owned());
+    assert_eq!(new.api_version, "kubelet.config.k8s.io/v1".to_owned());
+    assert_eq!(
+      new.providers.get(0).unwrap().api_version,
+      "credentialprovider.kubelet.k8s.io/v1".to_owned()
+    );
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();

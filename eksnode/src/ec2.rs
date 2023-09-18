@@ -3,14 +3,39 @@ use std::{
   net::{IpAddr, Ipv4Addr, Ipv6Addr},
 };
 
-use anyhow::Result;
-use aws_config::{imds::client::Client, provider_config::ProviderConfig};
+use anyhow::{Context, Result};
+use aws_config::{imds::client::Client as ImdsClient, provider_config::ProviderConfig, SdkConfig};
+use aws_sdk_ec2::{
+  config::{self, retry::RetryConfig},
+  Client,
+};
 use http::Uri;
 use ipnet::Ipv4Net;
 use serde::{Deserialize, Serialize};
 use tokio::time::Duration;
+use tokio_retry::{
+  strategy::{jitter, FibonacciBackoff},
+  Retry,
+};
 
 use crate::Assets;
+
+// Limit the timeout for fetching the private DNS name of the EC2 instance to 5 minutes.
+const FETCH_PRIVATE_DNS_NAME_TIMEOUT: Duration = Duration::from_secs(300);
+// Fibonacci backoff base duration when retrying requests
+const FIBONACCI_BACKOFF_BASE_DURATION_MILLIS: u64 = 200;
+
+/// Get the EC2 client
+pub async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
+  let client = Client::from_conf(
+    // Start with the shared environment configuration
+    config::Builder::from(&config)
+      // Set max attempts
+      .retry_config(RetryConfig::standard().with_max_attempts(retries))
+      .build(),
+  );
+  Ok(client)
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Instance {
@@ -44,9 +69,9 @@ pub fn get_instance(instance: &str) -> Result<Option<Instance>> {
 }
 
 /// Get the IMDS client
-async fn get_client() -> Result<Client> {
+async fn get_imds_client() -> Result<ImdsClient> {
   let config = ProviderConfig::with_default_region().await;
-  let mut client = Client::builder()
+  let mut client = ImdsClient::builder()
     .configure(&config)
     .max_attempts(5)
     .token_ttl(Duration::from_secs(90))
@@ -60,11 +85,44 @@ async fn get_client() -> Result<Client> {
   Ok(client.build().await?)
 }
 
+pub async fn get_private_dns_name(instance_id: &str, client: &Client) -> Result<String> {
+  tokio::time::timeout(
+    FETCH_PRIVATE_DNS_NAME_TIMEOUT,
+    Retry::spawn(
+      FibonacciBackoff::from_millis(FIBONACCI_BACKOFF_BASE_DURATION_MILLIS).map(jitter),
+      || async {
+        client
+          .describe_instances()
+          .instance_ids(instance_id.to_owned())
+          .send()
+          .await
+          .context(format!("Unable to describe instance {instance_id}"))?
+          .reservations
+          .and_then(|reservations| {
+            reservations.first().and_then(|r| {
+              r.instances.clone().and_then(|instances| {
+                instances
+                  .first()
+                  .and_then(|i| i.private_dns_name().map(|s| s.to_string()))
+              })
+            })
+          })
+          .filter(|private_dns_name| !private_dns_name.is_empty())
+          .context("Reservation.Instance.PrivateDNSName is empty")
+      },
+    ),
+  )
+  .await
+  .context("Failed to get PrivateDnsName")?
+}
+
 /// EC2 Instance metadata
 ///
 /// https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-categories.html
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InstanceMetadata {
+  /// The availablity zone in which the instance is launched
+  pub availability_zone: String,
   /// The AWS Region in which the instance is launched
   pub region: String,
   /// The domain for AWS resources for the Region
@@ -110,7 +168,8 @@ impl InstanceMetadata {
 ///
 /// Collects the relevant metadata from IMDS used in joining node to cluster
 pub async fn get_imds_data() -> Result<InstanceMetadata> {
-  let client = get_client().await?;
+  let client = get_imds_client().await?;
+  let availability_zone = client.get("/latest/meta-data/placement/availability-zone").await?;
   let region = client.get("/latest/meta-data/placement/region").await?;
   let domain = client.get("/latest/meta-data/services/domain").await?;
   let mac_address: String = client.get("/latest/meta-data/mac").await?;
@@ -140,6 +199,7 @@ pub async fn get_imds_data() -> Result<InstanceMetadata> {
   let instance_id = client.get("/latest/meta-data/instance-id").await?;
 
   let metadata = InstanceMetadata {
+    availability_zone,
     region,
     domain,
     mac_address,
@@ -155,7 +215,7 @@ pub async fn get_imds_data() -> Result<InstanceMetadata> {
 
 /// Get the instance type from IMDS endpoint
 pub async fn get_instance_type() -> Result<String> {
-  let client = get_client().await?;
+  let client = get_imds_client().await?;
   let instance_type = client.get("/latest/meta-data/instance-type").await?;
 
   Ok(instance_type)

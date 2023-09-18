@@ -146,6 +146,7 @@ pub struct KubeletConfiguration {
   enable_debugging_handlers: Option<bool>,
 
   /// enableContentionProfiling enables block profiling, if enableDebuggingHandlers is true.
+  #[serde(skip_serializing_if = "Option::is_none")]
   enable_contention_profiling: Option<bool>,
 
   /// healthzPort is the port of the localhost healthz endpoint (set to 0 to disable).
@@ -748,6 +749,7 @@ impl KubeletConfiguration {
       },
       cluster_domain: Some("cluster.local".to_string()),
       cluster_dns: Some(vec![cluster_dns.to_string()]),
+      container_runtime_endpoint: Some("unix:///run/containerd/containerd.sock".to_string()),
       eviction_hard: Some(BTreeMap::from([
         ("memory.available".to_string(), "100Mi".to_string()),
         ("nodefs.available".to_string(), "10%".to_string()),
@@ -762,7 +764,7 @@ impl KubeletConfiguration {
       read_only_port: Some(0),
       cgroup_driver: Some("systemd".to_string()),
       cgroup_root: Some("/".to_string()),
-      system_reserved_cgroup: Some("/service".to_string()),
+      system_reserved_cgroup: Some("/system".to_string()),
       kube_reserved_cgroup: Some("/runtime".to_string()),
       feature_gates: Some(BTreeMap::from([
         ("RotateKubeletServerCertificate".to_string(), true),
@@ -783,6 +785,13 @@ impl KubeletConfiguration {
       ]),
       ..KubeletConfiguration::default()
     }
+  }
+
+  /// The unique ID of the instance that an external provider (i.e. cloudprovider) can use to identify a specific node
+  ///
+  /// Only used when the cloud provider is external (< 1.27)
+  pub fn get_provider_id(&self, availability_zone: &str, instance_id: &str) -> Result<String> {
+    Ok(format!("aws:///{availability_zone}/{instance_id}"))
   }
 
   pub fn read<P: AsRef<Path>>(path: P) -> Result<Self> {

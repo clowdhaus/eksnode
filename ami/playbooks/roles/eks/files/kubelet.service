@@ -10,7 +10,6 @@ ExecStartPre=/sbin/iptables -P FORWARD ACCEPT -w 5
 ExecStart=/usr/bin/kubelet \
     --config /etc/kubernetes/kubelet/kubelet-config.json \
     --kubeconfig /var/lib/kubelet/kubeconfig \
-    --container-runtime-endpoint unix:///run/containerd/containerd.sock \
     --image-credential-provider-config /etc/eks/image-credential-provider/config.json \
     --image-credential-provider-bin-dir /etc/eks/image-credential-provider \
     $KUBELET_ARGS \

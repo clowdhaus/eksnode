@@ -80,15 +80,14 @@ fn derive_dns_cluster_ip(
     None => match ip_family {
       IpvFamily::Ipv4 => {
         let mut result = None;
-        let ten_net = Ipv4Net::new(Ipv4Addr::new(10, 0, 0, 0), 8).unwrap();
         for cidr in vpc_ipv4_cidr_blocks {
-          if ten_net.contains(cidr) {
-            result = Some(Ipv4Addr::new(10, 100, 0, 10));
+          if cidr.addr().octets().get(0).unwrap_or(&192).eq(&10) {
+            result = Some(Ipv4Addr::new(172, 20, 0, 10));
             break;
           }
         }
         if result.is_none() {
-          result = Some(Ipv4Addr::new(172, 20, 0, 10));
+          result = Some(Ipv4Addr::new(10, 100, 0, 10));
         }
         Ok(IpAddr::V4(result.unwrap()))
       }
@@ -207,10 +206,10 @@ mod tests {
   #[case(Some(IpNet::V6("2001:db8:8:4::2/62".parse::<Ipv6Net>().unwrap())), &IpvFamily::Ipv6, &[], IpAddr::V6("2001:db8:8:4::a".parse::<Ipv6Addr>().unwrap()))]
   #[case(Some(IpNet::V6("2001:db8:85a3:8d3:1319:8a2e:370:7348/126".parse::<Ipv6Net>().unwrap())), &IpvFamily::Ipv6, &[], IpAddr::V6("2001:db8:85a3:8d3:1319:8a2e:370:a".parse::<Ipv6Addr>().unwrap()))]
   // Service CIDR NOT provided - IPv4
-  #[case(None, &IpvFamily::Ipv4, &["10.1.0.0/24".parse::<Ipv4Net>().unwrap()], IpAddr::V4(Ipv4Addr::new(10, 100, 0, 10)))]
-  #[case(None, &IpvFamily::Ipv4, &["192.168.8.0/24".parse::<Ipv4Net>().unwrap(), "10.100.0.0/16".parse::<Ipv4Net>().unwrap()], IpAddr::V4(Ipv4Addr::new(10, 100, 0, 10)))]
-  #[case(None, &IpvFamily::Ipv4, &["192.168.8.0/24".parse::<Ipv4Net>().unwrap()], IpAddr::V4(Ipv4Addr::new(172, 20, 0, 10)))]
-  #[case(None, &IpvFamily::Ipv4, &["172.16.123.0/24".parse::<Ipv4Net>().unwrap()], IpAddr::V4(Ipv4Addr::new(172, 20, 0, 10)))]
+  #[case(None, &IpvFamily::Ipv4, &["10.1.0.0/24".parse::<Ipv4Net>().unwrap()], IpAddr::V4(Ipv4Addr::new(172, 20, 0, 10)))]
+  #[case(None, &IpvFamily::Ipv4, &["192.168.8.0/24".parse::<Ipv4Net>().unwrap(), "10.100.0.0/16".parse::<Ipv4Net>().unwrap()], IpAddr::V4(Ipv4Addr::new(172, 20, 0, 10)))]
+  #[case(None, &IpvFamily::Ipv4, &["192.168.8.0/24".parse::<Ipv4Net>().unwrap()], IpAddr::V4(Ipv4Addr::new(10, 100, 0, 10)))]
+  #[case(None, &IpvFamily::Ipv4, &["172.16.123.0/24".parse::<Ipv4Net>().unwrap()],  IpAddr::V4(Ipv4Addr::new(10, 100, 0, 10)))]
   // --service-cidr required when --ip-family is ipv4
   #[should_panic]
   #[case(None, &IpvFamily::Ipv6, &[], IpAddr::V6("fd00::a".parse::<Ipv6Addr>().unwrap()))]

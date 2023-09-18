@@ -113,12 +113,18 @@ impl Node {
     dns_cluster_ip: IpAddr,
     max_pods: i32,
     kubelet_version: &Version,
+    availability_zone: &str,
+    instance_id: &str,
   ) -> Result<kubelet::KubeletConfiguration> {
     let mebibytes_to_reserve = resource::memory_mebibytes_to_reserve(max_pods)?;
     let cpu_millicores_to_reserve = resource::cpu_millicores_to_reserve(max_pods, num_cpus::get() as i32)?;
 
     let mut config: kubelet::KubeletConfiguration =
       kubelet::KubeletConfiguration::new(dns_cluster_ip, mebibytes_to_reserve, cpu_millicores_to_reserve);
+
+    if self.use_max_pods {
+      config.max_pods = Some(max_pods);
+    }
 
     // Increase the API priority and fairness for the K8s versions that support it.
     // Starting with 1.27, the default is already increased to 50/100, so leave the higher defaults
@@ -128,12 +134,8 @@ impl Node {
     }
 
     match kubelet_version.lt(&Version::parse("1.26.0")?) {
-      true => config.provider_id = Some("aws".to_string()),
-      false => config.provider_id = Some("external".to_string()),
-    }
-
-    if self.use_max_pods {
-      config.max_pods = Some(max_pods);
+      true => config.provider_id = None,
+      false => config.provider_id = Some(config.get_provider_id(availability_zone, instance_id)?),
     }
 
     Ok(config)
@@ -167,7 +169,12 @@ impl Node {
     })
   }
 
-  fn get_kubelet_args(&self, imds: &ec2::InstanceMetadata, kubelet_version: &semver::Version) -> Result<kubelet::Args> {
+  fn get_kubelet_args(
+    &self,
+    imds: &ec2::InstanceMetadata,
+    kubelet_version: &semver::Version,
+    private_dns_name: &str,
+  ) -> Result<kubelet::Args> {
     let node_ip = imds.get_node_ip(&self.ip_family)?;
     let pod_infra_container_image = self.get_pause_container_image(imds)?;
 
@@ -182,7 +189,7 @@ impl Node {
     // The name of the Node object must be equal to EC2's PrivateDnsName for the aws-iam-authenticator to allow kubelet
     // to manage it.
     let hostname_override = match cloud_provider.as_str() {
-      "external" => Some(imds.domain.clone()),
+      "external" => Some(private_dns_name.to_owned()),
       _ => None,
     };
 
@@ -197,7 +204,7 @@ impl Node {
       pod_infra_container_image,
       hostname_override,
       cloud_provider,
-      container_runtime, // TODO
+      container_runtime,
     };
 
     Ok(args)
@@ -279,6 +286,10 @@ impl Node {
     let max_pods = self.get_max_pods(&instance_metadata.instance_type).await?;
     let pause_image = self.get_pause_container_image(&instance_metadata)?;
 
+    let sdk_config = crate::get_sdk_config(None).await?;
+    let ec2_client = ec2::get_client(sdk_config, 3).await?;
+    let private_dns_name = ec2::get_private_dns_name(&instance_metadata.instance_id, &ec2_client).await?;
+
     self.write_ca_cert(&cluster.b64_ca)?;
     if self.is_local_cluster {
       self.update_etc_hosts(&cluster.endpoint, PathBuf::from("/etc/hosts"))?;
@@ -290,7 +301,13 @@ impl Node {
     let kubelet_kubeconfig = self.get_kubelet_kubeconfig(&cluster, &instance_metadata.region)?;
     kubelet_kubeconfig.config.write(kubelet_kubeconfig.path, Some(0))?;
 
-    let kubelet_config = self.get_kubelet_config(cluster.dns_cluster_ip, max_pods, &kubelet_version)?;
+    let kubelet_config = self.get_kubelet_config(
+      cluster.dns_cluster_ip,
+      max_pods,
+      &kubelet_version,
+      &instance_metadata.availability_zone,
+      &instance_metadata.instance_id,
+    )?;
     let kubelet_config_path = "/etc/kubernetes/kubelet/kubelet-config.json";
     match kubelet_config.write(kubelet_config_path, Some(0)) {
       Ok(_) => (info!("created kubelet config at {kubelet_config_path}"),),
@@ -299,7 +316,7 @@ impl Node {
         return Err(e);
       }
     };
-    let kubelet_args = self.get_kubelet_args(&instance_metadata, &kubelet_version)?;
+    let kubelet_args = self.get_kubelet_args(&instance_metadata, &kubelet_version, &private_dns_name)?;
     kubelet_args.write(kubelet::ARGS_PATH, true)?;
     let kubelet_extra_args = self.get_kubelet_extra_args()?;
     kubelet_extra_args.write(kubelet::EXTRA_ARGS_PATH, true)?;
@@ -344,13 +361,15 @@ mod tests {
         IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
         110,
         &Version::parse("1.22.0").unwrap(),
+        "us-east-1a",
+        "i-0e46d9575664f45bd",
       )
       .unwrap();
 
     assert_eq!(kubelet_config.kube_api_qps, Some(10));
     assert_eq!(kubelet_config.kube_api_burst, Some(20));
-    assert_eq!(kubelet_config.provider_id, Some("aws".to_string()));
     assert_eq!(kubelet_config.max_pods, Some(110));
+    assert_eq!(kubelet_config.provider_id, None,);
   }
 
   #[test]
@@ -362,13 +381,18 @@ mod tests {
         IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
         110,
         &Version::parse("1.26.0").unwrap(),
+        "us-east-1a",
+        "i-0e46d9575664f45bd",
       )
       .unwrap();
 
     assert_eq!(kubelet_config.kube_api_qps, Some(10));
     assert_eq!(kubelet_config.kube_api_burst, Some(20));
-    assert_eq!(kubelet_config.provider_id, Some("external".to_string()));
     assert_eq!(kubelet_config.max_pods, None);
+    assert_eq!(
+      kubelet_config.provider_id,
+      Some("aws:///us-east-1a/i-0e46d9575664f45bd".to_string())
+    );
   }
 
   #[test]
@@ -380,13 +404,18 @@ mod tests {
         IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
         110,
         &Version::parse("1.27.0").unwrap(),
+        "us-east-1a",
+        "i-0e46d9575664f45bd",
       )
       .unwrap();
 
     assert_eq!(kubelet_config.kube_api_qps, None);
     assert_eq!(kubelet_config.kube_api_burst, None);
-    assert_eq!(kubelet_config.provider_id, Some("external".to_string()));
     assert_eq!(kubelet_config.max_pods, None);
+    assert_eq!(
+      kubelet_config.provider_id,
+      Some("aws:///us-east-1a/i-0e46d9575664f45bd".to_string())
+    );
   }
 
   #[test]

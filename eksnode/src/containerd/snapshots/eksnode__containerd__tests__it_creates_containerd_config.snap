@@ -1,5 +1,5 @@
 ---
-source: eksnode/src/containerd.rs
+source: eksnode/src/containerd/mod.rs
 expression: config
 ---
 ContainerdConfiguration {
@@ -30,7 +30,13 @@ ContainerdConfiguration {
     ttrpc: None,
     debug: None,
     metrics: None,
-    disabled_plugins: None,
+    disabled_plugins: Some(
+        [
+            "io.containerd.snapshotter.v1.aufs",
+            "io.containerd.snapshotter.v1.btrfs",
+            "io.containerd.snapshotter.v1.devmapper",
+        ],
+    ),
     required_plugins: None,
     plugins: Some(
         {
