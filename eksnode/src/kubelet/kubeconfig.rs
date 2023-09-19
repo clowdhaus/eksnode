@@ -141,7 +141,7 @@ struct Cluster {
   insecure_skip_tls_verify: Option<bool>,
 
   /// CertificateAuthority is the path to a cert file for the certificate authority
-  #[serde(skip_serializing_if = "Option::is_none")]
+  #[serde(skip_serializing_if = "Option::is_none", rename = "certificate_authority")]
   certificate_authority: Option<PathBuf>,
 
   /// CertificateAuthorityData contains PEM-encoded certificate authority certificates.

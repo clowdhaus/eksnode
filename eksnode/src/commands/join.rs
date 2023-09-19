@@ -37,11 +37,11 @@ pub struct Node {
   #[arg(long)]
   pub containerd_config_file: Option<String>,
 
-  /// Overrides the IP address to use for DNS queries within the cluster
+  /// Overrides the IP address used for DNS queries within the cluster
   ///
-  /// Defaults to 10.100.0.10 or 172.20.0.10 based on the IP address of the primary interface
+  /// Defaults to 10.100.0.10 or 172.20.0.10 for IPv4 based on the IP address of the primary interface
   #[arg(long)]
-  pub dns_cluster_ip: Option<IpAddr>,
+  pub cluster_dns_ip: Option<IpAddr>,
 
   /// Specifies cluster is a local cluster on Outpost
   #[arg(long)]
@@ -110,7 +110,7 @@ impl Node {
   /// Get the configuration for kubelet
   fn get_kubelet_config(
     &self,
-    dns_cluster_ip: IpAddr,
+    cluster_dns_ip: IpAddr,
     max_pods: i32,
     kubelet_version: &Version,
     availability_zone: &str,
@@ -120,7 +120,7 @@ impl Node {
     let cpu_millicores_to_reserve = resource::cpu_millicores_to_reserve(max_pods, num_cpus::get() as i32)?;
 
     let mut config: kubelet::KubeletConfiguration =
-      kubelet::KubeletConfiguration::new(dns_cluster_ip, mebibytes_to_reserve, cpu_millicores_to_reserve);
+      kubelet::KubeletConfiguration::new(cluster_dns_ip, mebibytes_to_reserve, cpu_millicores_to_reserve);
 
     if self.use_max_pods {
       config.max_pods = Some(max_pods);
@@ -302,7 +302,7 @@ impl Node {
     kubelet_kubeconfig.config.write(kubelet_kubeconfig.path, Some(0))?;
 
     let kubelet_config = self.get_kubelet_config(
-      cluster.dns_cluster_ip,
+      cluster.cluster_dns_ip,
       max_pods,
       &kubelet_version,
       &instance_metadata.availability_zone,
@@ -329,15 +329,10 @@ impl Node {
     containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true)?;
 
     // Enable & start systemd units - this should be the last step
-    let sys_rel = utils::cmd_exec("systemctl", vec!["daemon-reload"])?;
-    debug!("systemctl daemon-reload: {}", sys_rel.stdout);
-    let sys_enable = utils::cmd_exec("systemctl", vec!["enable", "containerd", "sandbox-image", "kubelet"])?;
-    debug!("systemctl enable: {}", sys_enable.stdout);
-    // Containerd will have been started at boot from AMI build
-    let sys_ctr_res = utils::cmd_exec("systemctl", vec!["reload-or-restart", "containerd"])?;
-    debug!("systemctl reload-or-restart containerd: {}", sys_ctr_res.stdout);
-    let sys_start = utils::cmd_exec("systemctl", vec!["start", "sandbox-image", "kubelet"])?;
-    debug!("systemctl start: {}", sys_start.stdout);
+    utils::cmd_exec("systemctl", vec!["daemon-reload"])?;
+    utils::cmd_exec("systemctl", vec!["enable", "containerd", "sandbox-image", "kubelet"])?;
+    utils::cmd_exec("systemctl", vec!["reload-or-restart", "containerd"])?;
+    utils::cmd_exec("systemctl", vec!["start", "sandbox-image", "kubelet"])?;
 
     Ok(())
   }
@@ -431,7 +426,7 @@ mod tests {
       endpoint: "http://localhost:8080".to_string(),
       b64_ca: "c3VwZXIgc2VjcmV0IGNsdXN0ZXIgY2VydGlmaWNhdGU".to_string(),
       is_local_cluster: true,
-      dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
+      cluster_dns_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
     };
 
     let kubelet_kubeconfig = node.get_kubelet_kubeconfig(&cluster, "us-west-2").unwrap();
@@ -451,7 +446,7 @@ mod tests {
       endpoint: "http://localhost:8080".to_string(),
       b64_ca: "c3VwZXIgc2VjcmV0IGNsdXN0ZXIgY2VydGlmaWNhdGU".to_string(),
       is_local_cluster: false,
-      dns_cluster_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
+      cluster_dns_ip: IpAddr::V4(Ipv4Addr::new(10, 1, 0, 10)),
     };
 
     let kubelet_kubeconfig = node.get_kubelet_kubeconfig(&cluster, "eu-west-1").unwrap();

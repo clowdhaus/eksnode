@@ -49,7 +49,7 @@ fn ipv6_dns_ip_address(addr: Ipv6Addr) -> Result<Ipv6Addr> {
   Ok(Ipv6Addr::from(segments))
 }
 
-/// Derive the IP address to use for DNS queries within the cluster
+/// Derive the IP address of the cluster DNS server
 ///
 /// When --ip-family ipv4 (default):
 /// - If --service-cidr is supplied, return x.x.x.10 address from the CIDR
@@ -58,7 +58,7 @@ fn ipv6_dns_ip_address(addr: Ipv6Addr) -> Result<Ipv6Addr> {
 ///
 /// When --ip-family ipv6:
 /// --service-cidr is required, return :::a address from the CIDR
-fn derive_dns_cluster_ip(
+fn derive_cluster_dns_ip(
   service_cidr: &Option<IpNet>,
   ip_family: &IpvFamily,
   vpc_ipv4_cidr_blocks: &[Ipv4Net],
@@ -81,7 +81,7 @@ fn derive_dns_cluster_ip(
       IpvFamily::Ipv4 => {
         let mut result = None;
         for cidr in vpc_ipv4_cidr_blocks {
-          if cidr.addr().octets().get(0).unwrap_or(&192).eq(&10) {
+          if cidr.addr().octets().first().unwrap_or(&192).eq(&10) {
             result = Some(Ipv4Addr::new(172, 20, 0, 10));
             break;
           }
@@ -107,20 +107,20 @@ pub struct Cluster {
   pub b64_ca: String,
   /// Identifies if the control plane is deployed on Outpost
   pub is_local_cluster: bool,
-  /// IP address to use for DNS queries within the cluster
-  pub dns_cluster_ip: IpAddr,
+  /// Cluster DNS IP address
+  pub cluster_dns_ip: IpAddr,
 }
 
 /// Return the cluster details from the input collected
-fn collect_cluster(cli_input: &Node, dns_cluster_ip: IpAddr) -> Result<Option<Cluster>> {
-  if let Some(endpoint) = cli_input.apiserver_endpoint.to_owned() {
-    if let Some(b64_ca) = cli_input.b64_cluster_ca.to_owned() {
+fn collect_cluster(node: &Node, cluster_dns_ip: IpAddr) -> Result<Option<Cluster>> {
+  if let Some(endpoint) = node.apiserver_endpoint.to_owned() {
+    if let Some(b64_ca) = node.b64_cluster_ca.to_owned() {
       return Ok(Some(Cluster {
-        name: cli_input.cluster_name.to_owned(),
+        name: node.cluster_name.to_owned(),
         endpoint,
         b64_ca,
-        is_local_cluster: cli_input.is_local_cluster,
-        dns_cluster_ip,
+        is_local_cluster: node.is_local_cluster,
+        cluster_dns_ip,
       }));
     }
   }
@@ -134,19 +134,19 @@ fn collect_cluster(cli_input: &Node, dns_cluster_ip: IpAddr) -> Result<Option<Cl
 /// we can save an API call. Otherwise, we need to describe the cluster to get the details.
 pub async fn collect_or_get_cluster(
   config: SdkConfig,
-  cli_input: &Node,
+  node: &Node,
   vpc_ipv4_cidr_blocks: &[Ipv4Net],
 ) -> Result<Cluster> {
   // DNS cluster IP is not related to cluster - if it cannot be derived, it should fail
-  let dns_cluster_ip = match cli_input.dns_cluster_ip {
+  let cluster_dns_ip = match node.cluster_dns_ip {
     Some(ip) => ip,
-    None => derive_dns_cluster_ip(&cli_input.service_cidr, &cli_input.ip_family, vpc_ipv4_cidr_blocks)?,
+    None => derive_cluster_dns_ip(&node.service_cidr, &node.ip_family, vpc_ipv4_cidr_blocks)?,
   };
-  info!("DNS cluster IP address: {}", dns_cluster_ip);
+  info!("DNS cluster IP address: {}", cluster_dns_ip);
 
-  let cluster_name = &cli_input.cluster_name.clone();
+  let cluster_name = &node.cluster_name.clone();
 
-  match collect_cluster(cli_input, dns_cluster_ip)? {
+  match collect_cluster(node, cluster_dns_ip)? {
     Some(cluster) => {
       debug!("Cluster details collected from CLI input - no describe API call required");
       Ok(cluster)
@@ -161,7 +161,7 @@ pub async fn collect_or_get_cluster(
         endpoint: describe.endpoint.unwrap(),
         b64_ca: describe.certificate_authority.unwrap().data.unwrap(),
         is_local_cluster: describe.outpost_config.is_some(),
-        dns_cluster_ip,
+        cluster_dns_ip,
       })
     }
   }
@@ -213,13 +213,13 @@ mod tests {
   // --service-cidr required when --ip-family is ipv4
   #[should_panic]
   #[case(None, &IpvFamily::Ipv6, &[], IpAddr::V6("fd00::a".parse::<Ipv6Addr>().unwrap()))]
-  fn derive_dns_cluster_ip_test(
+  fn derive_cluster_dns_ip_test(
     #[case] service_cidr: Option<IpNet>,
     #[case] ip_family: &IpvFamily,
     #[case] vpc_ipv4_cidr_blocks: &[Ipv4Net],
     #[case] expected: IpAddr,
   ) {
-    let result = derive_dns_cluster_ip(&service_cidr, ip_family, vpc_ipv4_cidr_blocks).unwrap();
+    let result = derive_cluster_dns_ip(&service_cidr, ip_family, vpc_ipv4_cidr_blocks).unwrap();
     assert_eq!(expected, result);
   }
 }
