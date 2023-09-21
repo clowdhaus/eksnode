@@ -3280,6 +3280,13 @@ mac1.metal:
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
   maximum_network_interfaces: 8
+mac2-m2pro.metal:
+  default_vcpus: 12
+  eni_maximum_pods: 234
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 30
+  maximum_network_interfaces: 8
 mac2.metal:
   default_vcpus: 8
   eni_maximum_pods: 234
