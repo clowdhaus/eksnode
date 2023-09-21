@@ -18,8 +18,7 @@ Documentation=https://containerd.io
 After=network.target local-fs.target
 
 [Service]
-#uncomment to fallback to legacy CRI plugin implementation with podsandbox support.
-#Environment="DISABLE_CRI_SANDBOXES=1"
+Slice=runtime.slice
 ExecStartPre=-/sbin/modprobe overlay
 ExecStart=/usr/local/bin/containerd
 
@@ -33,8 +32,6 @@ RestartSec=5
 LimitNPROC=infinity
 LimitCORE=infinity
 LimitNOFILE=infinity
-# Comment TasksMax if your systemd version does not supports it.
-# Only systemd 226 and above support this version.
 TasksMax=infinity
 OOMScoreAdjust=-999
 
