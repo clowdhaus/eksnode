@@ -50,8 +50,11 @@ pub enum Commands {
   /// the theoretical max pods limit.
   CalculateMaxPods(commands::calculate::MaxPods),
 
-  /// Fetch all content for the image into containerd
-  Fetch(commands::fetch::Image),
+  /// Pull images from a registry
+  ///
+  /// Supports pulling one image as specified or for pulling commonly used images
+  /// to be cached on the host/AMI
+  Pull(commands::pull::Image),
 
   /// Join an instance to the cluster
   Join(commands::join::Node),

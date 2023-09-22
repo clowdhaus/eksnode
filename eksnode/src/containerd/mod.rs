@@ -9,7 +9,7 @@ pub const SANDBOX_IMAGE_SERVICE_PATH: &str = "/etc/systemd/system/sandbox-image.
 
 pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
   let tmpl_file = "sandbox-image.service";
-  let exec_start = format!("eksnode fetch --image {pause_image} --namespace k8s.io");
+  let exec_start = format!("eksnode pull --image {pause_image} --namespace k8s.io");
 
   if let Some(tmpl) = crate::Templates::get(tmpl_file) {
     let contents = std::str::from_utf8(tmpl.data.as_ref())?.replace("{{EXEC_START}}", &exec_start);

@@ -15,6 +15,7 @@
     - awscli
     - iptables-legacy # needed by kubelet
     - amazon-ssm-agent
+    - amazon-ecr-credential-helper # to pull ECR images
 
 # ec2-net-utils interferes with the route setup on the instance
 - name: Remove the ec2-net-utils package
@@ -72,10 +73,6 @@
 #       service:
 #         name: sshd
 #         state: reloaded
-
-#########################################################
-# kube-proxy
-#########################################################
 
 - name: Create logrotate.conf file
   copy:
@@ -165,6 +162,26 @@
     group: root
     remote_src: yes
 
+# For amazon-ecr-credential-helper used by nerdctl to pull images
+- name: Create /root/.docker directory
+  ansible.builtin.file:
+    path: /root/.docker
+    state: directory
+    owner: root
+    group: root
+  register: docker_dir
+
+- name: Create {{ docker_dir.path }}/config.json
+  copy:
+    dest: '{{ docker_dir.path }}/config.json'
+    mode: 0644
+    owner: root
+    group: root
+    content: |
+      {
+        "credsStore": "ecr-login"
+      }
+
 - name: Install nerdctl {{ nerdctl_version }}
   ansible.builtin.unarchive:
     src: '{{ nerdctl_url }}'
@@ -193,16 +210,6 @@
     owner: root
     group: root
 
-- name: Create /etc/systemd/system/containerd.service.d/00-runtime-slice.conf
-  copy:
-    dest: /etc/systemd/system/containerd.service.d/00-runtime-slice.conf
-    mode: 0644
-    owner: root
-    group: root
-    content: |
-      [Service]
-      Slice=runtime.slice
-
 - name: Create /etc/modules-load.d/containerd.conf file
   copy:
     dest: /etc/modules-load.d/containerd.conf
@@ -223,14 +230,6 @@
       net.bridge.bridge-nf-call-ip6tables = 1
       net.bridge.bridge-nf-call-iptables = 1
       net.ipv4.ip_forward = 1
-
-- name: Create /etc/systemd/system/sandbox-image.service
-  copy:
-    src: files/sandbox-image.service
-    dest: /etc/systemd/system/sandbox-image.service
-    mode: 0644
-    owner: root
-    group: root
 
 - name: Create /etc/systemd/system/containerd.service
   copy:
@@ -400,4 +399,8 @@
     name: containerd
     enabled: true
     masked: no
-    # state: started
+    state: started
+
+- name: Pull pause image
+  ansible.builtin.shell: |
+    eksnode pull --image=602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9

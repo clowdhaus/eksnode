@@ -30,7 +30,7 @@
         - /etc/machine-id
         - /etc/resolv.conf
         - /home/ec2-user/.ssh/authorized_keys
-        - /root/.ssh/authorized_keys \
+        - /root/.ssh/authorized_keys
         - /var/lib/cloud/data
         - /var/lib/cloud/instance
         - /var/lib/cloud/instances

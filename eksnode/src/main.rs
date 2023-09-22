@@ -25,7 +25,7 @@ async fn main() -> Result<()> {
         process::exit(2);
       }
     },
-    Commands::Fetch(image) => match image.fetch().await {
+    Commands::Pull(image) => match image.pull().await {
       Ok(_) => Ok(()),
       Err(err) => {
         eprintln!("{err}");
