@@ -87,7 +87,7 @@ mod tests {
   #[test]
   fn it_gets_ecr_uri_apeast1() {
     let result = get_ecr_uri("cn-north-1", false).unwrap();
-    assert_eq!(result, "800184023465.dkr.ecr.cn-north-1.amazonaws.com.cn");
+    assert_eq!(result, "918309763551.dkr.ecr.cn-north-1.amazonaws.com.cn");
   }
 
   #[test]
