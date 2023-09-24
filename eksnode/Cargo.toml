@@ -23,19 +23,20 @@ anstyle.workspace = true
 anyhow.workspace = true
 aws-config.workspace = true
 aws-sdk-ec2.workspace = true
-aws-sdk-ecr = "0.30"
-aws-sdk-eks = "0.30"
+aws-sdk-ecr = "0.31"
+aws-sdk-eks = "0.31"
 aws-types.workspace = true
 base64 = "0.21.2"
 clap.workspace = true
 clap-verbosity-flag.workspace = true
-containerd-client = "0.4"
+containerd-client = { git = "https://github.com/containerd/rust-extensions.git", package = "containerd-client" }
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
 rust-embed = { version = "8.0", features = ["compression"] }
 http = "0.2"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.16"
+prost-types = "0.12"
 rand = "0.8"
 regex-lite.workspace = true
 semver = "1.0"

@@ -1,18 +1,19 @@
-use anyhow::Result;
+use anyhow::{bail, Result};
 use clap::Args;
 use containerd_client as client;
 use containerd_client::{
-  services::v1::{images_client::ImagesClient, GetImageRequest},
+  services::v1::{images_client::ImagesClient, GetImageRequest, TransferRequest},
   tonic::Request,
-  with_namespace,
+  with_namespace, Client as ContainerdClient,
 };
+use prost_types::Any;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info};
 
 const NAMESPACE: &str = "k8s.io";
 const CONTAINERD_SOCK: &str = "/run/containerd/containerd.sock";
 
-use crate::utils;
+use crate::{ec2, ecr, eks, kubelet, utils};
 
 #[derive(Args, Debug, Serialize, Deserialize)]
 #[command(group = clap::ArgGroup::new("pull").multiple(false).required(true))]
@@ -28,6 +29,10 @@ pub struct Image {
   /// Cache common set of images on host/AMI
   #[arg(long, group = "pull")]
   cached_images: bool,
+
+  /// Enable FIPS mode
+  #[arg(long)]
+  enable_fips: bool,
 }
 
 impl Image {
@@ -44,27 +49,14 @@ impl Image {
     match &self.image {
       Some(image) => {
         if self.exists().await? {
-          return Ok(());
+          Ok(())
+        } else {
+          pull_image(image, &self.namespace).await
         }
-
-        let out = utils::cmd_exec(
-          "nerdctl",
-          vec![
-            "pull",
-            "--unpack=false",
-            &format!("--namespace={}", &self.namespace),
-            &image,
-          ],
-        )?;
-        debug!("Pull image {}:\n {}", &image, &out.stdout);
-
-        Ok(())
       }
-      None => pull_cached_images(),
+      None => pull_cached_images(self.enable_fips).await,
     }
   }
-
-  // eksnode pull --image=602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9 -vvv
 
   /// Check if the image exists in the namespace
   async fn exists(&self) -> Result<bool> {
@@ -88,7 +80,7 @@ impl Image {
             }
           }
           Err(_) => {
-            info!("Image not found - pull {}", image);
+            info!("Image not found {}", image);
             Ok(false)
           }
         }
@@ -97,6 +89,102 @@ impl Image {
   }
 }
 
-fn pull_cached_images() -> Result<()> {
-  todo!()
+async fn pull_image(image: &str, namespace: &str) -> Result<()> {
+  info!("Pulling image: {image}");
+  let out = utils::cmd_exec(
+    "nerdctl",
+    vec!["pull", "--unpack=false", &format!("--namespace={namespace}"), image],
+  )?;
+
+  if out.status == 0 {
+    debug!("Image pulled {image}:\n {}", &out.stdout);
+  } else {
+    bail!("Failed to pull image: {image}");
+  };
+
+  Ok(())
+}
+
+async fn pull_cached_images(enable_fips: bool) -> Result<()> {
+  let region = ec2::get_region().await?;
+  let ecr_uri = ecr::get_ecr_uri(&region, enable_fips)?;
+  let kubelet_version = kubelet::get_kubelet_version()?;
+  let kubernetes_version = format!("{}.{}", kubelet_version.major, kubelet_version.minor);
+
+  let images = get_images_to_cache(&ecr_uri, &kubernetes_version).await?;
+  for image in &images {
+    pull_image(image, NAMESPACE).await?;
+  }
+
+  tag_images(images).await?;
+
+  Ok(())
+}
+
+// - `<ECR-ENDPOINT>/eks/kube-proxy:<default and latest>-eksbuild.<BUILD_VERSION>`
+// - `<ECR-ENDPOINT>/eks/kube-proxy:<default and latest>-minimal-eksbuild.<BUILD_VERSION>`
+// - `<ECR-ENDPOINT>/eks/pause:3.5`
+// - `<ECR-ENDPOINT>/amazon-k8s-cni-init:<default and latest>`
+// - `<ECR-ENDPOINT>/amazon-k8s-cni:<default and latest>`
+
+async fn get_images_to_cache(ecr_uri: &str, kubernetes_version: &str) -> Result<Vec<String>> {
+  let mut images = vec![format!("{ecr_uri}/eks/pause:3.9")];
+
+  let kube_proxy_version = eks::get_addon_versions("kube-proxy", kubernetes_version).await?;
+  images.push(format!("{ecr_uri}/eks/kube-proxy:{}", kube_proxy_version.default));
+  images.push(format!("{ecr_uri}/eks/kube-proxy:{}", kube_proxy_version.latest));
+  images
+    .push(format!("{ecr_uri}/eks/kube-proxy:{}", kube_proxy_version.default).replace("eksbuild", "minimal-eksbuild"));
+  images
+    .push(format!("{ecr_uri}/eks/kube-proxy:{}", kube_proxy_version.latest).replace("eksbuild", "minimal-eksbuild"));
+
+  let vpc_cni_version = eks::get_addon_versions("vpc-cni", kubernetes_version).await?;
+  images.push(format!("{ecr_uri}/amazon-k8s-cni:{}", vpc_cni_version.default));
+  images.push(format!("{ecr_uri}/amazon-k8s-cni-init:{}", vpc_cni_version.default));
+  images.push(format!("{ecr_uri}/amazon-k8s-cni:{}", vpc_cni_version.latest));
+  images.push(format!("{ecr_uri}/amazon-k8s-cni-init:{}", vpc_cni_version.latest));
+
+  Ok(images)
+}
+
+async fn tag_images(images: Vec<String>) -> Result<()> {
+  let client = ContainerdClient::from_path(CONTAINERD_SOCK)
+    .await
+    .expect("Failed to connect to containerd socket {CONTAINERD_SOCK}");
+
+  for image in images {
+    let source = Any {
+      type_url: "types.containerd.io/opencontainers/runtime-spec/1/Spec".to_string(),
+      value: image.clone().into_bytes(), // TODO
+    };
+
+    let destination = Any {
+      type_url: "types.containerd.io/opencontainers/runtime-spec/1/Spec".to_string(),
+      value: image.clone().into_bytes(), // TODO
+    };
+
+    let tx_req = TransferRequest {
+      source: Some(source),
+      destination: Some(destination),
+      options: None,
+    };
+
+    let _resp = client.transfer().transfer(with_namespace!(tx_req, NAMESPACE)).await?;
+  }
+
+  Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[tokio::test]
+  async fn it_gets_ecr_uri_apeast1() {
+    let ecr_uri = ecr::get_ecr_uri("us-east-1", false).unwrap();
+    let imgs = get_images_to_cache(&ecr_uri, "1.27").await.unwrap();
+    println!("{:#?}", imgs);
+
+    assert_eq!(1, 1)
+  }
 }

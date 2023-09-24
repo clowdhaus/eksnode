@@ -220,3 +220,11 @@ pub async fn get_instance_type() -> Result<String> {
 
   Ok(instance_type)
 }
+
+/// Get the region from IMDS endpoint
+pub async fn get_region() -> Result<String> {
+  let client = get_imds_client().await?;
+  let region = client.get("/latest/meta-data/placement/region").await?;
+
+  Ok(region)
+}

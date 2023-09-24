@@ -1,7 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 use anyhow::{bail, Result};
-use aws_config::SdkConfig;
 use aws_sdk_eks::{
   config::{self, retry::RetryConfig},
   Client,
@@ -12,12 +11,13 @@ use tracing::{debug, info};
 use crate::{commands::join::Node, IpvFamily};
 
 /// Get the EKS client
-async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
+async fn get_client() -> Result<Client> {
+  let config = crate::get_sdk_config(None).await?;
   let client = Client::from_conf(
     // Start with the shared environment configuration
     config::Builder::from(&config)
       // Set max attempts
-      .retry_config(RetryConfig::standard().with_max_attempts(retries))
+      .retry_config(RetryConfig::standard().with_max_attempts(3))
       .build(),
   );
   Ok(client)
@@ -132,11 +132,7 @@ fn collect_cluster(node: &Node, cluster_dns_ip: IpAddr) -> Result<Option<Cluster
 ///
 /// If all the necessary details required to join a node to the cluster are provided, then
 /// we can save an API call. Otherwise, we need to describe the cluster to get the details.
-pub async fn collect_or_get_cluster(
-  config: SdkConfig,
-  node: &Node,
-  vpc_ipv4_cidr_blocks: &[Ipv4Net],
-) -> Result<Cluster> {
+pub async fn collect_or_get_cluster(node: &Node, vpc_ipv4_cidr_blocks: &[Ipv4Net]) -> Result<Cluster> {
   // DNS cluster IP is not related to cluster - if it cannot be derived, it should fail
   let cluster_dns_ip = match node.cluster_dns_ip {
     Some(ip) => ip,
@@ -152,8 +148,9 @@ pub async fn collect_or_get_cluster(
       Ok(cluster)
     }
     None => {
-      debug!("Cluster details are insufficient - describing cluster to get details");
-      let client = get_client(config, 3).await?;
+      debug!("Insufficient cluster details - describing cluster to get details");
+
+      let client = get_client().await?;
       let describe = describe_cluster(&client, cluster_name).await?;
 
       Ok(Cluster {
@@ -165,6 +162,63 @@ pub async fn collect_or_get_cluster(
       })
     }
   }
+}
+
+/// Addon version is relative to a given Kubernetes version
+#[derive(Debug)]
+pub struct AddonVersion {
+  /// Latest supported version of the addon
+  pub latest: String,
+  /// Default version of the addon
+  pub default: String,
+}
+
+/// Get the addon version details for the given addon and Kubernetes version
+///
+/// Returns the default version and latest version of the addon for the given Kubernetes version
+pub async fn get_addon_versions(name: &str, kubernetes_version: &str) -> Result<AddonVersion> {
+  let client = get_client().await?;
+
+  // Get all of the addon versions supported for the given addon and Kubernetes version
+  let describe = client
+    .describe_addon_versions()
+    .addon_name(name)
+    .kubernetes_version(kubernetes_version)
+    .send()
+    .await?;
+
+  // Since we are providing an addon name, we are only concerned with the first and only item
+  let addon = describe.addons().unwrap_or_default().get(0).unwrap();
+  let latest_version = match addon.addon_versions() {
+    Some(versions) => match versions.first() {
+      Some(version) => version.addon_version().unwrap_or_default(),
+      None => {
+        bail!("Version not found for addon {name}");
+      }
+    },
+    None => bail!("No versions found for addon {name}"),
+  };
+
+  // The default version as specified by the EKS API for a given addon and Kubernetes version
+  let default_version = match addon.addon_versions() {
+    Some(versions) => versions
+      .iter()
+      .filter(|v| {
+        v.compatibilities()
+          .unwrap_or_default()
+          .iter()
+          .any(|c| c.default_version)
+      })
+      .map(|v| v.addon_version().unwrap_or_default())
+      .next()
+      .unwrap_or_default(),
+    None => bail!("Default version not found for addon {name}"),
+  };
+
+  Ok(AddonVersion {
+    latest: latest_version.to_owned(),
+    default: default_version.to_owned(),
+  })
 }
 
 #[cfg(test)]
