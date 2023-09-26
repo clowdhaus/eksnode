@@ -1,23 +1,21 @@
 use anyhow::{bail, Result};
 use clap::Args;
-use containerd_client as client;
 use containerd_client::{
-  services::v1::{images_client::ImagesClient, GetImageRequest, TransferRequest},
-  tonic::Request,
+  services::v1::{images_client::ImagesClient, CreateImageRequest, GetImageRequest, Image as ContainerdImage},
+  tonic::{transport::Channel, Request},
   with_namespace, Client as ContainerdClient,
 };
-use prost_types::Any;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info};
+
+use crate::{ec2, ecr, eks, kubelet, utils};
 
 const NAMESPACE: &str = "k8s.io";
 const CONTAINERD_SOCK: &str = "/run/containerd/containerd.sock";
 
-use crate::{ec2, ecr, eks, kubelet, utils};
-
 #[derive(Args, Debug, Serialize, Deserialize)]
 #[command(group = clap::ArgGroup::new("pull").multiple(false).required(true))]
-pub struct Image {
+pub struct ImageInput {
   /// Container image
   #[arg(short, long, group = "pull")]
   image: Option<String>,
@@ -35,7 +33,7 @@ pub struct Image {
   enable_fips: bool,
 }
 
-impl Image {
+impl ImageInput {
   /// Pull an image from a registry
   ///
   /// This is used to cache images on the host
@@ -48,10 +46,11 @@ impl Image {
   pub async fn pull(&self) -> Result<()> {
     match &self.image {
       Some(image) => {
-        if self.exists().await? {
+        if !self.exists().await? {
           Ok(())
         } else {
-          pull_image(image, &self.namespace).await
+          pull_image(image, &self.namespace).await?;
+          Ok(()) // TODO - this is ugly
         }
       }
       None => pull_cached_images(self.enable_fips).await,
@@ -64,8 +63,11 @@ impl Image {
       None => Ok(false),
       Some(_) => {
         let image = self.image.to_owned().unwrap();
-        let channel = client::connect(CONTAINERD_SOCK).await?;
-        let mut client = ImagesClient::new(channel);
+        let mut client = ContainerdClient::from_path(CONTAINERD_SOCK)
+          .await
+          .expect("Failed to connect to {CONTAINERD_SOCK}")
+          .images();
+
         let img_req = GetImageRequest { name: image.to_owned() };
 
         match client.get(with_namespace!(img_req, NAMESPACE)).await {
@@ -89,7 +91,7 @@ impl Image {
   }
 }
 
-async fn pull_image(image: &str, namespace: &str) -> Result<()> {
+async fn pull_image(image: &str, namespace: &str) -> Result<utils::CmdResult> {
   info!("Pulling image: {image}");
   let out = utils::cmd_exec(
     "nerdctl",
@@ -97,38 +99,37 @@ async fn pull_image(image: &str, namespace: &str) -> Result<()> {
   )?;
 
   if out.status == 0 {
-    debug!("Image pulled {image}:\n {}", &out.stdout);
+    debug!("Image pulled {image}: {}", &out.stdout);
   } else {
-    bail!("Failed to pull image: {image}");
+    bail!("Failed to pull image: {image}\n{}", &out.stderr);
   };
 
-  Ok(())
+  Ok(out)
 }
 
 async fn pull_cached_images(enable_fips: bool) -> Result<()> {
   let region = ec2::get_region().await?;
-  let ecr_uri = ecr::get_ecr_uri(&region, enable_fips)?;
   let kubelet_version = kubelet::get_kubelet_version()?;
   let kubernetes_version = format!("{}.{}", kubelet_version.major, kubelet_version.minor);
 
-  let images = get_images_to_cache(&ecr_uri, &kubernetes_version).await?;
-  for image in &images {
-    pull_image(image, NAMESPACE).await?;
-  }
+  let mut client = ContainerdClient::from_path(CONTAINERD_SOCK)
+    .await
+    .expect("Failed to connect to {CONTAINERD_SOCK}")
+    .images();
 
-  tag_images(images).await?;
+  let images = get_images_to_cache(&region, enable_fips, &kubernetes_version).await?;
+  for image in &images {
+    // TODO - this should be integrated better when pulling with client and not nerdctl
+    pull_image(image, NAMESPACE).await?;
+    tag_image(image, &region, enable_fips, &mut client).await?;
+  }
 
   Ok(())
 }
 
-// - `<ECR-ENDPOINT>/eks/kube-proxy:<default and latest>-eksbuild.<BUILD_VERSION>`
-// - `<ECR-ENDPOINT>/eks/kube-proxy:<default and latest>-minimal-eksbuild.<BUILD_VERSION>`
-// - `<ECR-ENDPOINT>/eks/pause:3.5`
-// - `<ECR-ENDPOINT>/amazon-k8s-cni-init:<default and latest>`
-// - `<ECR-ENDPOINT>/amazon-k8s-cni:<default and latest>`
-
-async fn get_images_to_cache(ecr_uri: &str, kubernetes_version: &str) -> Result<Vec<String>> {
-  let mut images = vec![format!("{ecr_uri}/eks/pause:3.9")];
+async fn get_images_to_cache(region: &str, enable_fips: bool, kubernetes_version: &str) -> Result<Vec<String>> {
+  let ecr_uri = ecr::get_ecr_uri(region, enable_fips)?;
+  let mut images = vec![format!("{ecr_uri}/eks/pause:3.8")];
 
   let kube_proxy_version = eks::get_addon_versions("kube-proxy", kubernetes_version).await?;
   images.push(format!("{ecr_uri}/eks/kube-proxy:{}", kube_proxy_version.default));
@@ -147,44 +148,72 @@ async fn get_images_to_cache(ecr_uri: &str, kubernetes_version: &str) -> Result<
   Ok(images)
 }
 
-async fn tag_images(images: Vec<String>) -> Result<()> {
-  let client = ContainerdClient::from_path(CONTAINERD_SOCK)
-    .await
-    .expect("Failed to connect to containerd socket {CONTAINERD_SOCK}");
-
-  for image in images {
-    let source = Any {
-      type_url: "types.containerd.io/opencontainers/runtime-spec/1/Spec".to_string(),
-      value: image.clone().into_bytes(), // TODO
+async fn tag_image(image: &str, cur_region: &str, enable_fips: bool, client: &mut ImagesClient<Channel>) -> Result<()> {
+  for region in ec2::get_all_regions().await? {
+    let img_req = GetImageRequest {
+      name: image.to_string(),
     };
 
-    let destination = Any {
-      type_url: "types.containerd.io/opencontainers/runtime-spec/1/Spec".to_string(),
-      value: image.clone().into_bytes(), // TODO
-    };
+    // TODO - this feels like we should be passing around an image struct and simply updating one field
+    let current_ecr_uri = ecr::get_ecr_uri(cur_region, enable_fips)?;
+    let region_ecr_uri = ecr::get_ecr_uri(&region, enable_fips)?;
+    if current_ecr_uri == region_ecr_uri {
+      continue;
+    }
 
-    let tx_req = TransferRequest {
-      source: Some(source),
-      destination: Some(destination),
-      options: None,
-    };
-
-    let _resp = client.transfer().transfer(with_namespace!(tx_req, NAMESPACE)).await?;
+    match client.get(with_namespace!(img_req, NAMESPACE)).await {
+      Ok(rsp) => {
+        if let Some(image) = rsp.into_inner().image {
+          let tagged_name = image.name.replace(&current_ecr_uri, &region_ecr_uri);
+          info!("Tagging image: {tagged_name}");
+          let create_req = CreateImageRequest {
+            image: Some(ContainerdImage {
+              name: tagged_name,
+              ..image
+            }),
+            ..Default::default()
+          };
+          client.create(with_namespace!(create_req, NAMESPACE)).await?;
+        }
+      }
+      Err(_) => bail!("Image not found, unable to tag"),
+    }
   }
 
   Ok(())
 }
-
 #[cfg(test)]
 mod tests {
   use super::*;
 
   #[tokio::test]
-  async fn it_gets_ecr_uri_apeast1() {
-    let ecr_uri = ecr::get_ecr_uri("us-east-1", false).unwrap();
-    let imgs = get_images_to_cache(&ecr_uri, "1.27").await.unwrap();
-    println!("{:#?}", imgs);
-
-    assert_eq!(1, 1)
+  async fn it_gets_images_to_cache_useast1_127() {
+    let imgs = get_images_to_cache("us-east-1", false, "1.27").await.unwrap();
+    insta::assert_debug_snapshot!(imgs);
+  }
+  #[tokio::test]
+  async fn it_gets_images_to_cache_apeast1_127() {
+    let imgs = get_images_to_cache("ap-east-1", false, "1.27").await.unwrap();
+    insta::assert_debug_snapshot!(imgs);
+  }
+  #[tokio::test]
+  async fn it_gets_images_to_cache_usgoveast1_fips_127() {
+    let imgs = get_images_to_cache("us-gov-east-1", true, "1.27").await.unwrap();
+    insta::assert_debug_snapshot!(imgs);
+  }
+  #[tokio::test]
+  async fn it_gets_images_to_cache_useast1_124() {
+    let imgs = get_images_to_cache("us-east-1", false, "1.24").await.unwrap();
+    insta::assert_debug_snapshot!(imgs);
+  }
+  #[tokio::test]
+  async fn it_gets_images_to_cache_apeast1_124() {
+    let imgs = get_images_to_cache("ap-east-1", false, "1.24").await.unwrap();
+    insta::assert_debug_snapshot!(imgs);
+  }
+  #[tokio::test]
+  async fn it_gets_images_to_cache_usgoveast1_fips_124() {
+    let imgs = get_images_to_cache("us-gov-east-1", true, "1.24").await.unwrap();
+    insta::assert_debug_snapshot!(imgs);
   }
 }

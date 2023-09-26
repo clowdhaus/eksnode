@@ -1,0 +1,15 @@
+---
+source: eksnode/src/commands/pull.rs
+expression: imgs
+---
+[
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/eks/pause:3.9",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/eks/kube-proxy:v1.27.1-eksbuild.1",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/eks/kube-proxy:v1.27.4-eksbuild.2",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/eks/kube-proxy:v1.27.1-minimal-eksbuild.1",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/eks/kube-proxy:v1.27.4-minimal-eksbuild.2",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/amazon-k8s-cni:v1.15.0-eksbuild.2",
+    "800184023465.dkr.ecr.ap-east-1.amazonaws.com/amazon-k8s-cni-init:v1.15.0-eksbuild.2",
+]

@@ -15,7 +15,7 @@
     - awscli
     - iptables-legacy # needed by kubelet
     - amazon-ssm-agent
-    - amazon-ecr-credential-helper # to pull ECR images
+    - amazon-ecr-credential-helper # for nerdctl to pull ECR images
 
 # ec2-net-utils interferes with the route setup on the instance
 - name: Remove the ec2-net-utils package
@@ -306,8 +306,6 @@
     group: root
     mode: 0755
 
-# TODO - create /etc/eks/release AMI build metadata file
-
 #########################################################
 # sysctl
 #########################################################
@@ -331,8 +329,6 @@
     owner: root
     group: root
 
-# TODO - create psuedo bootstrap.sh script for backwards compat
-
 #########################################################
 # Kubelet
 #########################################################
@@ -352,10 +348,6 @@
     state: directory
     owner: root
     group: root
-
-# Kubelet config will be saved here
-# TODO - why not save to /var/lib/kubelet?
-# kubelet kubeconfig is stored in /var/lib/kubelet
 
 - name: Create /etc/kubernetes/kubelet directory
   ansible.builtin.file:
@@ -401,6 +393,9 @@
     masked: no
     state: started
 
-- name: Pull pause image
+- name: Cache standard images
   ansible.builtin.shell: |
-    eksnode pull --image=602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9
+    eksnode pull --cached-images --no-color -vv
+
+# TODO - create /etc/eks/release AMI build metadata file
+# TODO - create psuedo bootstrap.sh script for backwards compat

@@ -26,6 +26,7 @@ pub fn get_semver(ver: &str) -> Result<Version> {
 
 pub struct CmdResult {
   pub stdout: String,
+  pub stderr: String,
   pub status: i32,
 }
 
@@ -34,13 +35,11 @@ pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<CmdResult> {
   let output = std::process::Command::new(cmd).args(args).output();
 
   match output {
-    Ok(output) => {
-      let stdout = String::from_utf8_lossy(&output.stdout);
-      Ok(CmdResult {
-        stdout: stdout.to_string(),
-        status: output.status.code().unwrap_or(1),
-      })
-    }
+    Ok(output) => Ok(CmdResult {
+      stdout: String::from_utf8_lossy(&output.stdout).to_string(),
+      stderr: String::from_utf8_lossy(&output.stderr).to_string(),
+      status: output.status.code().unwrap_or(1),
+    }),
     Err(e) => Err(anyhow!("Error executing command {cmd}: {e}")),
   }
 }

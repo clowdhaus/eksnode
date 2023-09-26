@@ -4,7 +4,7 @@ use std::{
 };
 
 use anyhow::{Context, Result};
-use aws_config::{imds::client::Client as ImdsClient, provider_config::ProviderConfig, SdkConfig};
+use aws_config::{imds::client::Client as ImdsClient, provider_config::ProviderConfig};
 use aws_sdk_ec2::{
   config::{self, retry::RetryConfig},
   Client,
@@ -26,12 +26,13 @@ const FETCH_PRIVATE_DNS_NAME_TIMEOUT: Duration = Duration::from_secs(300);
 const FIBONACCI_BACKOFF_BASE_DURATION_MILLIS: u64 = 200;
 
 /// Get the EC2 client
-pub async fn get_client(config: SdkConfig, retries: u32) -> Result<Client> {
+pub async fn get_client() -> Result<Client> {
+  let sdk_config = crate::get_sdk_config(None).await?;
   let client = Client::from_conf(
     // Start with the shared environment configuration
-    config::Builder::from(&config)
+    config::Builder::from(&sdk_config)
       // Set max attempts
-      .retry_config(RetryConfig::standard().with_max_attempts(retries))
+      .retry_config(RetryConfig::standard().with_max_attempts(3))
       .build(),
   );
   Ok(client)
@@ -221,10 +222,25 @@ pub async fn get_instance_type() -> Result<String> {
   Ok(instance_type)
 }
 
-/// Get the region from IMDS endpoint
+/// Get the current region from IMDS endpoint
 pub async fn get_region() -> Result<String> {
   let client = get_imds_client().await?;
   let region = client.get("/latest/meta-data/placement/region").await?;
 
   Ok(region)
+}
+
+/// Returns all regions for the current partition
+pub async fn get_all_regions() -> Result<Vec<String>> {
+  let client = get_client().await?;
+
+  let regions = client.describe_regions().all_regions(true).send().await.map(|r| {
+    r.regions
+      .unwrap_or_default()
+      .into_iter()
+      .map(|r| r.region_name.unwrap_or_default())
+      .collect::<Vec<String>>()
+  })?;
+
+  Ok(regions)
 }

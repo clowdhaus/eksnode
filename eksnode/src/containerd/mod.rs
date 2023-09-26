@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::utils;
 
 pub const SANDBOX_IMAGE_SERVICE_PATH: &str = "/etc/systemd/system/sandbox-image.service";
+pub const SANDBOX_IMAGE_TAG: &str = "3.8";
 
 pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
   let tmpl_file = "sandbox-image.service";

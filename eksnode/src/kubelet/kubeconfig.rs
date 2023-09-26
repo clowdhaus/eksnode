@@ -125,7 +125,7 @@ struct NamedCluster {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "kebab-case")]
 struct Cluster {
   /// Server is the address of the kubernetes cluster (https://hostname:port)
   server: String,
@@ -141,7 +141,7 @@ struct Cluster {
   insecure_skip_tls_verify: Option<bool>,
 
   /// CertificateAuthority is the path to a cert file for the certificate authority
-  #[serde(skip_serializing_if = "Option::is_none", rename = "certificate_authority")]
+  #[serde(skip_serializing_if = "Option::is_none")]
   certificate_authority: Option<PathBuf>,
 
   /// CertificateAuthorityData contains PEM-encoded certificate authority certificates.

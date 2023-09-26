@@ -219,7 +219,7 @@ impl Node {
   ///
   /// Use the container image specified if provided by the user, otherwise default to the ECR image
   fn get_pause_container_image(&self, imds: &ec2::InstanceMetadata) -> Result<String> {
-    let uri = format!("{}/eks/pause:3.9", ecr::get_ecr_uri(&imds.region, false)?);
+    let uri = format!("{}/eks/pause:{}", ecr::get_ecr_uri(&imds.region, false)?, containerd::SANDBOX_IMAGE_TAG);
     let sandbox_img = match &self.pause_container_image {
       Some(img) => img,
       None => &uri,
@@ -285,8 +285,7 @@ impl Node {
     let max_pods = self.get_max_pods(&instance_metadata.instance_type).await?;
     let pause_image = self.get_pause_container_image(&instance_metadata)?;
 
-    let sdk_config = crate::get_sdk_config(None).await?;
-    let ec2_client = ec2::get_client(sdk_config, 3).await?;
+    let ec2_client = ec2::get_client().await?;
     let private_dns_name = ec2::get_private_dns_name(&instance_metadata.instance_id, &ec2_client).await?;
 
     self.write_ca_cert(&cluster.b64_ca)?;

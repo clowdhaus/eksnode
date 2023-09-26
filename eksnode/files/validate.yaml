@@ -20,10 +20,6 @@ files:
     mode: 100644
     uid: 0
     gid: 0
-  - path: /etc/systemd/system/containerd.service.d/00-runtime-slice.conf
-    mode: 100644
-    uid: 0
-    gid: 0
   - path: /etc/systemd/system/sandbox-image.service
     mode: 100644
     uid: 0

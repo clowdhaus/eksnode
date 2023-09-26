@@ -655,6 +655,23 @@ variable "temporary_iam_instance_profile_policy_document" {
         "ssm:UpdateAssociationStatus",
         "ssm:UpdateInstanceAssociationStatus",
         "ssm:UpdateInstanceInformation",
+        # Required by eksnode
+        "eks:List*",
+        "eks:Describe*",
+        "ec2:Describe*",
+        # ECR read-only policy
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetRepositoryPolicy",
+        "ecr:DescribeRepositories",
+        "ecr:ListImages",
+        "ecr:DescribeImages",
+        "ecr:BatchGetImage",
+        "ecr:GetLifecyclePolicy",
+        "ecr:GetLifecyclePolicyPreview",
+        "ecr:ListTagsForResource",
+        "ecr:DescribeImageScanFindings",
       ]
       Resource = ["*"]
     },
