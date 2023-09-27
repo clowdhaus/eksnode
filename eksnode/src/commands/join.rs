@@ -219,7 +219,11 @@ impl Node {
   ///
   /// Use the container image specified if provided by the user, otherwise default to the ECR image
   fn get_pause_container_image(&self, imds: &ec2::InstanceMetadata) -> Result<String> {
-    let uri = format!("{}/eks/pause:{}", ecr::get_ecr_uri(&imds.region, false)?, containerd::SANDBOX_IMAGE_TAG);
+    let uri = format!(
+      "{}/eks/pause:{}",
+      ecr::get_ecr_uri(&imds.region, false)?,
+      containerd::SANDBOX_IMAGE_TAG
+    );
     let sandbox_img = match &self.pause_container_image {
       Some(img) => img,
       None => &uri,

@@ -1,35 +1,34 @@
 ---
 arch: amd64
-region: "us-east-1"
 
-# aws s3 ls s3://amazon-eks/1.27.3/2023-06-30/bin/linux/amd64/
+# Ref: aws s3 ls s3://amazon-eks/1.27.3/2023-06-30/bin/linux/amd64/
 kubernetes_version: "{{ [version]| map('extract', versions, 'kubernetes_version') | last}}"
 kubernetes_build_date: "{{ [version]| map('extract', versions, 'kubernetes_build_date') | last}}"
-s3_binary_bucket: "amazon-eks"
-s3_binary_path: "{{ kubernetes_version }}/{{ kubernetes_build_date }}/bin/linux/{{ arch }}"
+s3_binary_bucket: 'amazon-eks'
+s3_binary_path: '{{ kubernetes_version }}/{{ kubernetes_build_date }}/bin/linux/{{ arch }}'
 
 #### runc ####
 
 runc_version: "{{ [version]| map('extract', versions, 'runc_version') | last}}"
-runc_url: "https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.{{ arch }}"
-runc_checksum: "sha256:https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.sha256sum"
+runc_url: 'https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.{{ arch }}'
+runc_checksum: 'sha256:https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.sha256sum'
 
 #### containerd ####
 
 containerd_version: "{{ [version]| map('extract', versions, 'containerd_version') | last}}"
-containerd_archive: "containerd-{{ containerd_version }}-linux-{{ arch }}.tar.gz"
-containerd_url: "https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}"
-containerd_checksum: "sha256:https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}.sha256sum"
+containerd_archive: 'containerd-{{ containerd_version }}-linux-{{ arch }}.tar.gz'
+containerd_url: 'https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}'
+containerd_checksum: 'sha256:https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive }}.sha256sum'
 
 #### nerdctl ####
 
 nerdctl_version: "{{ [version]| map('extract', versions, 'nerdctl_version') | last}}"
-nerdctl_archive: "nerdctl-{{ nerdctl_version }}-linux-{{ arch }}.tar.gz"
-nerdctl_url: "https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/{{ nerdctl_archive }}"
+nerdctl_archive: 'nerdctl-{{ nerdctl_version }}-linux-{{ arch }}.tar.gz'
+nerdctl_url: 'https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/{{ nerdctl_archive }}'
 
 #### CNI ####
 
 cni_plugin_version: "{{ [version]| map('extract', versions, 'cni_plugin_version') | last}}"
-cni_plugin_archive: "cni-plugins-linux-{{ arch }}-{{ cni_plugin_version }}.tgz"
-cni_plugin_url: "https://github.com/containernetworking/plugins/releases/download/{{ cni_plugin_version }}/{{ cni_plugin_archive }}"
-cni_plugin_checksum: "sha256:https://github.com/containernetworking/plugins/releases/download/{{ cni_plugin_version }}/{{ cni_plugin_archive }}.sha256"
+cni_plugin_archive: 'cni-plugins-linux-{{ arch }}-{{ cni_plugin_version }}.tgz'
+cni_plugin_url: 'https://github.com/containernetworking/plugins/releases/download/{{ cni_plugin_version }}/{{ cni_plugin_archive }}'
+cni_plugin_checksum: 'sha256:https://github.com/containernetworking/plugins/releases/download/{{ cni_plugin_version }}/{{ cni_plugin_archive }}.sha256'

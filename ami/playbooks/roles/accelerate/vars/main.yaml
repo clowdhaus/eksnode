@@ -1,0 +1,10 @@
+---
+
+# https://docs.nvidia.com/datacenter/tesla/index.html
+nvidia_driver_version: '535.104.12'
+
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-verify.html
+efa_installer_version: '1.26.1'
+
+# https://github.com/aws/aws-ofi-nccl/releases
+aws_ofi_nccl_version: '1.7.2'

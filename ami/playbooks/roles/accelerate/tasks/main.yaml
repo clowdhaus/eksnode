@@ -1,0 +1,26 @@
+---
+
+# TODO - EFA installer requires instance reboot
+
+### EFA w/ MPI
+
+# Ensure ptrace protection is disabled https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start.html#efa-start-ptrace
+# Optional: support enabling passwordless SSH https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start.html#efa-start-passwordless
+# Optional: making Intel MPI optional https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start.html#efa-start-impi
+
+# 1. Download and unpack EFA installer
+# 2. Run installer
+# 3. [Optional] Disable ptrace protection
+# 4. [Optional] Install Intel MPI
+# 4. [Optional] Enable passwordless SSH
+
+
+### EFA w/ NCCL
+
+# NCCL bandwidth test https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting.html#gpu-to-gpu-communication
+# NCCL install docs https://docs.nvidia.com/deeplearning/nccl/install-guide/index.html
+# NCCL requires https://docs.nvidia.com/deeplearning/nccl/install-guide/index.html#softreq
+#   - glibc 2.17 or higher
+#   - CUDA 10.0 or higher
+
+# Question - EFA docs have NCCL installed before EFA, is that required/recommended?

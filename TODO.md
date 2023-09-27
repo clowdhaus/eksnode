@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] Pre-fetch images on AMI <https://github.com/awslabs/amazon-eks-ami/pull/938>
 - [ ] Add Ansible role for NVIDIA GPU drivers and supporting software
 - [ ] Add log collection functionality
   - Expand on this - this should be created from the perspective of `eksnode debug` perspective where `--collect-logs` can be used to collect logs from the node similar to current AMI functionality
@@ -36,4 +35,3 @@
 - [ ] [WebAssembly and containerd: How it works](https://nigelpoulton.com/webassembly-and-containerd-how-it-works/)
   - [WebAssembly on Kubernetes: The ultimate hands-on guide](https://nigelpoulton.com/webassembly-on-kubernetes-ultimate-hands-on/)
   - [WebAssembly on Kubernetes: everything you need to know](https://nigelpoulton.com/webassembly-on-kubernetes-everything-you-need-to-know/)
-
