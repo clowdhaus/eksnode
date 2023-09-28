@@ -9,6 +9,7 @@
 
   roles:
     - eks
+    - accelerate
 
   tasks:
     - name: Stop containerd to ensure build logs are not leaked

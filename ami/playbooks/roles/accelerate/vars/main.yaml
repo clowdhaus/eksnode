@@ -1,10 +1,15 @@
 ---
-
 # https://docs.nvidia.com/datacenter/tesla/index.html
+# https://www.nvidia.com/en-us/drivers/unix/
 nvidia_driver_version: '535.104.12'
+nvidia_driver_executable: 'NVIDIA-Linux-x86_64-{{ nvidia_driver_version }}-no-compat32.run'
+nvidia_driver_url: 'https://us.download.nvidia.com/tesla/{{ nvidia_driver_version }}/{{ nvidia_driver_executable }}'
 
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-verify.html
 efa_installer_version: '1.26.1'
+efa_installer_archive: 'aws-efa-installer-{{ efa_installer_version }}.tar.gz'
+efa_installer_url: 'https://efa-installer.amazonaws.com/{{ efa_installer_archive }}'
+efa_installer_checksum: 'sha256:c616994c924f54ebfabfab32b7fe8ac56947fae00a0ff453d975e298d174fc96'
 
 # https://github.com/aws/aws-ofi-nccl/releases
 aws_ofi_nccl_version: '1.7.2'

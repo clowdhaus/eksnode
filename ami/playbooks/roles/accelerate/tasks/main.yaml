@@ -1,4 +1,48 @@
 ---
+- name: Install prerequisites
+  block:
+  - name: Install dnf packages
+    ansible.builtin.dnf:
+      name: '{{ item }}'
+      state: present
+    loop:
+      - gcc
+      - kernel-devel
+
+- name: Install NVIDIA driver
+  block:
+  - name: Download NVIDIA driver installer {{ nvidia_driver_version }}
+    ansible.builtin.get_url:
+      url: '{{ nvidia_driver_url }}'
+      dest: '/opt/{{ nvidia_driver_executable }}' # TODO - change to /tmp
+    register: nvidia_driver_installer
+
+  # - name: Execute NVIDIA driver installer
+  #   ansible.builtin.shell: |
+  #     sh {{ nvidia_driver_installer.dest }} -a --silent --ui=none'
+
+- name: Install EFA
+  block:
+  - name: Download EFA installer {{ efa_installer_version }}
+    ansible.builtin.get_url:
+      url: '{{ efa_installer_url }}'
+      dest: '/tmp/{{ efa_installer_archive }}'
+      checksum: '{{ efa_installer_checksum }}'
+    register: efa_installer_archive
+
+  - name: Extract EFA insaller
+    ansible.builtin.unarchive:
+      src: '{{ efa_installer_archive.dest }}'
+      dest: /opt/aws-efa-installer # TODO - change to /tmp
+      mode: 0755
+      owner: root
+      group: root
+      remote_src: yes
+    register: efa_installer
+
+  # - name: Execute EFA installer
+  #   ansible.builtin.shell: |
+  #     sh {{ efa_installer.dest }}/efa_installer.sh -y'
 
 # TODO - EFA installer requires instance reboot
 

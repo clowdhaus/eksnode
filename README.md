@@ -1,5 +1,7 @@
 # eksnode
 
+protobuf is required for compiling (containerd)
+
 ## MacOS
 
 ```sh
