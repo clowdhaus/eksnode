@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] Add Ansible role for NVIDIA GPU drivers and supporting software
 - [ ] Add log collection functionality
   - Expand on this - this should be created from the perspective of `eksnode debug` perspective where `--collect-logs` can be used to collect logs from the node similar to current AMI functionality
 - [ ] Add validate functionality
@@ -31,6 +30,8 @@
     - [Support for density optimized memory overhead](https://github.com/aws/karpenter/issues/1295)
 
 ## Wasi
+
+(More from the aspect of - how does supporting this plus other similar methods affect the design of `eksnode`?)
 
 - [ ] [WebAssembly and containerd: How it works](https://nigelpoulton.com/webassembly-and-containerd-how-it-works/)
   - [WebAssembly on Kubernetes: The ultimate hands-on guide](https://nigelpoulton.com/webassembly-on-kubernetes-ultimate-hands-on/)

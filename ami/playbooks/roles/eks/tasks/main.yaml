@@ -7,7 +7,7 @@
     group: root
     mode: 0755
 
-- name: Install/remove dnf packages
+- name: Install dnf packages
   block:
   - name: Install dnf packages
     ansible.builtin.dnf:
@@ -17,12 +17,18 @@
       - awscli
       - iptables-legacy # needed by kubelet
       - amazon-ssm-agent
+      - glibc-minimal-langpack
+      - glibc-langpack-en
 
-  # ec2-net-utils interferes with the route setup on the instance
-  - name: Remove the ec2-net-utils package
+  - name: Install dnf packages
     ansible.builtin.dnf:
-      name: ec2-net-utils
+      name: '{{ item }}'
       state: absent
+    loop:
+      # ec2-net-utils interferes with the route setup on the instance
+      - ec2-net-utils
+      # Swapping out for smaller min langpack
+      - glibc-all-langpacks
 
 #########################################################
 # Logrotate
@@ -107,7 +113,7 @@
       checksum: '{{ containerd_checksum }}'
     register: containerd_archive_dl
 
-  - name: Extract containerd
+  - name: Extract containerd {{ containerd_version }}
     ansible.builtin.unarchive:
       src: '{{ containerd_archive_dl.dest }}'
       dest: /usr/local/
@@ -115,6 +121,12 @@
       owner: root
       group: root
       remote_src: yes
+    register: containerd
+
+  - name: Remove {{ containerd.dest }}/bin/containerd-stress
+    ansible.builtin.file:
+      path: '{{ containerd.dest }}/bin/containerd-stress'
+      state: absent
 
   - name: Create {{ eks_dir.path }}/containerd
     ansible.builtin.file:
@@ -128,14 +140,14 @@
       src: files/runtime.slice
       dest: /etc/systemd/system/runtime.slice
 
-  - name: Create /etc/systemd/system/containerd.service.d directory
+  - name: Create /etc/systemd/system/containerd.service.d
     ansible.builtin.file:
       path: /etc/systemd/system/containerd.service.d
       state: directory
       owner: root
       group: root
 
-  - name: Create /etc/modules-load.d/containerd.conf file
+  - name: Create /etc/modules-load.d/containerd.conf
     copy:
       dest: /etc/modules-load.d/containerd.conf
       mode: 0644
@@ -153,7 +165,7 @@
       owner: root
       group: root
 
-  - name: Create /etc/sysctl.d/99-kubernetes-cri.conf file
+  - name: Create /etc/sysctl.d/99-kubernetes-cri.conf
     copy:
       dest: /etc/sysctl.d/99-kubernetes-cri.conf
       mode: 0644
@@ -167,7 +179,7 @@
 - name: Install nerdctl {{ nerdctl_version }}
   block:
   # For amazon-ecr-credential-helper used by nerdctl to pull images
-  - name: Create /root/.docker directory
+  - name: Create /root/.docker
     ansible.builtin.file:
       path: /root/.docker
       state: directory
@@ -259,7 +271,7 @@
       group: root
       mode: 0755
 
-  - name: Create ECR credential provider directory
+  - name: Create '{{ eks_dir.path }}/image-credential-provider'
     ansible.builtin.file:
       path: '{{ eks_dir.path }}/image-credential-provider'
       state: directory
@@ -307,7 +319,7 @@
 
 - name: Install kubelet {{ kubernetes_version }}/{{ kubernetes_build_date }}
   block:
-  - name: Download kubelet binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
+  - name: Download kubelet {{ kubernetes_version }}/{{ kubernetes_build_date }}
     ansible.builtin.get_url:
       url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet'
       dest: '/usr/bin/kubelet'
@@ -316,28 +328,28 @@
       group: root
       mode: 0755
 
-  - name: Create /var/lib/kubelet directory
+  - name: Create /var/lib/kubelet
     ansible.builtin.file:
       path: /var/lib/kubelet
       state: directory
       owner: root
       group: root
 
-  - name: Create /etc/kubernetes/kubelet directory
+  - name: Create /etc/kubernetes/kubelet
     ansible.builtin.file:
       path: /etc/kubernetes/kubelet
       state: directory
       owner: root
       group: root
 
-  - name: Create /etc/systemd/system/kubelet.service.d directory
+  - name: Create /etc/systemd/system/kubelet.service.d
     ansible.builtin.file:
       path: /etc/systemd/system/kubelet.service.d
       state: directory
       owner: root
       group: root
 
-  - name: Create /etc/kubernetes/pki directory
+  - name: Create /etc/kubernetes/pki
     ansible.builtin.file:
       path: /etc/kubernetes/pki
       state: directory
@@ -358,11 +370,11 @@
 
 - name: Install kubelet {{ kubernetes_version }}/{{ kubernetes_build_date }}
   block:
-  - name: Reload systemd daemon
+  - name: Reload systemd
     ansible.builtin.systemd:
       daemon_reload: true
 
-  - name: Enable containerd systemd service
+  - name: Enable containerd service
     ansible.builtin.systemd:
       name: containerd
       enabled: true
@@ -373,7 +385,7 @@
     ansible.builtin.shell: |
       eksnode pull --cached-images --no-color -vv
 
-  - name: Stop containerd systemd service
+  - name: Stop containerd service
     ansible.builtin.systemd:
       name: containerd
       enabled: true
