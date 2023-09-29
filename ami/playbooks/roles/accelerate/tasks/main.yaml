@@ -1,63 +1,82 @@
 ---
 - name: Install prerequisites
   block:
-  - name: Install dnf packages
-    ansible.builtin.dnf:
-      name: '{{ item }}'
-      state: present
-    loop:
-      - gcc
-      - kernel-devel
+    - name: Install dnf packages
+      ansible.builtin.dnf:
+        name: '{{ item }}'
+        state: present
+      loop:
+        - gcc
+        - kernel-devel
+
+#########################################################
+# NVIDIA driver
+#########################################################
 
 - name: Install NVIDIA driver
+  when: install_nvidia_driver|bool
   block:
-  - name: Download NVIDIA driver installer {{ nvidia_driver_version }}
-    ansible.builtin.get_url:
-      url: '{{ nvidia_driver_url }}'
-      dest: '/opt/{{ nvidia_driver_executable }}' # TODO - change to /tmp
-    register: nvidia_driver_installer
+    - name: Download NVIDIA driver installer {{ nvidia_driver_version }}
+      ansible.builtin.get_url:
+        url: '{{ nvidia_driver_url }}'
+        dest: '/tmp/{{ nvidia_driver_executable }}'
+      register: nvidia_driver_installer
 
-  # - name: Execute NVIDIA driver installer
-  #   ansible.builtin.shell: |
-  #     sh {{ nvidia_driver_installer.dest }} -a --silent --ui=none'
+    - name: Run NVIDIA driver installer
+      ansible.builtin.shell: |
+        sh {{ nvidia_driver_installer.dest }} -a -s --ui=none
+
+#########################################################
+# AWS EFA
+#########################################################
 
 - name: Install EFA
+  when: install_efa|bool
   block:
-  - name: Download EFA installer {{ efa_installer_version }}
-    ansible.builtin.get_url:
-      url: '{{ efa_installer_url }}'
-      dest: '/tmp/{{ efa_installer_archive }}'
-      checksum: '{{ efa_installer_checksum }}'
-    register: efa_installer_archive
+    - name: Download EFA installer {{ efa_installer_version }}
+      ansible.builtin.get_url:
+        url: '{{ efa_installer_url }}'
+        dest: '/tmp/{{ efa_installer_archive }}'
+        checksum: '{{ efa_installer_checksum }}'
+      register: efa_installer_archive
 
-  - name: Extract EFA insaller
-    ansible.builtin.unarchive:
-      src: '{{ efa_installer_archive.dest }}'
-      dest: /opt/aws-efa-installer # TODO - change to /tmp
-      mode: 0755
-      owner: root
-      group: root
-      remote_src: yes
-    register: efa_installer
+    - name: Extract EFA installer
+      ansible.builtin.unarchive:
+        src: '{{ efa_installer_archive.dest }}'
+        dest: /tmp
+        mode: 0755
+        owner: root
+        group: root
+        remote_src: yes
+      register: efa_installer
 
-  # - name: Execute EFA installer
-  #   ansible.builtin.shell: |
-  #     sh {{ efa_installer.dest }}/efa_installer.sh -y'
+    - name: Run EFA installer
+      ansible.builtin.shell:
+        chdir: '{{ efa_installer.dest }}/aws-efa-installer'
+        cmd: ./efa_installer.sh --enable-gdr --yes
 
-# TODO - EFA installer requires instance reboot
+    - name: Ensure ptrace protection is disabled
+      ansible.posix.seboolean:
+        name: deny_ptrace
+        state: false
+        persistent: true
 
-### EFA w/ MPI
+#########################################################
+# Clean-up
+#########################################################
 
-# Ensure ptrace protection is disabled https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start.html#efa-start-ptrace
-# Optional: support enabling passwordless SSH https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start.html#efa-start-passwordless
-# Optional: making Intel MPI optional https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-start.html#efa-start-impi
-
-# 1. Download and unpack EFA installer
-# 2. Run installer
-# 3. [Optional] Disable ptrace protection
-# 4. [Optional] Install Intel MPI
-# 4. [Optional] Enable passwordless SSH
-
+- name: Remove install prerequisites
+  block:
+    - name: Remove dnf packages
+      ansible.builtin.dnf:
+        name: '{{ item }}'
+        state: absent
+      loop:
+        - gcc
+        - kernel-devel
+        - rpmdevtools
+        - rdma-core-devel
+        - libfabric-aws-devel
 
 ### EFA w/ NCCL
 

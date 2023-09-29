@@ -57,10 +57,6 @@ files:
     mode: 100644
     uid: 0
     gid: 0
-  - path: /etc/systemd/system/sys-fs-bpf.mount
-    mode: 100644
-    uid: 0
-    gid: 0
   - path: /etc/systemd/system/kubelet.service
     mode: 100644
     uid: 0
