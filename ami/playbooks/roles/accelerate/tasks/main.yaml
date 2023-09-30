@@ -37,6 +37,7 @@
       ansible.builtin.pause:
         seconds: 180
 
+    # TODO - this should be done during node provisioning (join)
     - name: Set persistence mode enabled for all devices
       ansible.builtin.shell: |
         nvidia-persistenced
@@ -49,15 +50,27 @@
 - name: Install NVIDIA container toolkit
   block:
     - name: Add nvidia-container-toolkit repo
-      ansible.builtin.command:
-        cmd: dnf config-manager --add-repo https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
-      args:
-        creates: /etc/dnf.repos.d/nvidia-container-toolkit.repo
+      yum_repository:
+        name: nvidia-container-toolkit
+        description: NVIDIA container toolkit
+        baseurl: https://nvidia.github.io/libnvidia-container/stable/rpm/$basearch
+        repo_gpgcheck: true
+        gpgcheck: false
+        enabled: true
+        gpgkey: https://nvidia.github.io/libnvidia-container/gpgkey
+        sslverify: true
+        sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+
+    - name: Import nvidia-container-toolkit GPG key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://nvidia.github.io/libnvidia-container/gpgkey
 
     - name: Install nvidia-container-toolkit
       ansible.builtin.dnf:
         name: nvidia-container-toolkit
-        state: present
+        state: latest
+        update_cache: true
 
 #########################################################
 # AWS EFA

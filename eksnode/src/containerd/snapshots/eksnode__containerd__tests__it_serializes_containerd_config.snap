@@ -1,5 +1,5 @@
 ---
-source: eksnode/src/containerd.rs
+source: eksnode/src/containerd/mod.rs
 expression: deserialized
 ---
 ContainerdConfiguration {
@@ -30,7 +30,15 @@ ContainerdConfiguration {
     ttrpc: None,
     debug: None,
     metrics: None,
-    disabled_plugins: None,
+    disabled_plugins: Some(
+        [
+            "io.containerd.internal.v1.opt",
+            "io.containerd.snapshotter.v1.aufs",
+            "io.containerd.snapshotter.v1.devmapper",
+            "io.containerd.snapshotter.v1.native",
+            "io.containerd.snapshotter.v1.zfs",
+        ],
+    ),
     required_plugins: None,
     plugins: Some(
         {
@@ -54,7 +62,7 @@ ContainerdConfiguration {
                     "registry": Object {
                         "config_path": String("/etc/containerd/certs.d:/etc/docker/certs.d"),
                     },
-                    "sandbox_image": String("SANDBOX_IMAGE"),
+                    "sandbox_image": String("602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8"),
                 },
             },
         },

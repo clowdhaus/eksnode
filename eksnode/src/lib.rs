@@ -19,15 +19,6 @@ pub use cli::{Cli, Commands};
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 
-/// Embeds the contents of the `templates/` directory into the binary
-///
-/// This struct contains both the templates used for rendering the playbook
-/// as well as the static data used for populating the playbook templates
-/// embedded into the binary for distribution
-#[derive(RustEmbed)]
-#[folder = "templates/"]
-pub struct Templates;
-
 /// Embeds the contents of the `files/` directory into the binary
 ///
 /// This struct contains the static data used within `eksnode`

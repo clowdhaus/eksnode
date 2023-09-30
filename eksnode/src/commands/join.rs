@@ -37,6 +37,9 @@ pub struct Node {
   #[arg(long)]
   pub containerd_config_file: Option<String>,
 
+  #[arg(long, value_enum, default_value_t)]
+  pub default_container_runtime: containerd::DefaultRuntime,
+
   /// Overrides the IP address used for DNS queries within the cluster
   ///
   /// Defaults to 10.100.0.10 or 172.20.0.10 for IPv4 based on the IP address of the primary interface
@@ -248,7 +251,7 @@ impl Node {
   /// Get the rendered containerd configuration
   async fn get_containerd_config(&self, imds: ec2::InstanceMetadata) -> Result<containerd::ContainerdConfiguration> {
     let sandbox_img = self.get_pause_container_image(&imds)?;
-    let config = containerd::ContainerdConfiguration::new(&sandbox_img)?;
+    let config = containerd::ContainerdConfiguration::new(&self.default_container_runtime, &sandbox_img)?;
 
     Ok(config)
   }

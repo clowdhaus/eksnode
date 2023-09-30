@@ -1,6 +1,8 @@
 use std::{collections::BTreeMap, path::Path};
 
-use anyhow::{bail, Result};
+use anyhow::Result;
+use clap::ValueEnum;
+use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 
 use crate::utils;
@@ -8,16 +10,36 @@ use crate::utils;
 pub const SANDBOX_IMAGE_SERVICE_PATH: &str = "/etc/systemd/system/sandbox-image.service";
 pub const SANDBOX_IMAGE_TAG: &str = "3.8";
 
-pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
-  let tmpl_file = "sandbox-image.service";
-  let exec_start = format!("eksnode pull --image {pause_image} --namespace k8s.io");
+/// Embeds the contents of the `templates/` directory into the binary
+///
+/// This struct contains both the templates used for rendering the playbook
+/// as well as the static data used for populating the playbook templates
+/// embedded into the binary for distribution
+#[derive(RustEmbed)]
+#[folder = "src/containerd/templates/"]
+pub struct Templates;
 
-  if let Some(tmpl) = crate::Templates::get(tmpl_file) {
-    let contents = std::str::from_utf8(tmpl.data.as_ref())?.replace("{{EXEC_START}}", &exec_start);
-    utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
-  } else {
-    bail!("Unable to load template file {tmpl_file}")
+#[derive(Copy, Clone, Debug, ValueEnum, Serialize, Deserialize)]
+pub enum DefaultRuntime {
+  Containerd,
+  Nvidia,
+}
+
+impl Default for DefaultRuntime {
+  fn default() -> Self {
+    Self::Containerd
   }
+}
+
+pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
+  let tmpl = Templates::get("sandbox-image.service").unwrap();
+  let tmpl = std::str::from_utf8(tmpl.data.as_ref())?;
+
+  let contents = tmpl.replace(
+    "{{EXEC_START}}",
+    &format!("eksnode pull --image {pause_image} --namespace k8s.io"),
+  );
+  utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
 }
 
 /// Config provides containerd configuration data for the server
@@ -100,9 +122,48 @@ pub struct ContainerdConfiguration {
 }
 
 impl ContainerdConfiguration {
-  pub fn new(sandbox_image: &str) -> Result<Self> {
-    let templ = crate::Templates::get("containerd-config.toml").unwrap();
-    let contents = std::str::from_utf8(templ.data.as_ref())?.replace("{{SANDBOX_IMAGE}}", sandbox_image);
+  pub fn new(default_runtime: &DefaultRuntime, sandbox_image: &str) -> Result<Self> {
+    let tmpl = Templates::get("containerd-config.toml").unwrap();
+    let tmpl = std::str::from_utf8(tmpl.data.as_ref())?;
+
+    let runtime = match default_runtime {
+      DefaultRuntime::Containerd => {
+        r#"
+[plugins."io.containerd.grpc.v1.cri".containerd]
+default_runtime_name = "runc"
+discard_unpacked_layers = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+SystemdCgroup = true
+"#
+      }
+      DefaultRuntime::Nvidia => {
+        r#"
+[plugins."io.containerd.grpc.v1.cri".containerd]
+default_runtime_name = "nvidia"
+discard_unpacked_layers = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+privileged_without_host_devices = false
+runtime_engine = ""
+runtime_root = ""
+runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+SystemdCgroup = true
+BinaryName = "/usr/bin/nvidia-container-runtime"
+"#
+      }
+    };
+
+    println!("{}", runtime.trim());
+
+    let contents = tmpl
+      .replace("{{SANDBOX_IMAGE}}", sandbox_image)
+      .replace("{{RUNTIME}}", runtime.trim());
     let config: ContainerdConfiguration = toml::from_str(&contents)?;
 
     Ok(config)
@@ -226,18 +287,26 @@ mod tests {
     version = 2
     root = "/var/lib/containerd"
     state = "/run/containerd"
+    disabled_plugins = [
+        "io.containerd.internal.v1.opt",
+        "io.containerd.snapshotter.v1.aufs",
+        "io.containerd.snapshotter.v1.devmapper",
+        "io.containerd.snapshotter.v1.native",
+        "io.containerd.snapshotter.v1.zfs",
+    ]
 
     [grpc]
     address = "/run/containerd/containerd.sock"
 
+    [plugins."io.containerd.grpc.v1.cri"]
+    sandbox_image = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8"
+
+    [plugins."io.containerd.grpc.v1.cri".cni]
+    bin_dir = "/opt/cni/bin"
+    conf_dir = "/etc/cni/net.d"
+
     [plugins."io.containerd.grpc.v1.cri".containerd]
     default_runtime_name = "runc"
-
-    [plugins."io.containerd.grpc.v1.cri"]
-    sandbox_image = "SANDBOX_IMAGE"
-
-    [plugins."io.containerd.grpc.v1.cri".registry]
-    config_path = "/etc/containerd/certs.d:/etc/docker/certs.d"
 
     [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
     runtime_type = "io.containerd.runc.v2"
@@ -245,9 +314,8 @@ mod tests {
     [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
     SystemdCgroup = true
 
-    [plugins."io.containerd.grpc.v1.cri".cni]
-    bin_dir = "/opt/cni/bin"
-    conf_dir = "/etc/cni/net.d"
+    [plugins."io.containerd.grpc.v1.cri".registry]
+    config_path = "/etc/containerd/certs.d:/etc/docker/certs.d"
     "#;
 
     let deserialized: ContainerdConfiguration = toml::from_str(config).unwrap();
@@ -259,8 +327,8 @@ mod tests {
 
   #[test]
   fn it_creates_containerd_config() {
-    let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9";
-    let config = ContainerdConfiguration::new(sandbox_img).unwrap();
+    let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8";
+    let config = ContainerdConfiguration::new(&DefaultRuntime::Containerd, sandbox_img).unwrap();
     insta::assert_debug_snapshot!(config);
 
     let mut file = NamedTempFile::new().unwrap();

@@ -145,6 +145,9 @@ async fn get_images_to_cache(region: &str, enable_fips: bool, kubernetes_version
   images.push(format!("{ecr_uri}/amazon-k8s-cni:{}", vpc_cni_version.latest));
   images.push(format!("{ecr_uri}/amazon-k8s-cni-init:{}", vpc_cni_version.latest));
 
+  // // TODO - how to pull the correct image version
+  // images.push(format!("{ecr_uri}/aws-network-policy-agent:v1.0.2-eksbuild.1"));
+
   Ok(images)
 }
 
@@ -188,32 +191,44 @@ mod tests {
 
   #[tokio::test]
   async fn it_gets_images_to_cache_useast1_127() {
-    let imgs = get_images_to_cache("us-east-1", false, "1.27").await.unwrap();
-    insta::assert_debug_snapshot!(imgs);
+    match get_images_to_cache("us-east-1", false, "1.27").await {
+      Ok(imgs) => insta::assert_debug_snapshot!(imgs),
+      Err(e) => panic!("[ERROR] {:?}", e),
+    }
   }
   #[tokio::test]
   async fn it_gets_images_to_cache_apeast1_127() {
-    let imgs = get_images_to_cache("ap-east-1", false, "1.27").await.unwrap();
-    insta::assert_debug_snapshot!(imgs);
+    match get_images_to_cache("ap-east-1", false, "1.27").await {
+      Ok(imgs) => insta::assert_debug_snapshot!(imgs),
+      Err(e) => panic!("[ERROR] {:?}", e),
+    }
   }
   #[tokio::test]
   async fn it_gets_images_to_cache_usgoveast1_fips_127() {
-    let imgs = get_images_to_cache("us-gov-east-1", true, "1.27").await.unwrap();
-    insta::assert_debug_snapshot!(imgs);
+    match get_images_to_cache("us-gov-east-1", true, "1.27").await {
+      Ok(imgs) => insta::assert_debug_snapshot!(imgs),
+      Err(e) => panic!("[ERROR] {:?}", e),
+    }
   }
   #[tokio::test]
   async fn it_gets_images_to_cache_useast1_124() {
-    let imgs = get_images_to_cache("us-east-1", false, "1.24").await.unwrap();
-    insta::assert_debug_snapshot!(imgs);
+    match get_images_to_cache("us-east-1", false, "1.24").await {
+      Ok(imgs) => insta::assert_debug_snapshot!(imgs),
+      Err(e) => panic!("[ERROR] {:?}", e),
+    }
   }
   #[tokio::test]
   async fn it_gets_images_to_cache_apeast1_124() {
-    let imgs = get_images_to_cache("ap-east-1", false, "1.24").await.unwrap();
-    insta::assert_debug_snapshot!(imgs);
+    match get_images_to_cache("ap-east-1", false, "1.24").await {
+      Ok(imgs) => insta::assert_debug_snapshot!(imgs),
+      Err(e) => panic!("[ERROR] {:?}", e),
+    }
   }
   #[tokio::test]
   async fn it_gets_images_to_cache_usgoveast1_fips_124() {
-    let imgs = get_images_to_cache("us-gov-east-1", true, "1.24").await.unwrap();
-    insta::assert_debug_snapshot!(imgs);
+    match get_images_to_cache("us-gov-east-1", true, "1.24").await {
+      Ok(imgs) => insta::assert_debug_snapshot!(imgs),
+      Err(e) => panic!("[ERROR] {:?}", e),
+    }
   }
 }

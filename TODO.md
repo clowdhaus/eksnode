@@ -62,3 +62,13 @@
 [   24.213934] [drm] Initialized nvidia-drm 0.0.0 20160202 for 0000:00:1e.0 on minor 0
 [  122.258702] nvidia_uvm: module uses symbols nvUvmInterfaceDisableAccessCntr from proprietary module nvidia, inheriting taint.
 [  122.313310] nvidia-uvm: Loaded the UVM driver, major device number 242.
+
+[   19.278376] nvidia: loading out-of-tree module taints kernel.
+[   19.279005] nvidia: module license 'NVIDIA' taints kernel.
+[   19.299619] nvidia: module verification failed: signature and/or required key missing - tainting kernel
+[   19.444476] nvidia-nvlink: Nvlink Core is being initialized, major device number 244
+[   19.733539] nvidia-modeset: Loading NVIDIA Kernel Mode Setting Driver for UNIX platforms  535.104.12  Wed Sep 20 09:17:53 UTC 2023
+[   20.113230] [drm] [nvidia-drm] [GPU ID 0x0000001e] Loading driver
+[   20.113940] [drm] Initialized nvidia-drm 0.0.0 20160202 for 0000:00:1e.0 on minor 0
+[   43.744275] nvidia_uvm: module uses symbols nvUvmInterfaceDisableAccessCntr from proprietary module nvidia, inheriting taint.
+[   43.799099] nvidia-uvm: Loaded the UVM driver, major device number 242.

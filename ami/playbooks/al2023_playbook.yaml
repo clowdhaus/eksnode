@@ -17,10 +17,12 @@
         name: containerd
         state: stopped
 
-    - name: Clean dnf cache
+    - name: Clean dnf/yum cache
       ansible.builtin.shell: |
         /usr/bin/dnf clean all
         /usr/bin/rm -rf /var/cache/dnf
+        /usr/bin/yum clean all
+        /usr/bin/rm -rf /var/cache/yum
 
     - name: Clean up files from build process
       ansible.builtin.file:

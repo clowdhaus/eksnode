@@ -50,6 +50,7 @@ ContainerdConfiguration {
                     },
                     "containerd": Object {
                         "default_runtime_name": String("runc"),
+                        "discard_unpacked_layers": Bool(true),
                         "runtimes": Object {
                             "runc": Object {
                                 "options": Object {
@@ -62,7 +63,7 @@ ContainerdConfiguration {
                     "registry": Object {
                         "config_path": String("/etc/containerd/certs.d:/etc/docker/certs.d"),
                     },
-                    "sandbox_image": String("602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9"),
+                    "sandbox_image": String("602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8"),
                 },
             },
         },

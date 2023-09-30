@@ -3,11 +3,11 @@ source: eksnode/src/commands/pull.rs
 expression: imgs
 ---
 [
-    "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/pause:3.9",
+    "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/pause:3.8",
     "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/kube-proxy:v1.27.1-eksbuild.1",
-    "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/kube-proxy:v1.27.4-eksbuild.2",
+    "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/kube-proxy:v1.27.6-eksbuild.2",
     "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/kube-proxy:v1.27.1-minimal-eksbuild.1",
-    "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/kube-proxy:v1.27.4-minimal-eksbuild.2",
+    "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/eks/kube-proxy:v1.27.6-minimal-eksbuild.2",
     "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2",
     "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2",
     "151742754352.dkr.ecr-fips.us-gov-east-1.amazonaws.com/amazon-k8s-cni:v1.15.0-eksbuild.2",
