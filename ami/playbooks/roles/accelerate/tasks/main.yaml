@@ -16,6 +16,13 @@
 - name: Install NVIDIA driver
   when: install_nvidia_driver|bool
   block:
+    - name: Install NVIDIA supporting packages
+      ansible.builtin.dnf:
+        name: '{{ item }}'
+        state: present
+      loop:
+        - libXft.x86_64 # required for nvidia-settings
+
     - name: Download NVIDIA driver installer {{ nvidia_driver_version }}
       ansible.builtin.get_url:
         url: '{{ nvidia_driver_url }}'
@@ -25,6 +32,32 @@
     - name: Run NVIDIA driver installer
       ansible.builtin.shell: |
         sh {{ nvidia_driver_installer.dest }} -a -s --ui=none
+
+    - name: Pause for 180 seconds
+      ansible.builtin.pause:
+        seconds: 180
+
+    - name: Set persistence mode enabled for all devices
+      ansible.builtin.shell: |
+        nvidia-persistenced
+        nvidia-smi -pm 1
+
+#########################################################
+# NVIDIA container toolkit
+#########################################################
+
+- name: Install NVIDIA container toolkit
+  block:
+    - name: Add nvidia-container-toolkit repo
+      ansible.builtin.command:
+        cmd: dnf config-manager --add-repo https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
+      args:
+        creates: /etc/dnf.repos.d/nvidia-container-toolkit.repo
+
+    - name: Install nvidia-container-toolkit
+      ansible.builtin.dnf:
+        name: nvidia-container-toolkit
+        state: present
 
 #########################################################
 # AWS EFA
@@ -74,6 +107,7 @@
       ansible.builtin.dnf:
         name: '{{ item }}'
         state: absent
+        autoremove: true
       loop:
         - gcc
         - kernel-devel

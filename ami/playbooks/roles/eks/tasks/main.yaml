@@ -9,26 +9,27 @@
 
 - name: Install dnf packages
   block:
-  - name: Install dnf packages
-    ansible.builtin.dnf:
-      name: '{{ item }}'
-      state: present
-    loop:
-      - awscli
-      - iptables-legacy # needed by kubelet
-      - amazon-ssm-agent
-      - glibc-minimal-langpack
-      - glibc-langpack-en
+    - name: Install dnf packages
+      ansible.builtin.dnf:
+        name: '{{ item }}'
+        state: present
+      loop:
+        - awscli
+        - iptables-legacy # needed by kubelet
+        - amazon-ssm-agent
+        - glibc-minimal-langpack
+        - glibc-langpack-en
 
-  - name: Install dnf packages
-    ansible.builtin.dnf:
-      name: '{{ item }}'
-      state: absent
-    loop:
-      # ec2-net-utils interferes with the route setup on the instance
-      - ec2-net-utils
-      # Swapping out for smaller min langpack
-      - glibc-all-langpacks
+    - name: Install dnf packages
+      ansible.builtin.dnf:
+        name: '{{ item }}'
+        state: absent
+        autoremove: true
+      loop:
+        # ec2-net-utils interferes with the route setup on the instance
+        - ec2-net-utils
+        # Swapping out for smaller min langpack
+        - glibc-all-langpacks
 
 #########################################################
 # Logrotate
@@ -36,21 +37,20 @@
 
 - name: Configure logrotate
   block:
-  - name: Create logrotate.conf file
-    copy:
-      src: files/logrotate.conf
-      dest: /etc/logrotate.conf
-      owner: root
-      group: root
-      mode: 0644
-
-  - name: Create /etc/logrotate.d/kube-proxy file
-    copy:
-      src: files/logrotate-kube-proxy
-      dest: /etc/logrotate.d/kube-proxy
-      mode: 0644
-      owner: root
-      group: root
+    - name: Create /etc/logrotate.d/kube-proxy file
+      copy:
+        dest: /etc/modules-load.d/containerd.conf
+        mode: 0644
+        owner: root
+        group: root
+        content: |
+          /var/log/kube-proxy.log {
+            copytruncate
+            missingok
+            rotate 5
+            daily
+            compress
+          }
 
 #########################################################
 # Kubernetes directories
@@ -58,27 +58,27 @@
 
 - name: Create Kubernetes directories
   block:
-  - name: Create /etc/eks/ directory
-    ansible.builtin.file:
-      path: /etc/eks
-      state: directory
-      owner: root
-      group: root
-    register: eks_dir
+    - name: Create /etc/eks/ directory
+      ansible.builtin.file:
+        path: /etc/eks
+        state: directory
+        owner: root
+        group: root
+      register: eks_dir
 
-  - name: Create /etc/kubernetes/manifests directory
-    ansible.builtin.file:
-      path: /etc/kubernetes/manifests
-      state: directory
-      owner: root
-      group: root
+    - name: Create /etc/kubernetes/manifests directory
+      ansible.builtin.file:
+        path: /etc/kubernetes/manifests
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create /var/lib/kubernetes directory
-    ansible.builtin.file:
-      path: /var/lib/kubernetes
-      state: directory
-      owner: root
-      group: root
+    - name: Create /var/lib/kubernetes directory
+      ansible.builtin.file:
+        path: /var/lib/kubernetes
+        state: directory
+        owner: root
+        group: root
 
 #########################################################
 # RunC
@@ -99,123 +99,123 @@
 
 - name: Install containerd {{ containerd_version }}
   block:
-  - name: Create /etc/containerd directory
-    ansible.builtin.file:
-      path: /etc/containerd
-      state: directory
-      owner: root
-      group: root
+    - name: Create /etc/containerd directory
+      ansible.builtin.file:
+        path: /etc/containerd
+        state: directory
+        owner: root
+        group: root
 
-  - name: Download containerd {{ containerd_version }}
-    ansible.builtin.get_url:
-      url: '{{ containerd_url }}'
-      dest: '/tmp/{{ containerd_archive }}'
-      checksum: '{{ containerd_checksum }}'
-    register: containerd_archive_dl
+    - name: Download containerd {{ containerd_version }}
+      ansible.builtin.get_url:
+        url: '{{ containerd_url }}'
+        dest: '/tmp/{{ containerd_archive }}'
+        checksum: '{{ containerd_checksum }}'
+      register: containerd_archive_dl
 
-  - name: Extract containerd {{ containerd_version }}
-    ansible.builtin.unarchive:
-      src: '{{ containerd_archive_dl.dest }}'
-      dest: /usr/local/
-      mode: 0755
-      owner: root
-      group: root
-      remote_src: yes
-    register: containerd
+    - name: Extract containerd {{ containerd_version }}
+      ansible.builtin.unarchive:
+        src: '{{ containerd_archive_dl.dest }}'
+        dest: /usr/local/
+        mode: 0755
+        owner: root
+        group: root
+        remote_src: yes
+      register: containerd
 
-  - name: Remove {{ containerd.dest }}/bin/containerd-stress
-    ansible.builtin.file:
-      path: '{{ containerd.dest }}/bin/containerd-stress'
-      state: absent
+    - name: Remove {{ containerd.dest }}/bin/containerd-stress
+      ansible.builtin.file:
+        path: '{{ containerd.dest }}/bin/containerd-stress'
+        state: absent
 
-  - name: Create {{ eks_dir.path }}/containerd
-    ansible.builtin.file:
-      path: '{{ eks_dir.path }}/containerd'
-      state: directory
-      owner: root
-      group: root
+    - name: Create {{ eks_dir.path }}/containerd
+      ansible.builtin.file:
+        path: '{{ eks_dir.path }}/containerd'
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create runtime slice
-    copy:
-      src: files/runtime.slice
-      dest: /etc/systemd/system/runtime.slice
+    - name: Create runtime slice
+      copy:
+        src: files/runtime.slice
+        dest: /etc/systemd/system/runtime.slice
 
-  - name: Create /etc/systemd/system/containerd.service.d
-    ansible.builtin.file:
-      path: /etc/systemd/system/containerd.service.d
-      state: directory
-      owner: root
-      group: root
+    - name: Create /etc/systemd/system/containerd.service.d
+      ansible.builtin.file:
+        path: /etc/systemd/system/containerd.service.d
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create /etc/modules-load.d/containerd.conf
-    copy:
-      dest: /etc/modules-load.d/containerd.conf
-      mode: 0644
-      owner: root
-      group: root
-      content: |
-        br_netfilter
-        overlay
+    - name: Create /etc/modules-load.d/containerd.conf
+      copy:
+        dest: /etc/modules-load.d/containerd.conf
+        mode: 0644
+        owner: root
+        group: root
+        content: |
+          br_netfilter
+          overlay
 
-  - name: Create /etc/systemd/system/containerd.service
-    copy:
-      src: files/containerd.service
-      dest: /etc/systemd/system/containerd.service
-      mode: 0644
-      owner: root
-      group: root
+    - name: Create /etc/systemd/system/containerd.service
+      copy:
+        src: files/containerd.service
+        dest: /etc/systemd/system/containerd.service
+        mode: 0644
+        owner: root
+        group: root
 
-  - name: Create /etc/sysctl.d/99-kubernetes-cri.conf
-    copy:
-      dest: /etc/sysctl.d/99-kubernetes-cri.conf
-      mode: 0644
-      owner: root
-      group: root
-      content: |
-        net.bridge.bridge-nf-call-ip6tables = 1
-        net.bridge.bridge-nf-call-iptables = 1
-        net.ipv4.ip_forward = 1
+    - name: Create /etc/sysctl.d/99-kubernetes-cri.conf
+      copy:
+        dest: /etc/sysctl.d/99-kubernetes-cri.conf
+        mode: 0644
+        owner: root
+        group: root
+        content: |
+          net.bridge.bridge-nf-call-ip6tables = 1
+          net.bridge.bridge-nf-call-iptables = 1
+          net.ipv4.ip_forward = 1
 
 - name: Install nerdctl {{ nerdctl_version }}
   block:
-  # For amazon-ecr-credential-helper used by nerdctl to pull images
-  - name: Create /root/.docker
-    ansible.builtin.file:
-      path: /root/.docker
-      state: directory
-      owner: root
-      group: root
-    register: docker_dir
+    # For amazon-ecr-credential-helper used by nerdctl to pull images
+    - name: Create /root/.docker
+      ansible.builtin.file:
+        path: /root/.docker
+        state: directory
+        owner: root
+        group: root
+      register: docker_dir
 
-  - name: Install amazon-ecr-credential-helper
-    ansible.builtin.dnf:
-      name: amazon-ecr-credential-helper
-      state: present
+    - name: Install amazon-ecr-credential-helper
+      ansible.builtin.dnf:
+        name: amazon-ecr-credential-helper
+        state: present
 
-  - name: Create {{ docker_dir.path }}/config.json
-    copy:
-      dest: '{{ docker_dir.path }}/config.json'
-      mode: 0644
-      owner: root
-      group: root
-      content: |
-        {
-          "credsStore": "ecr-login"
-        }
+    - name: Create {{ docker_dir.path }}/config.json
+      copy:
+        dest: '{{ docker_dir.path }}/config.json'
+        mode: 0644
+        owner: root
+        group: root
+        content: |
+          {
+            "credsStore": "ecr-login"
+          }
 
-  - name: Install nerdctl {{ nerdctl_version }}
-    ansible.builtin.unarchive:
-      src: '{{ nerdctl_url }}'
-      dest: /usr/local/bin
-      mode: 0755
-      owner: root
-      group: root
-      remote_src: yes
+    - name: Install nerdctl {{ nerdctl_version }}
+      ansible.builtin.unarchive:
+        src: '{{ nerdctl_url }}'
+        dest: /usr/local/bin
+        mode: 0755
+        owner: root
+        group: root
+        remote_src: yes
 
-  - name: Remove ctr - nerdctl is used instead
-    ansible.builtin.file:
-      path: /usr/local/bin/ctr
-      state: absent
+    - name: Remove ctr - nerdctl is used instead
+      ansible.builtin.file:
+        path: /usr/local/bin/ctr
+        state: absent
 
 #########################################################
 # CNI
@@ -223,38 +223,38 @@
 
 - name: Install CNI {{ cni_plugin_version }}
   block:
-  - name: Create /etc/cni/net.d directory
-    ansible.builtin.file:
-      path: /etc/cni/net.d
-      state: directory
-      owner: root
-      group: root
+    - name: Create /etc/cni/net.d directory
+      ansible.builtin.file:
+        path: /etc/cni/net.d
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create /opt/cni/bin
-    ansible.builtin.file:
-      path: /opt/cni/bin
-      state: directory
-      owner: root
-      group: root
-    register: cni_dir
+    - name: Create /opt/cni/bin
+      ansible.builtin.file:
+        path: /opt/cni/bin
+        state: directory
+        owner: root
+        group: root
+      register: cni_dir
 
-  # This separate task is used to validate checksum
-  - name: Download CNI {{ cni_plugin_version }}
-    ansible.builtin.get_url:
-      url: '{{ cni_plugin_url}}'
-      dest: '/tmp/{{ cni_plugin_archive }}'
-      checksum: '{{ cni_plugin_checksum }}'
-    register: cni_archive
+    # This separate task is used to validate checksum
+    - name: Download CNI {{ cni_plugin_version }}
+      ansible.builtin.get_url:
+        url: '{{ cni_plugin_url}}'
+        dest: '/tmp/{{ cni_plugin_archive }}'
+        checksum: '{{ cni_plugin_checksum }}'
+      register: cni_archive
 
-  - name: Extract CNI {{ cni_plugin_version }}
-    ansible.builtin.unarchive:
-      src: '{{ cni_archive.dest }}'
-      dest: '{{ cni_dir.path }}'
-      mode: 0755
-      owner: root
-      group: root
-      remote_src: yes
-      keep_newer: yes
+    - name: Extract CNI {{ cni_plugin_version }}
+      ansible.builtin.unarchive:
+        src: '{{ cni_archive.dest }}'
+        dest: '{{ cni_dir.path }}'
+        mode: 0755
+        owner: root
+        group: root
+        remote_src: yes
+        keep_newer: yes
 
 #########################################################
 # IAM authenticator / ECR credential provider
@@ -262,31 +262,31 @@
 
 - name: Install aws-iam-authenticator and ecr-credential-provider
   block:
-  - name: Download aws-iam-authenticator binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
-    ansible.builtin.get_url:
-      url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator'
-      dest: '/usr/bin/aws-iam-authenticator'
-      checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator.sha256'
-      owner: root
-      group: root
-      mode: 0755
+    - name: Download aws-iam-authenticator binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
+      ansible.builtin.get_url:
+        url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator'
+        dest: '/usr/bin/aws-iam-authenticator'
+        checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/aws-iam-authenticator.sha256'
+        owner: root
+        group: root
+        mode: 0755
 
-  - name: Create '{{ eks_dir.path }}/image-credential-provider'
-    ansible.builtin.file:
-      path: '{{ eks_dir.path }}/image-credential-provider'
-      state: directory
-      owner: root
-      group: root
-    register: image_credential_provider_dir
+    - name: Create '{{ eks_dir.path }}/image-credential-provider'
+      ansible.builtin.file:
+        path: '{{ eks_dir.path }}/image-credential-provider'
+        state: directory
+        owner: root
+        group: root
+      register: image_credential_provider_dir
 
-  - name: Download ecr-credential-provider binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
-    ansible.builtin.get_url:
-      url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider'
-      dest: '{{ image_credential_provider_dir.path }}/ecr-credential-provider'
-      checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider.sha256'
-      owner: root
-      group: root
-      mode: 0755
+    - name: Download ecr-credential-provider binary {{ kubernetes_version }}/{{ kubernetes_build_date }}
+      ansible.builtin.get_url:
+        url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider'
+        dest: '{{ image_credential_provider_dir.path }}/ecr-credential-provider'
+        checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/ecr-credential-provider.sha256'
+        owner: root
+        group: root
+        mode: 0755
 
 #########################################################
 # sysctl
@@ -294,24 +294,24 @@
 
 - name: Configure sysctl settings
   block:
-  - name: Create /etc/sysctl.d/99-amazon.conf
-    copy:
-      dest: /etc/sysctl.d/99-amazon.conf
-      mode: 0644
-      owner: root
-      group: root
-      content: |
-        vm.overcommit_memory=1
-        kernel.panic=10
-        kernel.panic_on_oops=1
+    - name: Create /etc/sysctl.d/99-amazon.conf
+      copy:
+        dest: /etc/sysctl.d/99-amazon.conf
+        mode: 0644
+        owner: root
+        group: root
+        content: |
+          vm.overcommit_memory=1
+          kernel.panic=10
+          kernel.panic_on_oops=1
 
-  - name: Create /etc/sysctl.conf
-    copy:
-      src: files/sysctl.conf
-      dest: /etc/sysctl.conf
-      mode: 0644
-      owner: root
-      group: root
+    - name: Create /etc/sysctl.conf
+      copy:
+        src: files/sysctl.conf
+        dest: /etc/sysctl.conf
+        mode: 0644
+        owner: root
+        group: root
 
 #########################################################
 # Kubelet
@@ -319,50 +319,50 @@
 
 - name: Install kubelet {{ kubernetes_version }}/{{ kubernetes_build_date }}
   block:
-  - name: Download kubelet {{ kubernetes_version }}/{{ kubernetes_build_date }}
-    ansible.builtin.get_url:
-      url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet'
-      dest: '/usr/bin/kubelet'
-      checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet.sha256'
-      owner: root
-      group: root
-      mode: 0755
+    - name: Download kubelet {{ kubernetes_version }}/{{ kubernetes_build_date }}
+      ansible.builtin.get_url:
+        url: 'https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet'
+        dest: '/usr/bin/kubelet'
+        checksum: 'sha256:https://{{ s3_binary_bucket}}.s3.amazonaws.com/{{ s3_binary_path }}/kubelet.sha256'
+        owner: root
+        group: root
+        mode: 0755
 
-  - name: Create /var/lib/kubelet
-    ansible.builtin.file:
-      path: /var/lib/kubelet
-      state: directory
-      owner: root
-      group: root
+    - name: Create /var/lib/kubelet
+      ansible.builtin.file:
+        path: /var/lib/kubelet
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create /etc/kubernetes/kubelet
-    ansible.builtin.file:
-      path: /etc/kubernetes/kubelet
-      state: directory
-      owner: root
-      group: root
+    - name: Create /etc/kubernetes/kubelet
+      ansible.builtin.file:
+        path: /etc/kubernetes/kubelet
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create /etc/systemd/system/kubelet.service.d
-    ansible.builtin.file:
-      path: /etc/systemd/system/kubelet.service.d
-      state: directory
-      owner: root
-      group: root
+    - name: Create /etc/systemd/system/kubelet.service.d
+      ansible.builtin.file:
+        path: /etc/systemd/system/kubelet.service.d
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create /etc/kubernetes/pki
-    ansible.builtin.file:
-      path: /etc/kubernetes/pki
-      state: directory
-      owner: root
-      group: root
+    - name: Create /etc/kubernetes/pki
+      ansible.builtin.file:
+        path: /etc/kubernetes/pki
+        state: directory
+        owner: root
+        group: root
 
-  - name: Create /etc/systemd/system/kubelet.service
-    copy:
-      src: files/kubelet.service
-      dest: /etc/systemd/system/kubelet.service
-      mode: 0644
-      owner: root
-      group: root
+    - name: Create /etc/systemd/system/kubelet.service
+      copy:
+        src: files/kubelet.service
+        dest: /etc/systemd/system/kubelet.service
+        mode: 0644
+        owner: root
+        group: root
 
 #########################################################
 # Start containerd
@@ -370,27 +370,26 @@
 
 - name: Install kubelet {{ kubernetes_version }}/{{ kubernetes_build_date }}
   block:
-  - name: Reload systemd
-    ansible.builtin.systemd:
-      daemon_reload: true
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
 
-  - name: Enable containerd service
-    ansible.builtin.systemd:
-      name: containerd
-      enabled: true
-      masked: no
-      state: started
+    - name: Enable containerd service
+      ansible.builtin.systemd:
+        name: containerd
+        enabled: true
+        masked: no
+        state: started
 
-  - name: Pull standard images to cache
-    ansible.builtin.shell: |
-      eksnode pull --cached-images --no-color -vv
+    - name: Pull standard images to cache
+      ansible.builtin.shell: |
+        eksnode pull --cached-images --no-color -vv
 
-  - name: Stop containerd service
-    ansible.builtin.systemd:
-      name: containerd
-      enabled: true
-      masked: no
-      state: stopped
-
+    - name: Stop containerd service
+      ansible.builtin.systemd:
+        name: containerd
+        enabled: true
+        masked: no
+        state: stopped
 # TODO - create /etc/eks/release AMI build metadata file
 # TODO - create psuedo bootstrap.sh script for backwards compat

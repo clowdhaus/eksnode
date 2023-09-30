@@ -7,7 +7,7 @@ variable "ami_name_prefix" {
 variable "eks_version" {
   description = "The EKS cluster version associated with the AMI created"
   type        = string
-  default     = "1.27"
+  default     = "1.28"
 }
 
 variable "cpu_architecture" {
