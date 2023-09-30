@@ -137,6 +137,19 @@ impl Node {
       false => config.provider_id = Some(config.get_provider_id(availability_zone, instance_id)?),
     }
 
+    if kubelet_version.lt(&Version::parse("1.28.0")?) {
+      match config.feature_gates {
+        Some(ref mut feature_gates) => {
+          feature_gates.insert("KubeletCredentialProviders".to_owned(), true);
+        }
+        None => {
+          let mut feature_gates = std::collections::BTreeMap::new();
+          feature_gates.insert("KubeletCredentialProviders".to_owned(), true);
+          config.feature_gates = Some(feature_gates);
+        }
+      }
+    }
+
     Ok(config)
   }
 

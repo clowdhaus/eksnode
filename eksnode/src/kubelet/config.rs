@@ -482,7 +482,7 @@ pub struct KubeletConfiguration {
   /// features. This field modifies piecemeal the built-in default values from
   /// "k8s.io/kubernetes/pkg/features/kube_features.go".
   #[serde(skip_serializing_if = "Option::is_none")]
-  feature_gates: Option<BTreeMap<String, bool>>,
+  pub feature_gates: Option<BTreeMap<String, bool>>,
 
   /// failSwapOn tells the Kubelet to fail to start if swap is enabled on the node.
   #[serde(skip_serializing_if = "Option::is_none")]
@@ -766,10 +766,7 @@ impl KubeletConfiguration {
       cgroup_root: Some("/".to_string()),
       system_reserved_cgroup: Some("/system".to_string()),
       kube_reserved_cgroup: Some("/runtime".to_string()),
-      feature_gates: Some(BTreeMap::from([
-        ("RotateKubeletServerCertificate".to_string(), true),
-        ("KubeletCredentialProviders".to_owned(), true),
-      ])),
+      feature_gates: Some(BTreeMap::from([("RotateKubeletServerCertificate".to_string(), true)])),
       protect_kernel_defaults: Some(true),
       serialize_image_pulls: Some(false),
       server_tls_bootstrap: Some(true),
