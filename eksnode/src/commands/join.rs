@@ -9,7 +9,7 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, error, info};
 
-use crate::{commands, containerd, ec2, ecr, eks, kubelet, resource, utils};
+use crate::{commands, containerd, ec2, ecr, eks, gpu, kubelet, resource, utils};
 
 #[derive(Args, Debug, Default, Serialize, Deserialize)]
 pub struct Node {
@@ -340,11 +340,18 @@ impl Node {
     kubelet_extra_args.write(kubelet::EXTRA_ARGS_PATH, true)?;
 
     let containerd_config = self.get_containerd_config(instance_metadata).await?;
-    // TODO - will need to handle case where existing containerd config is present from AMI build
     containerd_config.write("/etc/containerd/config.toml", true)?;
 
     // Requries that containerd is running - should be running at boot from AMI build
     containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true)?;
+
+    match self.default_container_runtime {
+      containerd::DefaultRuntime::Nvidia => {
+        // Set the max clock for Nvidia GPUs
+        gpu::set_nvidia_max_clock()?;
+      }
+      _ => (),
+    }
 
     // Enable & start systemd units - this should be the last step
     utils::cmd_exec("systemctl", vec!["daemon-reload"])?;

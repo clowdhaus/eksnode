@@ -159,8 +159,6 @@ BinaryName = "/usr/bin/nvidia-container-runtime"
       }
     };
 
-    println!("{}", runtime.trim());
-
     let contents = tmpl
       .replace("{{SANDBOX_IMAGE}}", sandbox_image)
       .replace("{{RUNTIME}}", runtime.trim());
