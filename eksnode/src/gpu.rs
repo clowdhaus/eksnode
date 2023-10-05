@@ -53,7 +53,6 @@ fn get_nvidia_max_clock(clock_type: &NvidiaGpuClock) -> Result<i32> {
   }
 }
 
-
 // Ref: https://developer.nvidia.com/blog/advanced-api-performance-setstablepowerstate/
 pub fn set_nvidia_max_clock() -> Result<()> {
   info!("Setting NVIDIA GPU to max clock");
@@ -73,14 +72,8 @@ pub fn set_nvidia_max_clock() -> Result<()> {
     vec!["--applications-clocks", &format!("{mem_max_clock},{graph_max_clock}")],
   )?;
 
-  cmd_exec(
-    "nvidia-smi",
-    vec!["--lock-gpu-clocks", &format!("{mem_max_clock}")],
-  )?;
-  cmd_exec(
-    "nvidia-smi",
-    vec!["--lock-memory-clocks", &format!("{mem_max_clock}")],
-  )?;
+  cmd_exec("nvidia-smi", vec!["--lock-gpu-clocks", &format!("{mem_max_clock}")])?;
+  cmd_exec("nvidia-smi", vec!["--lock-memory-clocks", &format!("{mem_max_clock}")])?;
 
   Ok(())
 }

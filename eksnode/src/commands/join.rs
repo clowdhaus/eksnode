@@ -345,12 +345,9 @@ impl Node {
     // Requries that containerd is running - should be running at boot from AMI build
     containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true)?;
 
-    match self.default_container_runtime {
-      containerd::DefaultRuntime::Nvidia => {
-        // Set the max clock for Nvidia GPUs
-        gpu::set_nvidia_max_clock()?;
-      }
-      _ => (),
+    if let containerd::DefaultRuntime::Nvidia = self.default_container_runtime {
+      // Set the max clock for Nvidia GPUs
+      gpu::set_nvidia_max_clock()?;
     }
 
     // Enable & start systemd units - this should be the last step
