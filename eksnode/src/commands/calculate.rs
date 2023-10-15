@@ -67,8 +67,13 @@ impl MaxPods {
       _ => std::cmp::min(110, max_pods),
     };
 
+    Ok(result)
+  }
+  pub async fn result(&self) -> Result<()> {
+    let result = self.calculate().await?;
+
     println!("{result}");
 
-    Ok(result)
+    Ok(())
   }
 }

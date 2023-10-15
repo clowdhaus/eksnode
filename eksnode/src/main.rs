@@ -1,5 +1,3 @@
-use std::process;
-
 use anyhow::Result;
 use clap::Parser;
 use eksnode::{Cli, Commands};
@@ -18,33 +16,9 @@ async fn main() -> Result<()> {
   tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
 
   match &cli.command {
-    Commands::CalculateMaxPods(maxpods) => match maxpods.calculate().await {
-      Ok(_) => Ok(()),
-      Err(err) => {
-        eprintln!("{err}");
-        process::exit(2);
-      }
-    },
-    Commands::Pull(image) => match image.pull().await {
-      Ok(_) => Ok(()),
-      Err(err) => {
-        eprintln!("{err}");
-        process::exit(2);
-      }
-    },
-    Commands::Join(node) => match node.join_node_to_cluster().await {
-      Ok(_) => Ok(()),
-      Err(err) => {
-        eprintln!("{err}");
-        process::exit(2);
-      }
-    },
-    Commands::Validate(validate) => match validate.validate().await {
-      Ok(_) => Ok(()),
-      Err(err) => {
-        eprintln!("{err}");
-        process::exit(2);
-      }
-    },
+    Commands::CalculateMaxPods(maxpods) => maxpods.result().await,
+    Commands::Pull(image) => image.pull().await,
+    Commands::Join(node) => node.join_node_to_cluster().await,
+    Commands::Validate(validate) => validate.validate().await,
   }
 }
