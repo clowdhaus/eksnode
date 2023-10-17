@@ -64,16 +64,11 @@
       ansible.builtin.pause:
         seconds: 180
 
-    # TODO - this should be done during node provisioning (join)
-    - name: Set persistence mode enabled for all devices
-      ansible.builtin.shell: |
-        nvidia-persistenced
-        nvidia-smi -pm 1
-
 #########################################################
 # NVIDIA container toolkit
 #########################################################
 
+# https://github.com/NVIDIA/libnvidia-container/issues/208#issuecomment-1596723034
 - name: Install NVIDIA container toolkit
   block:
     - name: Add nvidia-container-toolkit repo
@@ -81,6 +76,18 @@
         name: nvidia-container-toolkit
         description: NVIDIA container toolkit
         baseurl: https://nvidia.github.io/libnvidia-container/stable/rpm/$basearch
+        repo_gpgcheck: true
+        gpgcheck: false
+        enabled: true
+        gpgkey: https://nvidia.github.io/libnvidia-container/gpgkey
+        sslverify: true
+        sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+
+    - name: Add libnvidia-container repo
+      yum_repository:
+        name: libnvidia-container
+        description: NVIDIA libnvidia-container
+        baseurl: https://nvidia.github.io/libnvidia-container/stable/centos8/$basearch
         repo_gpgcheck: true
         gpgcheck: false
         enabled: true
