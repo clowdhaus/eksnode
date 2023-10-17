@@ -29,7 +29,7 @@ aws-types.workspace = true
 base64 = "0.21.2"
 clap.workspace = true
 clap-verbosity-flag.workspace = true
-containerd-client = { git = "https://github.com/containerd/rust-extensions.git", package = "containerd-client" }
+containerd-client = "0.4"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
 rust-embed = { version = "8.0", features = ["compression"] }
