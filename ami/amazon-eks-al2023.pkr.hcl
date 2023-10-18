@@ -278,42 +278,14 @@ build {
   provisioner "shell" {
     execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
 
-    inline  = try(var.shell_provisioner1.inline, null)
+    inline  = try(var.shell_provisioner1.inline, ["set -x"])
     script  = try(var.shell_provisioner1.script, null)
-    scripts = try(var.shell_provisioner1.scripts, ["scripts/dummy.sh"])
+    scripts = try(var.shell_provisioner1.scripts, null)
 
     env              = try(var.shell_provisioner1.env, null)
     environment_vars = try(var.shell_provisioner1.environment_vars, null)
 
     expect_disconnect = try(var.shell_provisioner1.expect_disconnect, false)
     pause_after       = try(var.shell_provisioner1.pause_after, "15s")
-  }
-
-  provisioner "shell" {
-    execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
-
-    inline  = try(var.shell_provisioner2.inline, null)
-    script  = try(var.shell_provisioner2.script, null)
-    scripts = try(var.shell_provisioner2.scripts, ["scripts/dummy.sh"])
-
-    env              = try(var.shell_provisioner2.env, null)
-    environment_vars = try(var.shell_provisioner2.environment_vars, null)
-
-    expect_disconnect = try(var.shell_provisioner2.expect_disconnect, false)
-    pause_after       = try(var.shell_provisioner2.pause_after, "15s")
-  }
-
-  provisioner "shell" {
-    execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
-
-    inline  = try(var.shell_provisioner3.inline, null)
-    script  = try(var.shell_provisioner3.script, null)
-    scripts = try(var.shell_provisioner3.scripts, ["scripts/dummy.sh"])
-
-    env              = try(var.shell_provisioner3.env, null)
-    environment_vars = try(var.shell_provisioner3.environment_vars, null)
-
-    expect_disconnect = try(var.shell_provisioner3.expect_disconnect, false)
-    pause_after       = try(var.shell_provisioner3.pause_after, "15s")
   }
 }
