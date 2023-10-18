@@ -15,7 +15,7 @@
         state: present
       loop:
         - awscli
-        - iptables-legacy # needed by kubelet
+        - iptables-nft # https://kubernetes.io/blog/2022/09/07/iptables-chains-not-api/#use-case-iptables-mode
         - amazon-ssm-agent
         - glibc-minimal-langpack
         - glibc-langpack-en
@@ -147,6 +147,15 @@
         owner: root
         group: root
 
+    - name: Create /etc/systemd/system/containerd.service
+      copy:
+        src: files/containerd.service
+        dest: /etc/systemd/system/containerd.service
+        mode: 0644
+        owner: root
+        group: root
+
+    # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#forwarding-ipv4-and-letting-iptables-see-bridged-traffic
     - name: Create /etc/modules-load.d/containerd.conf
       copy:
         dest: /etc/modules-load.d/containerd.conf
@@ -157,14 +166,7 @@
           br_netfilter
           overlay
 
-    - name: Create /etc/systemd/system/containerd.service
-      copy:
-        src: files/containerd.service
-        dest: /etc/systemd/system/containerd.service
-        mode: 0644
-        owner: root
-        group: root
-
+    # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#forwarding-ipv4-and-letting-iptables-see-bridged-traffic
     - name: Create /etc/sysctl.d/99-kubernetes-cri.conf
       copy:
         dest: /etc/sysctl.d/99-kubernetes-cri.conf
