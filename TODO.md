@@ -37,3 +37,15 @@
 - [ ] [WebAssembly and containerd: How it works](https://nigelpoulton.com/webassembly-and-containerd-how-it-works/)
   - [WebAssembly on Kubernetes: The ultimate hands-on guide](https://nigelpoulton.com/webassembly-on-kubernetes-ultimate-hands-on/)
   - [WebAssembly on Kubernetes: everything you need to know](https://nigelpoulton.com/webassembly-on-kubernetes-everything-you-need-to-know/)
+
+
+
+
+[1.1.2.1] [1.1.3.1] [1.1.4.1] [1.1.5.1] [1.1.6.1] [1.1.7.1] [1.1.8.1]
+[1.2.3] [1.6.1.6] [2.4] [5.3] [5.3] [6.1.9] [6.1.12] [Reboot_required]"
+
+"Warning!! The following files are not covered by default logrotate settings ensure they match site policy\"\n\"/etc/logrotate.d/dnf, /etc/logrotate.d/btmp, /etc/logrotate.d/wtmp, /etc/logrotate.d/aide, /etc/logrotate.d/firewalld\"
+
+"Warning!! You have some package descrepancies issues.\n The file list can be found in /var/tmp/rpm_file_check\"
+
+"Warning!! SUID set on items in ['/usr/bin/su', '/usr/bin/crontab', '/usr/bin/passwd', '/usr/bin/mount', '/usr/bin/sudo', '/usr/bin/umount', '/usr/bin/chage', '/usr/bin/gpasswd', '/usr/bin/newgrp', '/usr/sbin/pam_timestamp_check', '/usr/sbin/unix_chkpwd', '/usr/sbin/grub2-set-bootflag']"

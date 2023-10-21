@@ -17,6 +17,16 @@ variable "cpu_architecture" {
 }
 
 ################################################################################
+# Ansible
+################################################################################
+
+variable "ansible_roles" {
+  description = "A list of Ansible roles to apply to the instance. Available roles are `accelerate` and `harden`"
+  type        = list(string)
+  default     = []
+}
+
+################################################################################
 # EBS Source
 ################################################################################
 

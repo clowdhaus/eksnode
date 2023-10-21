@@ -271,7 +271,12 @@ build {
     use_proxy = false
 
     extra_arguments = [
-      "--extra-vars", "version=${var.eks_version}"
+      "--extra-vars", jsonencode(
+        {
+          version = var.eks_version
+          ansible_roles   = var.ansible_roles
+        }
+      )
     ]
   }
 

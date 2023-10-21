@@ -1,0 +1,29 @@
+---
+#########################################################
+# CIS Level 1 and 2
+#########################################################
+
+- name: Install dnf packages
+  block:
+    - name: Install dnf packages
+      ansible.builtin.dnf:
+        name: '{{ item }}'
+        state: present
+      loop:
+        - acl
+        - aide
+        - firewalld
+        - rsyslog
+
+- name: Amazon Linux 2023 CIS
+  ansible.builtin.include_role:
+    name: MindPointGroup.amazon2023_cis
+    apply:
+      become: true
+  # https://github.com/ansible-lockdown/AMAZON2023-CIS/blob/devel/defaults/main.yml
+  vars:
+    # Ensure root password is set
+    amzn2023cis_rule_4_6_6: false
+    # https://github.com/ansible-lockdown/AMAZON2023-CIS/issues/14
+    amzn2023cis_rule_1_2_1: false
+
