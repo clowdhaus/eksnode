@@ -32,3 +32,25 @@
         amzn2023cis_rule_4_6_6: false
         # https://github.com/ansible-lockdown/AMAZON2023-CIS/issues/14
         amzn2023cis_rule_1_2_1: false
+
+#########################################################
+# FIPs
+# https://docs.aws.amazon.com/linux/al2023/ug/fips-mode.html
+#########################################################
+
+- name: Enable FIPS Mode
+  when: harden_fips|bool
+  block:
+    - name: Install dnf packages
+      block:
+        - name: Install dnf packages
+          ansible.builtin.dnf:
+            name: '{{ item }}'
+            state: present
+          loop:
+            - crypto-policies
+            - crypto-policies-scripts
+
+    - name: Enable FIPs mode
+      ansible.builtin.shell: |
+        fips-mode-setup --enable

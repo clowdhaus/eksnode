@@ -5,7 +5,6 @@
 - [ ] Add validate functionality
   - Will need to write a config file to use for validation - will capture the build-spec and join-spec so that when running `eksnode validate`, the default behavior will be to load this file to infer how the node was intended to be setup. Users should have the option to override and check specifics with something like `eksnode validate --nvidia-gpu` or `eksnode validate --containerd` or even `eksnode validate --containerd --nvidia-gpu`, etc.
 - [ ] Add Ansible role for STIG hardening
-- [ ] Add Ansible role for CIS hardening
 - [ ] Add Ansible role for FedRAMP hardening
 - [ ] Add checks and reporting of CIS, STIG, FedRAMP hardening with OpenSCAP
 - [ ] Add functionality to generate SBOM
@@ -38,14 +37,4 @@
   - [WebAssembly on Kubernetes: The ultimate hands-on guide](https://nigelpoulton.com/webassembly-on-kubernetes-ultimate-hands-on/)
   - [WebAssembly on Kubernetes: everything you need to know](https://nigelpoulton.com/webassembly-on-kubernetes-everything-you-need-to-know/)
 
-
-
-
-[1.1.2.1] [1.1.3.1] [1.1.4.1] [1.1.5.1] [1.1.6.1] [1.1.7.1] [1.1.8.1]
-[1.2.3] [1.6.1.6] [2.4] [5.3] [5.3] [6.1.9] [6.1.12] [Reboot_required]"
-
 "Warning!! The following files are not covered by default logrotate settings ensure they match site policy\"\n\"/etc/logrotate.d/dnf, /etc/logrotate.d/btmp, /etc/logrotate.d/wtmp, /etc/logrotate.d/aide, /etc/logrotate.d/firewalld\"
-
-"Warning!! You have some package descrepancies issues.\n The file list can be found in /var/tmp/rpm_file_check\"
-
-"Warning!! SUID set on items in ['/usr/bin/su', '/usr/bin/crontab', '/usr/bin/passwd', '/usr/bin/mount', '/usr/bin/sudo', '/usr/bin/umount', '/usr/bin/chage', '/usr/bin/gpasswd', '/usr/bin/newgrp', '/usr/sbin/pam_timestamp_check', '/usr/sbin/unix_chkpwd', '/usr/sbin/grub2-set-bootflag']"

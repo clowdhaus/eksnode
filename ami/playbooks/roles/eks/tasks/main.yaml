@@ -384,8 +384,14 @@
         state: started
 
     - name: Pull standard images to cache
+      when: not harden_fips|bool
       ansible.builtin.shell: |
         eksnode pull --cached-images --no-color -vv
+
+    - name: Pull FIPs standard images to cache
+      when: harden_fips|bool
+      ansible.builtin.shell: |
+        eksnode pull --cached-images --enable-fips --no-color -vv
 
     - name: Stop containerd service
       ansible.builtin.systemd:
@@ -393,5 +399,6 @@
         enabled: true
         masked: no
         state: stopped
+
 # TODO - create /etc/eks/release AMI build metadata file
 # TODO - create psuedo bootstrap.sh script for backwards compat
