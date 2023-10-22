@@ -11,15 +11,44 @@
     - eks
 
   tasks:
-    - name: Dynamic roles
-      include_role:
-        name: "{{ item }}"
-      loop: "{{ ansible_roles }}"
+    - name: CIS Level 1 and 2 baseline
+      block:
+        - name: Install dnf packages
+          block:
+            - name: Install dnf packages
+              ansible.builtin.dnf:
+                name: '{{ item }}'
+                state: present
+              loop:
+                - acl
+                - aide
+                - firewalld
+                - rsyslog
+
+        - name: Amazon Linux 2023 CIS
+          ansible.builtin.include_role:
+            name: MindPointGroup.amazon2023_cis
+            apply:
+              become: true
+          # https://github.com/ansible-lockdown/AMAZON2023-CIS/blob/devel/defaults/main.yml
+          vars:
+            # Ensure root password is set
+            amzn2023cis_rule_4_6_6: false
+            # https://github.com/ansible-lockdown/AMAZON2023-CIS/issues/14
+            amzn2023cis_rule_1_2_1: false
+      when: harden_cis|bool
+      become: true
+      become_user: root
 
     - name: Stop containerd to ensure build logs are not leaked
       ansible.builtin.systemd:
         name: containerd
         state: stopped
+
+    # - name: Fetch remote files
+    #   ansible.builtin.fetch:
+    #     src: /var/tmp/rpm_file_check
+    #     dest: ./rpm_file_check
 
     - name: Clean dnf/yum cache
       ansible.builtin.shell: |

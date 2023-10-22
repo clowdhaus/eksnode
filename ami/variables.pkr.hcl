@@ -20,10 +20,22 @@ variable "cpu_architecture" {
 # Ansible
 ################################################################################
 
-variable "ansible_roles" {
-  description = "A list of Ansible roles to apply to the instance. Available roles are `accelerate` and `harden`"
-  type        = list(string)
-  default     = []
+variable "install_nvidia_driver" {
+  description = "If `true`, the NVIDIA driver will be installed on the instance. Defaults to `false`"
+  type        = bool
+  default     = false
+}
+
+variable "install_efa_driver" {
+  description = "If `true`, the EFA driver will be installed on the instance. Defaults to `false`"
+  type        = bool
+  default     = false
+}
+
+variable "harden_cis" {
+  description = "If `true`, the CIS hardening role will be applied to the instance. Defaults to `false`"
+  type        = bool
+  default     = false
 }
 
 ################################################################################

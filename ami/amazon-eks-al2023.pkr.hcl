@@ -274,7 +274,11 @@ build {
       "--extra-vars", jsonencode(
         {
           version = var.eks_version
-          ansible_roles   = var.ansible_roles
+
+          install_nvidia_driver = var.install_nvidia_driver
+          install_efa_driver    = var.install_efa_driver
+
+          harden_cis = var.harden_cis
         }
       )
     ]

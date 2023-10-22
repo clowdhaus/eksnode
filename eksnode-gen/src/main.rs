@@ -1,5 +1,5 @@
 //! Script-like crate for generating files used by `eksnode` or image creation process
-use std::{env, process};
+use std::env;
 
 use anyhow::Result;
 use clap::Parser;
@@ -28,24 +28,12 @@ async fn main() -> Result<()> {
   match &cli.command {
     // Creates the `ec2-instances.yaml` which embeds EC2 details into the `eksnode` binary
     // to reduce the number of AWS API calls when provisioning a node and joining it to a cluster
-    Commands::UpdateEc2 => match ec2::write_files(cur_dir).await {
-      Ok(_) => Ok(()),
-      Err(err) => {
-        eprintln!("{err}");
-        process::exit(2);
-      }
-    },
+    Commands::UpdateEc2 => ec2::write_files(cur_dir).await,
 
     // Updates the `versions.yaml` file which is used by the AMI build process to map the correct
     // artifact version to the given Kubernetes version. EKS vended artifacts are built and stored in S3
     // and are not available via a public API. This file is used to map the Kubernetes version to the
     // correct artifact version.
-    Commands::UpdateArtifactVersions => match versions::update_artifact_versions(cur_dir).await {
-      Ok(_) => Ok(()),
-      Err(err) => {
-        eprintln!("{err}");
-        process::exit(2);
-      }
-    },
+    Commands::UpdateArtifactVersions => versions::update_artifact_versions(cur_dir).await
   }
 }

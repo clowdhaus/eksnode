@@ -22,6 +22,10 @@ static MIN_SUPPORTED_KUBERNETES_VERSION: i32 = 24;
 #[derive(Debug, Serialize, Deserialize)]
 struct Versions {
   versions: BTreeMap<String, Version>,
+
+  /// Preserve any additional values provided in the variables file
+  #[serde(flatten, skip_serializing_if = "BTreeMap::is_empty")]
+  other: BTreeMap<String, serde_json::Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -61,7 +65,9 @@ impl Versions {
     let template = cur_dir.join("eksnode-gen").join("templates").join("versions.tpl");
     handlebars.register_template_file("tpl", template)?;
 
-    let data = json!({"versions": self.versions});
+    let other = serde_yaml::to_string(&self.other)?;
+    let data = json!({"versions": self.versions, "other": other});
+
     let rendered = handlebars.render("tpl", &data)?;
     fs::write(path, rendered).map_err(anyhow::Error::from)
   }

@@ -1,3 +1,4 @@
+ami_name_prefix  = "amazon-eks-gpu"
 ami_description  = "Amazon EKS x86_64/amd64 GPU AL2023 image"
 instance_type    = "g4dn.8xlarge"
 cpu_architecture = "x86_64"
@@ -13,5 +14,5 @@ launch_block_device_mappings = [
 # Amazon Linux 2023 minimal does not come with SSM agent installed by default
 user_data_file = "./files/ssm_user_data.sh"
 
-ansible_roles = ["accelerate", "harden"]
-skip_create_ami = true
+install_nvidia_driver = true
+install_efa_driver    = true
