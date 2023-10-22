@@ -1,0 +1,64 @@
+#########################################################
+# NVIDIA driver
+#########################################################
+
+- name: Install NVIDIA supporting packages
+  ansible.builtin.dnf:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - libXft.x86_64 # required for nvidia-settings
+
+- name: Download NVIDIA driver installer {{ nvidia_driver_version }}
+  ansible.builtin.get_url:
+    url: '{{ nvidia_driver_url }}'
+    dest: '/tmp/{{ nvidia_driver_executable }}'
+  register: nvidia_driver_installer
+
+- name: Run NVIDIA driver installer
+  ansible.builtin.shell: |
+    sh {{ nvidia_driver_installer.dest }} -a -s --ui=none
+
+- name: Pause for 180 seconds
+  ansible.builtin.pause:
+    seconds: 180
+
+#########################################################
+# NVIDIA container toolkit
+#########################################################
+
+# https://github.com/NVIDIA/libnvidia-container/issues/208#issuecomment-1596723034
+- name: Add nvidia-container-toolkit repo
+  yum_repository:
+    name: nvidia-container-toolkit
+    description: NVIDIA container toolkit
+    baseurl: https://nvidia.github.io/libnvidia-container/stable/rpm/$basearch
+    repo_gpgcheck: true
+    gpgcheck: false
+    enabled: true
+    gpgkey: https://nvidia.github.io/libnvidia-container/gpgkey
+    sslverify: true
+    sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+
+- name: Add libnvidia-container repo
+  yum_repository:
+    name: libnvidia-container
+    description: NVIDIA libnvidia-container
+    baseurl: https://nvidia.github.io/libnvidia-container/stable/centos8/$basearch
+    repo_gpgcheck: true
+    gpgcheck: false
+    enabled: true
+    gpgkey: https://nvidia.github.io/libnvidia-container/gpgkey
+    sslverify: true
+    sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+
+- name: Import nvidia-container-toolkit GPG key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://nvidia.github.io/libnvidia-container/gpgkey
+
+- name: Install nvidia-container-toolkit
+  ansible.builtin.dnf:
+    name: nvidia-container-toolkit
+    state: latest
+    update_cache: true

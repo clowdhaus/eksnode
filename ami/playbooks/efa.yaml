@@ -1,0 +1,59 @@
+#########################################################
+# Limit deeper C-states
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/processor_state_control.html#c-states
+#########################################################
+
+- name: Limit Intel processors deeper C-state
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="((?:(?!intel_idle.max_cstate=1).)*?)"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 intel_idle.max_cstate=1"'
+    backup: true
+    backrefs: true
+
+- name: Limit AMD processors deeper C-state
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="((?:(?!processor.max_cstate=1).)*?)"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 processor.max_cstate=1"'
+    backup: true
+    backrefs: true
+
+- name: Rebuild grub boot configuration
+  ansible.builtin.shell: |
+    grub2-mkconfig -o /boot/grub2/grub.cfg
+
+#########################################################
+# AWS EFA
+#########################################################
+
+- name: Download EFA installer {{ efa_installer_version }}
+  ansible.builtin.get_url:
+    url: '{{ efa_installer_url }}'
+    dest: '/tmp/{{ efa_installer_archive }}'
+    checksum: '{{ efa_installer_checksum }}'
+  register: efa_installer_archive
+
+- name: Extract EFA installer
+  ansible.builtin.unarchive:
+    src: '{{ efa_installer_archive.dest }}'
+    dest: /tmp
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+  register: efa_installer
+
+- name: Run EFA installer
+  ansible.builtin.shell:
+    chdir: '{{ efa_installer.dest }}/aws-efa-installer'
+    # We only need the kernel module and rdma-core
+    # OpenMPI and libfabric (along with NCCL, etc.) should
+    # be provided in the application container
+    cmd: ./efa_installer.sh --enable-gdr --minimal --yes
+
+- name: Ensure ptrace protection is disabled
+  ansible.posix.seboolean:
+    name: deny_ptrace
+    state: false
+    persistent: true

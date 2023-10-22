@@ -266,7 +266,7 @@ build {
   sources = ["source.amazon-ebs.this"]
 
   provisioner "ansible" {
-    playbook_file = "./playbooks/al2023_playbook.yaml"
+    playbook_file = "./playbooks/main.yaml"
     # Required for connecting via AWS Session Manager
     use_proxy = false
 

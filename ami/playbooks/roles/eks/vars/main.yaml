@@ -1,6 +1,4 @@
 ---
-arch: amd64
-
 # Ref: aws s3 ls s3://amazon-eks/1.27.3/2023-06-30/bin/linux/amd64/
 kubernetes_version: "{{ [version]| map('extract', versions, 'kubernetes_version') | last}}"
 kubernetes_build_date: "{{ [version]| map('extract', versions, 'kubernetes_build_date') | last}}"
