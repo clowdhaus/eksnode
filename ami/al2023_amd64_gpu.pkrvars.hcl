@@ -14,5 +14,5 @@ launch_block_device_mappings = [
 # Amazon Linux 2023 minimal does not come with SSM agent installed by default
 user_data_file = "./files/ssm_user_data.sh"
 
-install_nvidia_driver = true
-install_efa_driver    = true
+install_nvidia = true
+install_efa    = true

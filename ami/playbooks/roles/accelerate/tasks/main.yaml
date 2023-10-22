@@ -1,5 +1,6 @@
 ---
 - name: Install prerequisites
+  when: install_nvidia|bool or install_efa|bool
   block:
     - name: Install dnf packages
       ansible.builtin.dnf:
@@ -15,6 +16,7 @@
 #########################################################
 
 - name: Limit deeper C-stats
+  when: install_efa|bool
   block:
     - name: Limit Intel processors deeper C-state
       ansible.builtin.lineinfile:
@@ -41,7 +43,7 @@
 #########################################################
 
 - name: Install NVIDIA driver
-  when: install_nvidia_driver|bool
+  when: install_nvidia|bool
   block:
     - name: Install NVIDIA supporting packages
       ansible.builtin.dnf:
@@ -70,6 +72,7 @@
 
 # https://github.com/NVIDIA/libnvidia-container/issues/208#issuecomment-1596723034
 - name: Install NVIDIA container toolkit
+  when: install_nvidia|bool
   block:
     - name: Add nvidia-container-toolkit repo
       yum_repository:
@@ -149,6 +152,7 @@
 #########################################################
 
 - name: Remove install prerequisites
+  when: install_nvidia|bool or install_efa|bool
   block:
     - name: Remove dnf packages
       ansible.builtin.dnf:

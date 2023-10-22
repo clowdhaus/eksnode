@@ -20,14 +20,14 @@ variable "cpu_architecture" {
 # Ansible
 ################################################################################
 
-variable "install_nvidia_driver" {
-  description = "If `true`, the NVIDIA driver will be installed on the instance. Defaults to `false`"
+variable "install_nvidia" {
+  description = "If `true`, the NVIDIA components will be installed on the instance. Defaults to `false`"
   type        = bool
   default     = false
 }
 
-variable "install_efa_driver" {
-  description = "If `true`, the EFA driver will be installed on the instance. Defaults to `false`"
+variable "install_efa" {
+  description = "If `true`, the EFA components will be installed on the instance. Defaults to `false`"
   type        = bool
   default     = false
 }

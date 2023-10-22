@@ -275,8 +275,8 @@ build {
         {
           version = var.eks_version
 
-          install_nvidia_driver = var.install_nvidia_driver
-          install_efa_driver    = var.install_efa_driver
+          install_nvidia = var.install_nvidia
+          install_efa    = var.install_efa
 
           harden_cis = var.harden_cis
         }
