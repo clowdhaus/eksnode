@@ -34,6 +34,6 @@ async fn main() -> Result<()> {
     // artifact version to the given Kubernetes version. EKS vended artifacts are built and stored in S3
     // and are not available via a public API. This file is used to map the Kubernetes version to the
     // correct artifact version.
-    Commands::UpdateArtifactVersions => versions::update_artifact_versions(cur_dir).await
+    Commands::UpdateArtifactVersions => versions::update_artifact_versions(cur_dir).await,
   }
 }
