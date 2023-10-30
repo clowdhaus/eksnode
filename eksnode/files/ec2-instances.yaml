@@ -1222,6 +1222,20 @@ c7i.large:
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
   maximum_network_interfaces: 3
+c7i.metal-24xl:
+  default_vcpus: 96
+  eni_maximum_pods: 737
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
+c7i.metal-48xl:
+  default_vcpus: 192
+  eni_maximum_pods: 737
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
 c7i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
@@ -3350,6 +3364,20 @@ m7i.large:
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
   maximum_network_interfaces: 3
+m7i.metal-24xl:
+  default_vcpus: 96
+  eni_maximum_pods: 737
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
+m7i.metal-48xl:
+  default_vcpus: 192
+  eni_maximum_pods: 737
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
 m7i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
@@ -4701,6 +4729,20 @@ r7i.large:
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
   maximum_network_interfaces: 3
+r7i.metal-24xl:
+  default_vcpus: 96
+  eni_maximum_pods: 737
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
+r7i.metal-48xl:
+  default_vcpus: 192
+  eni_maximum_pods: 737
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
 r7i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
