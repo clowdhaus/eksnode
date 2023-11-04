@@ -83,7 +83,7 @@ async fn get_imds_client() -> Result<ImdsClient> {
     client = client.endpoint(endpoint.parse::<Uri>()?);
   }
 
-  Ok(client.build().await?)
+  Ok(client.build())
 }
 
 pub async fn get_private_dns_name(instance_id: &str, client: &Client) -> Result<String> {
@@ -170,34 +170,43 @@ impl InstanceMetadata {
 /// Collects the relevant metadata from IMDS used in joining node to cluster
 pub async fn get_imds_data() -> Result<InstanceMetadata> {
   let client = get_imds_client().await?;
-  let availability_zone = client.get("/latest/meta-data/placement/availability-zone").await?;
-  let region = client.get("/latest/meta-data/placement/region").await?;
-  let domain = client.get("/latest/meta-data/services/domain").await?;
-  let mac_address: String = client.get("/latest/meta-data/mac").await?;
+  let availability_zone = client
+    .get("/latest/meta-data/placement/availability-zone")
+    .await?
+    .into();
+  let region = client.get("/latest/meta-data/placement/region").await?.into();
+  let domain = client.get("/latest/meta-data/services/domain").await?.into();
+  let mac_address = client.get("/latest/meta-data/mac").await?.into();
   let vpc_ipv4_cidr_blocks = client
     .get(&format!(
       "/latest/meta-data/network/interfaces/macs/{mac_address}/vpc-ipv4-cidr-blocks"
     ))
     .await
     .expect("Failed to get VPC IPv4 CIDR blocks")
+    .as_ref()
     .split('\n')
     .map(|s| s.parse::<Ipv4Net>().expect("Failed to parse VPC IPv4 CIDR block"))
     .collect();
   let local_ipv4 = match client.get("/latest/meta-data/local-ipv4").await {
-    Ok(s) => Some(s.parse::<Ipv4Addr>().expect("Failed to parse local IPv4 address")),
+    Ok(s) => Some(
+      s.as_ref()
+        .parse::<Ipv4Addr>()
+        .expect("Failed to parse local IPv4 address"),
+    ),
     Err(_) => None,
   };
   let ipv6s_uri = format!("/latest/meta-data/network/interfaces/macs/{mac_address}/ipv6s");
   let ipv6_addresses = match client.get(&ipv6s_uri).await {
     Ok(s) => Some(
-      s.split('\n')
+      s.as_ref()
+        .split('\n')
         .map(|s| s.parse::<Ipv6Addr>().expect("Failed to parse IPv6 address"))
         .collect(),
     ),
     Err(_) => None,
   };
-  let instance_type = client.get("/latest/meta-data/instance-type").await?;
-  let instance_id = client.get("/latest/meta-data/instance-id").await?;
+  let instance_type = client.get("/latest/meta-data/instance-type").await?.into();
+  let instance_id = client.get("/latest/meta-data/instance-id").await?.into();
 
   let metadata = InstanceMetadata {
     availability_zone,
@@ -219,7 +228,7 @@ pub async fn get_instance_type() -> Result<String> {
   let client = get_imds_client().await?;
   let instance_type = client.get("/latest/meta-data/instance-type").await?;
 
-  Ok(instance_type)
+  Ok(instance_type.into())
 }
 
 /// Get the current region from IMDS endpoint
@@ -227,7 +236,7 @@ pub async fn get_region() -> Result<String> {
   let client = get_imds_client().await?;
   let region = client.get("/latest/meta-data/placement/region").await?;
 
-  Ok(region)
+  Ok(region.into())
 }
 
 /// Returns all regions for the current partition

@@ -188,32 +188,25 @@ pub async fn get_addon_versions(name: &str, kubernetes_version: &str) -> Result<
     .await?;
 
   // Since we are providing an addon name, we are only concerned with the first and only item
-  let addon = describe.addons().unwrap_or_default().get(0).unwrap();
-  let latest_version = match addon.addon_versions() {
-    Some(versions) => match versions.first() {
-      Some(version) => version.addon_version().unwrap_or_default(),
-      None => {
-        bail!("Version not found for addon {name}");
-      }
-    },
-    None => bail!("No versions found for addon {name}"),
+  let addon = describe
+    .addons()
+    .first()
+    .expect("describe addons failed to return results");
+  let latest_version = match addon.addon_versions().first() {
+    Some(version) => version.addon_version().unwrap_or_default(),
+    None => {
+      bail!("Version not found for addon {name}");
+    }
   };
 
   // The default version as specified by the EKS API for a given addon and Kubernetes version
-  let default_version = match addon.addon_versions() {
-    Some(versions) => versions
-      .iter()
-      .filter(|v| {
-        v.compatibilities()
-          .unwrap_or_default()
-          .iter()
-          .any(|c| c.default_version)
-      })
-      .map(|v| v.addon_version().unwrap_or_default())
-      .next()
-      .unwrap_or_default(),
-    None => bail!("Default version not found for addon {name}"),
-  };
+  let default_version = addon
+    .addon_versions()
+    .iter()
+    .filter(|v| v.compatibilities().iter().any(|c| c.default_version))
+    .map(|v| v.addon_version().unwrap_or_default())
+    .next()
+    .unwrap_or_default();
 
   Ok(AddonVersion {
     latest: latest_version.to_owned(),

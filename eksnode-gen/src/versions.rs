@@ -10,7 +10,6 @@ use aws_sdk_s3::{config::Region, Client};
 use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use tokio_stream::StreamExt;
 
 /// The Amazon EKS S3 bucket where the artifacts are stored
 static S3_BUCKET_NAME: &str = "amazon-eks";

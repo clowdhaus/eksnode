@@ -166,7 +166,7 @@ mod tests {
     insta::assert_debug_snapshot!(new);
     assert_eq!(new.api_version, "kubelet.config.k8s.io/v1alpha1".to_owned());
     assert_eq!(
-      new.providers.get(0).unwrap().api_version,
+      new.providers.first().unwrap().api_version,
       "credentialprovider.kubelet.k8s.io/v1alpha1".to_owned()
     );
 
@@ -189,7 +189,7 @@ mod tests {
     insta::assert_debug_snapshot!(new);
     assert_eq!(new.api_version, "kubelet.config.k8s.io/v1".to_owned());
     assert_eq!(
-      new.providers.get(0).unwrap().api_version,
+      new.providers.first().unwrap().api_version,
       "credentialprovider.kubelet.k8s.io/v1".to_owned()
     );
 

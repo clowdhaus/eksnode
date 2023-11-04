@@ -11,7 +11,6 @@ use eksnode::resource::calculate_eni_max_pods;
 use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use tokio_stream::StreamExt;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Instance {
