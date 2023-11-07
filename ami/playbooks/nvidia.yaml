@@ -7,7 +7,7 @@
     name: '{{ item }}'
     state: present
   loop:
-    - libXft.x86_64 # required for nvidia-settings
+    - kernel-modules-extra
 
 - name: Download NVIDIA driver installer {{ nvidia_driver_version }}
   ansible.builtin.get_url:
@@ -62,3 +62,14 @@
     name: nvidia-container-toolkit
     state: latest
     update_cache: true
+
+#########################################################
+# NVIDIA driver
+#########################################################
+
+- name: Remove development/compilation packages
+  ansible.builtin.dnf:
+    name: '{{ item }}'
+    state: absent
+  loop:
+    - kernel-modules-extra
