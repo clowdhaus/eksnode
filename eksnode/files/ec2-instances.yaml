@@ -1355,6 +1355,13 @@ dl1.24xlarge:
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
   maximum_network_interfaces: 15
+dl2q.24xlarge:
+  default_vcpus: 96
+  eni_maximum_pods: 737
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
 f1.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 394
