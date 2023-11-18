@@ -2,7 +2,7 @@
 # NVIDIA driver
 #########################################################
 
-- name: Install NVIDIA supporting packages
+- name: Install NVIDIA prerequisites
   ansible.builtin.dnf:
     name: '{{ item }}'
     state: present
@@ -64,7 +64,7 @@
     update_cache: true
 
 #########################################################
-# NVIDIA driver
+# Clean-up
 #########################################################
 
 - name: Remove development/compilation packages

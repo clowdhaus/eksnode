@@ -61,7 +61,7 @@ ContainerdConfiguration {
                         },
                     },
                     "registry": Object {
-                        "config_path": String("/etc/containerd/certs.d:/etc/docker/certs.d"),
+                        "config_path": String("/etc/containerd/certs.d"),
                     },
                     "sandbox_image": String("602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8"),
                 },

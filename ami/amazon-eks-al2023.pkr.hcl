@@ -203,7 +203,7 @@ source "amazon-ebs" "this" {
   source_ami              = data.amazon-parameterstore.this.value
 
   dynamic "subnet_filter" {
-    for_each = length(var.subnet_filter) > 0 ? var.subnet_filter : []
+    for_each = length(var.subnet_filter) > 0 ? [var.subnet_filter] : []
 
     content {
       filters   = try(subnet_filter.value.filters, null)
@@ -275,6 +275,7 @@ build {
         {
           version = var.eks_version
 
+          install_neuron = var.install_neuron
           install_nvidia = var.install_nvidia
           install_efa    = var.install_efa
 

@@ -1,0 +1,45 @@
+#########################################################
+# Neuron packages
+#########################################################
+
+- name: Install Neuron prerequisites
+  ansible.builtin.dnf:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - kernel-modules-extra
+
+- name: Add Neuron repo
+  yum_repository:
+    name: neuron
+    description: Neuron YUM Repository
+    baseurl: https://yum.repos.neuron.amazonaws.com/
+    priority: 12
+    keepcache: 0
+    gpgcheck: true
+    enabled: true
+    gpgkey: https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+
+- name: Import Neuron GPG key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
+
+- name: Install Neuron packages
+  ansible.builtin.dnf:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - aws-neuronx-dkms-2.*
+    - aws-neuronx-oci-hook-2.*
+
+#########################################################
+# Clean-up
+#########################################################
+
+- name: Remove development/compilation packages
+  ansible.builtin.dnf:
+    name: '{{ item }}'
+    state: absent
+  loop:
+    - kernel-modules-extra

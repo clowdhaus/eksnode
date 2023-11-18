@@ -20,6 +20,12 @@ variable "cpu_architecture" {
 # Ansible
 ################################################################################
 
+variable "install_neuron" {
+  description = "If `true`, the AWS Neuron components will be installed on the instance. Defaults to `false`"
+  type        = bool
+  default     = false
+}
+
 variable "install_nvidia" {
   description = "If `true`, the NVIDIA components will be installed on the instance. Defaults to `false`"
   type        = bool
@@ -646,8 +652,12 @@ variable "skip_profile_validation" {
 
 variable "subnet_filter" {
   description = "Filters used to populate the subnet_id field. `subnet_id` take precedence over this"
-  type        = list(map(string))
-  default     = []
+  default     = {
+  filters = {
+        "tag:eksnode" = "private"
+  }
+  random = true
+}
 }
 
 variable "subnet_id" {

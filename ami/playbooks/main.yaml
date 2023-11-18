@@ -17,9 +17,9 @@
     #########################################################
 
     - name: Accelerated tasks
-      when: install_nvidia|bool or install_efa|bool
+      when: install_nvidia|bool or install_neuron|bool or install_efa|bool
       block:
-        - name: Install dnf packages
+        - name: Install packages
           ansible.builtin.dnf:
             name: '{{ item }}'
             state: present
@@ -32,25 +32,28 @@
           ansible.builtin.import_tasks:
             file: nvidia.yaml
 
+        - name: Run Neuron tasks
+          when: install_neuron|bool
+          ansible.builtin.import_tasks:
+            file: neuron.yaml
+
         - name: Run EFA tasks
           when: install_efa|bool
           ansible.builtin.import_tasks:
             file: efa.yaml
 
-        - name: Remove install prerequisites
-          block:
-            - name: Remove dnf packages
-              ansible.builtin.dnf:
-                name: '{{ item }}'
-                state: absent
-                autoremove: true
-              loop:
-                - gcc
-                - kernel-devel
-                - libstdc++-devel
-                - rpmdevtools
-                - rdma-core-devel
-                - cmake
+        - name: Clean-up packages
+          ansible.builtin.dnf:
+            name: '{{ item }}'
+            state: absent
+            autoremove: true
+          loop:
+            - gcc
+            - kernel-devel
+            - libstdc++-devel
+            - rpmdevtools
+            - rdma-core-devel
+            - cmake
 
     #########################################################
     # CIS Level 1 and 2 baseline
@@ -61,17 +64,15 @@
       become: true
       become_user: root
       block:
-        - name: Install dnf packages
-          block:
-            - name: Install dnf packages
-              ansible.builtin.dnf:
-                name: '{{ item }}'
-                state: present
-              loop:
-                - acl
-                - aide
-                - firewalld
-                - rsyslog
+        - name: Install packages
+          ansible.builtin.dnf:
+            name: '{{ item }}'
+            state: present
+          loop:
+            - acl
+            - aide
+            - firewalld
+            - rsyslog
 
         - name: Amazon Linux 2023 CIS
           ansible.builtin.include_role:
@@ -93,15 +94,13 @@
     - name: Enable FIPS Mode
       when: harden_fips|bool
       block:
-        - name: Install dnf packages
-          block:
-            - name: Install dnf packages
-              ansible.builtin.dnf:
-                name: '{{ item }}'
-                state: present
-              loop:
-                - crypto-policies
-                - crypto-policies-scripts
+        - name: Install packages
+          ansible.builtin.dnf:
+            name: '{{ item }}'
+            state: present
+          loop:
+            - crypto-policies
+            - crypto-policies-scripts
 
         - name: Enable FIPs mode
           ansible.builtin.shell: |

@@ -22,6 +22,7 @@ pub struct Templates;
 #[derive(Copy, Clone, Debug, ValueEnum, Serialize, Deserialize)]
 pub enum DefaultRuntime {
   Containerd,
+  Neuron,
   Nvidia,
 }
 
@@ -130,31 +131,46 @@ impl ContainerdConfiguration {
       DefaultRuntime::Containerd => {
         r#"
 [plugins."io.containerd.grpc.v1.cri".containerd]
-default_runtime_name = "runc"
-discard_unpacked_layers = true
+  default_runtime_name = "runc"
+  discard_unpacked_layers = true
 
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-runtime_type = "io.containerd.runc.v2"
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+    runtime_type = "io.containerd.runc.v2"
 
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-SystemdCgroup = true
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+      SystemdCgroup = true
+"#
+      }
+      DefaultRuntime::Neuron => {
+        r#"
+[plugins."io.containerd.grpc.v1.cri".containerd]
+  default_runtime_name = "neuron"
+  discard_unpacked_layers = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron]
+   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron.options]
+      BinaryName = "/opt/aws/neuron/bin/oci_neuron_hook_wrapper.sh"
+
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron]
+    runtime_type = "io.containerd.runc.v2"
+
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron.options]
+      SystemdCgroup = true
+      BinaryName = "/opt/aws/neuron/bin/oci_neuron_hook_wrapper.sh"
 "#
       }
       DefaultRuntime::Nvidia => {
         r#"
 [plugins."io.containerd.grpc.v1.cri".containerd]
-default_runtime_name = "nvidia"
-discard_unpacked_layers = true
+  default_runtime_name = "nvidia"
+  discard_unpacked_layers = true
 
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
-privileged_without_host_devices = false
-runtime_engine = ""
-runtime_root = ""
-runtime_type = "io.containerd.runc.v2"
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+    runtime_type = "io.containerd.runc.v2"
 
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
-SystemdCgroup = true
-BinaryName = "/usr/bin/nvidia-container-runtime"
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+      SystemdCgroup = true
+      BinaryName = "/usr/bin/nvidia-container-runtime"
 "#
       }
     };

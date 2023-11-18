@@ -10,16 +10,16 @@ disabled_plugins = [
 ]
 
 [grpc]
-address = "/run/containerd/containerd.sock"
+  address = "/run/containerd/containerd.sock"
 
 [plugins."io.containerd.grpc.v1.cri"]
-sandbox_image = "{{SANDBOX_IMAGE}}"
+  sandbox_image = "{{SANDBOX_IMAGE}}"
 
 [plugins."io.containerd.grpc.v1.cri".cni]
-bin_dir = "/opt/cni/bin"
-conf_dir = "/etc/cni/net.d"
+  bin_dir = "/opt/cni/bin"
+  conf_dir = "/etc/cni/net.d"
 
 {{RUNTIME}}
 
 [plugins."io.containerd.grpc.v1.cri".registry]
-config_path = "/etc/containerd/certs.d:/etc/docker/certs.d"
+  config_path = "/etc/containerd/certs.d"
