@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::ValueEnum;
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
+use serde_json::{json, Value as JsonValue};
 
 use crate::utils;
 
@@ -43,6 +44,88 @@ pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, 
   utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
 }
 
+// https://github.com/serde-rs/json/issues/377#issuecomment-341490464
+fn merge(a: &mut JsonValue, b: &JsonValue) {
+  match (a, b) {
+    (&mut JsonValue::Object(ref mut a), JsonValue::Object(b)) => {
+      for (k, v) in b {
+        merge(a.entry(k.clone()).or_insert(JsonValue::Null), v);
+      }
+    }
+    (a, b) => {
+      *a = b.clone();
+    }
+  }
+}
+
+fn get_plugins_config(default_runtime: &DefaultRuntime, sandbox_image: &str) -> Result<JsonValue> {
+  let mut base = json!({
+          "io.containerd.grpc.v1.cri": {
+            "sandbox_image": sandbox_image,
+            "cni": {
+              "bin_dir": "/opt/cni/bin",
+              "conf_dir": "/etc/cni/net.d"
+            },
+            "containerd": {
+              "default_runtime_name": "runc",
+              "discard_unpacked_layers": true,
+
+              "runtimes": {
+                "runc": {
+                  "runtime_type": "io.containerd.runc.v2",
+                  "options": {
+                    "SystemdCgroup": true
+                  }
+                }
+              }
+            },
+            "registry": {
+              "config_path": "/etc/containerd/certs.d"
+            }
+          }
+  });
+
+  let runtime = match default_runtime {
+    DefaultRuntime::Containerd => json!({}),
+    DefaultRuntime::Neuron => json!({
+          "io.containerd.grpc.v1.cri": {
+            "containerd": {
+              "default_runtime_name": "neuron",
+
+              "runtimes": {
+                "neuron": {
+                  "runtime_type": "io.containerd.runc.v2",
+                  "options": {
+                    "SystemdCgroup": true,
+                    "BinaryName": "/opt/aws/neuron/bin/oci_neuron_hook_wrapper.sh"
+                  }
+                }
+              }
+            }
+          }
+    }),
+    DefaultRuntime::Nvidia => json!({
+          "io.containerd.grpc.v1.cri": {
+            "containerd": {
+              "default_runtime_name": "nvidia",
+
+              "runtimes": {
+                "nvidia": {
+                  "runtime_type": "io.containerd.runc.v2",
+                  "options": {
+                    "SystemdCgroup": true,
+                    "BinaryName": "/usr/bin/nvidia-container-runtime"
+                  }
+                }
+              }
+            }
+        }
+    }),
+  };
+  merge(&mut base, &runtime);
+
+  Ok(base)
+}
 /// Config provides containerd configuration data for the server
 ///
 /// https://github.com/containerd/containerd/blob/main/services/server/config/config.go
@@ -124,63 +207,27 @@ pub struct ContainerdConfiguration {
 
 impl ContainerdConfiguration {
   pub fn new(default_runtime: &DefaultRuntime, sandbox_image: &str) -> Result<Self> {
-    let tmpl = Templates::get("containerd-config.toml").unwrap();
-    let tmpl = std::str::from_utf8(tmpl.data.as_ref())?;
+    let plugins_config = get_plugins_config(default_runtime, sandbox_image)?;
 
-    let runtime = match default_runtime {
-      DefaultRuntime::Containerd => {
-        r#"
-[plugins."io.containerd.grpc.v1.cri".containerd]
-  default_runtime_name = "runc"
-  discard_unpacked_layers = true
-
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-    runtime_type = "io.containerd.runc.v2"
-
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-      SystemdCgroup = true
-"#
-      }
-      DefaultRuntime::Neuron => {
-        r#"
-[plugins."io.containerd.grpc.v1.cri".containerd]
-  default_runtime_name = "neuron"
-  discard_unpacked_layers = true
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron]
-   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron.options]
-      BinaryName = "/opt/aws/neuron/bin/oci_neuron_hook_wrapper.sh"
-
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron]
-    runtime_type = "io.containerd.runc.v2"
-
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.neuron.options]
-      SystemdCgroup = true
-      BinaryName = "/opt/aws/neuron/bin/oci_neuron_hook_wrapper.sh"
-"#
-      }
-      DefaultRuntime::Nvidia => {
-        r#"
-[plugins."io.containerd.grpc.v1.cri".containerd]
-  default_runtime_name = "nvidia"
-  discard_unpacked_layers = true
-
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
-    runtime_type = "io.containerd.runc.v2"
-
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
-      SystemdCgroup = true
-      BinaryName = "/usr/bin/nvidia-container-runtime"
-"#
-      }
-    };
-
-    let contents = tmpl
-      .replace("{{SANDBOX_IMAGE}}", sandbox_image)
-      .replace("{{RUNTIME}}", runtime.trim());
-    let config: ContainerdConfiguration = toml::from_str(&contents)?;
-
-    Ok(config)
+    Ok(ContainerdConfiguration {
+      version: 2,
+      root: Some("/var/lib/containerd".to_string()),
+      state: Some("/run/containerd".to_string()),
+      grpc: Some(GrpcConfig {
+        address: Some("/run/containerd/containerd.sock".to_string()),
+        ..Default::default()
+      }),
+      disabled_plugins: Some(vec![
+        "io.containerd.internal.v1.opt".to_string(),
+        "io.containerd.snapshotter.v1.aufs".to_string(),
+        "io.containerd.snapshotter.v1.devmapper".to_string(),
+        "io.containerd.snapshotter.v1.native".to_string(),
+        "io.containerd.snapshotter.v1.zfs".to_string(),
+      ]),
+      required_plugins: None,
+      plugins: Some(BTreeMap::from([("plugins".to_string(), plugins_config)])),
+      ..Default::default()
+    })
   }
 
   pub fn read<P: AsRef<Path>>(path: P) -> Result<Self> {
