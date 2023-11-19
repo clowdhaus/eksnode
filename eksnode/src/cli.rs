@@ -54,11 +54,11 @@ pub enum Commands {
   ///
   /// Supports pulling one image as specified or for pulling commonly used images
   /// to be cached on the host/AMI
-  Pull(commands::pull::ImageInput),
+  PullImage(commands::pull::ImageInput),
 
   /// Join an instance to the cluster
-  Join(commands::join::Node),
+  JoinCluster(commands::join::Node),
 
   /// Validate the node configuration
-  Validate(commands::validate::Validation),
+  ValidateNode(commands::validate::Validation),
 }
