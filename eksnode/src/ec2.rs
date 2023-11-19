@@ -80,7 +80,8 @@ async fn get_imds_client() -> Result<ImdsClient> {
     .read_timeout(Duration::from_secs(5));
 
   if let Ok(endpoint) = std::env::var("IMDS_ENDPOINT") {
-    client = client.endpoint(endpoint.parse::<Uri>()?);
+    let endpoint = endpoint.parse::<Uri>()?;
+    client = client.endpoint(endpoint.to_string()).map_err(|e| anyhow::anyhow!(e))?;
   }
 
   Ok(client.build())

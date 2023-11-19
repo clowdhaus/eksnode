@@ -19,9 +19,9 @@ categories = [
 [workspace.dependencies]
 anstyle = "1.0"
 anyhow = "1.0"
-aws-config = "0.57"
-aws-types = "0.57"
-aws-sdk-ec2 = "0.35"
+aws-config = {version="0.101", features=["behavior-version-latest"]}
+aws-types = "0.101"
+aws-sdk-ec2 = "0.38"
 clap = { version = "4.2", features = ["derive", "env", "color"] }
 clap-verbosity-flag = "2.0"
 regex-lite = "0.1"
