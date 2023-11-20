@@ -1,20 +1,20 @@
 site_name: eksnode
-docs_dir: 'docs/'
-copyright: 'Copyright &copy; Clowd Haus 2023'
-site_author: 'ClowdHaus'
-site_url: 'https://clowdhaus.github.io/eksnode/'
-repo_name: 'eksnode'
-repo_url: 'https://github.com/clowdhaus/eksnode'
+docs_dir: docs/
+copyright: Copyright &copy; Clowd Haus 2023
+site_author: ClowdHaus
+site_url: https://clowdhaus.github.io/eksnode/
+repo_name: eksnode
+repo_url: https://github.com/clowdhaus/eksnode
 
 theme:
   name: material
   logo: images/favicon.ico
   favicon: images/favicon.ico
   font:
-    text: ember
+    text: Roboto
   palette:
-    primary: blue grey
-    accent: deep orange
+    primary: black
+    accent: orange
   icon:
     repo: fontawesome/brands/github
     admonition:
@@ -32,6 +32,7 @@ theme:
       quote: octicons/quote-16
   features:
     - navigation.tabs.sticky
+    - navigation.footer
   highlightjs: true
   hljs_languages:
     - yaml
@@ -45,8 +46,14 @@ plugins:
   - awesome-pages
 
 extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/clowdhaus/eksnode
   version:
     provider: mike
+
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - admonition

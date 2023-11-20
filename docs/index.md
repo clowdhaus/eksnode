@@ -1,53 +1,13 @@
-## Motivation
-
-1. Fresh slate to build using the latest technologies
-    - AL2  -> AL2023
-    - cgroup v1 -> v2
-    - Docker is removed and containerd is the default
-      - Option to add additional volume for containerd only
-    - Add <https://github.com/awslabs/soci-snapshotter> by default
-    - Add support for "profiles" for different workload types
-      - Change default max PIDs
-    - Add support for network proxy <https://github.com/awslabs/amazon-eks-ami/issues/1182>
-
-2. Improve the development process and increase confidence in changes
-    - Bash scripts + various *nix tools -> single, custom executable
-      - Reduce the amount of additional tools that need to be installed to facilitate bootstrap process
-    - Introduce unit tests, snapshot tests, and various integration tests
-    - CLI provides ability to run various commands both locally and on host all through same interface/executable
-      - Bootstrap, calc max pods, collect logs, validate configs, etc.
-    - Improve troubleshooting through the use debug logging controlled by variable flag
-
-3. Provide a stable interface and better support for customization to override default values
-    - Improved validation of input parameters
-    - Support for customizing the AMI using a configuration file
-    - Support for specifying core component versions
-      - containerd, runc, CNI
-      - NVIDIA driver, EFA, etc.
-    - Support for providing a kubelet config file
-      - Either replace or merge with default kubelet config
-      - <https://github.com/awslabs/amazon-eks-ami/issues/661>
-
-4. The ability to generate multiple AMI types/configurations
-    - CIS compliant AMIs (default)
-    - STIG, FedRAMP, FIPS compliant AMIs
-      - <https://github.com/awslabs/amazon-eks-ami/pull/1028>
-    - AMIs w/ GPU support (drivers and devices)
 
 ## Image vs Bootstrap
 
-There are tradeoffs when it comes to determining if a change should be made to the image or the node join process. Baking the changes into the image results in faster instance startup times but reduces the configuration flexibility and increase the amount of image variants. Making the changes during node provisioning results in longer startup times but allows for a more flexible and dynamic configuration. See below for more details on how we approached this tradeoff below and some of the factors that influenced our decisions.
+There are primarily two phases - image creation and node provisioning. The image creation process is responsible for installing components and setting static configuration while the node provisioning process is responsible for performing dynamic configuration that cannot, or should not, be baked into the image. There is a tradeoff between image creation and node provisioning with respect to image flexibility and size versus the time required to join the cluster.
+
+The more that can be baked into the image, the less time that is required for the node to join the cluster. However, this also means that the image will be either less flexible with respect to the various configurations it supports or the image will increase in size resulting in slower startup times. Conversely, making the image more flexible by moving more tasks to the node provisioning process will result in more time required for the node to join the cluster.
 
 ### Image
 
 As much work as possible should be performed during the image creation process in order to minimize the amount of time and process activity during node provisioning. The time penalty here is inconsequential when compared with the time penalty that would be incurred during node provisioning.
-
-- Create `/etc/kubernetes/pki` directory
-- ECR credential provider config - version dependent, not something users modify
-- Create `/etc/containerd` and `/etc/cni/net.d` directories
-  - Create systemd unit files and slices
-- Create `/etc/systemd/system/kubelet.service.d` directory
-- Mount BPF filesystem by default
 
 ### Bootstrap
 
@@ -60,9 +20,6 @@ As much work as possible should be performed during the image creation process i
     - <https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/>
     - <https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/>
 - Mount/partition instance store volumes
-- Containerd and kubelet path location
-- Enable EFA interfaces
-  - Configuration provided will allow customization of the EFA(s)
 - Add node labels
   - NFD & GFD common labels
 
@@ -86,3 +43,43 @@ As much work as possible should be performed during the image creation process i
 ### Terms
 
 - Node provisioning: the process of turning on an EC2 instance, performing initialization/setup processes, and joining the node to the cluster
+
+## Motivation
+
+1. Fresh slate to build using the latest technologies
+
+  |  | EKS AL2 AMI | eksnode |
+  |: --- :|: --- :|: --- :|
+  | Kernel | 5.10 | 6.1 |
+  | Docker | 20.10 | ❌ |
+  | containerd | 1.6 | 1.7 |
+  | cgroup | v1 | v2 |
+
+    - Add <https://github.com/awslabs/soci-snapshotter> by default
+    - Add support for "profiles" for different workload types
+      - Change default max PIDs
+    - Add support for network proxy <https://github.com/awslabs/amazon-eks-ami/issues/1182>
+
+2. Improve the development process and increase confidence in changes
+    - Bash scripts + various *nix tools -> single, custom executable
+      - Reduce the amount of additional tools required to facilitate joining the node to the cluster
+    - Introduce unit tests, snapshot tests, and various integration tests
+    - CLI provides ability to run various commands both locally and on host all through same interface/executable
+      - Bootstrap, calc max pods, collect logs, validate configs, etc.
+    - Improve troubleshooting through the use of debug logging controlled by variable flag
+
+3. Provide a stable interface and better support for customization to override default values
+    - Improved validation of input parameters
+    - Support for customizing the AMI using a configuration file
+    - Support for specifying core component versions
+      - containerd, runc, CNI
+      - NVIDIA driver, EFA, etc.
+    - Support for providing a kubelet config file
+      - Either replace or merge with default kubelet config
+      - <https://github.com/awslabs/amazon-eks-ami/issues/661>
+
+4. The ability to generate multiple AMI types/configurations
+    - CIS compliant AMIs (default)
+    - STIG, FedRAMP, FIPS compliant AMIs
+      - <https://github.com/awslabs/amazon-eks-ami/pull/1028>
+    - AMIs w/ GPU support (drivers and devices)
