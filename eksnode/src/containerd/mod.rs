@@ -5,6 +5,7 @@ use clap::ValueEnum;
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as JsonValue};
+use taplo::formatter;
 
 use crate::utils;
 
@@ -238,8 +239,22 @@ impl ContainerdConfiguration {
   }
 
   pub fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
-    let conf = toml::to_string_pretty(self)?;
-    utils::write_file(conf.as_bytes(), path, Some(0o644), chown)
+    let conf = toml::to_string(self)?;
+    let options = formatter::Options {
+      align_entries: true,
+      align_comments: true,
+      array_trailing_comma: true,
+      compact_arrays: true,
+      compact_inline_tables: true,
+      indent_tables: true,
+      indent_entries: true,
+      trailing_newline: true,
+      reorder_keys: false,
+      reorder_arrays: true,
+      ..Default::default()
+    };
+    let formatted = formatter::format(&conf, options);
+    utils::write_file(formatted.as_bytes(), &path, Some(0o644), chown)
   }
 }
 
