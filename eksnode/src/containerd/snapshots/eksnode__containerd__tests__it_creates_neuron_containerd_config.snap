@@ -1,0 +1,77 @@
+---
+source: eksnode/src/containerd/mod.rs
+expression: config
+---
+ContainerdConfiguration {
+    version: 2,
+    root: Some(
+        "/var/lib/containerd",
+    ),
+    state: Some(
+        "/run/containerd",
+    ),
+    temp_dir: None,
+    plugin_dir: None,
+    grpc: Some(
+        GrpcConfig {
+            address: Some(
+                "/run/containerd/containerd.sock",
+            ),
+            tcp_address: None,
+            tcp_tls_ca: None,
+            tcp_tls_cert: None,
+            tcp_tls_key: None,
+            uid: None,
+            gid: None,
+            max_recv_message_size: None,
+            max_send_message_size: None,
+        },
+    ),
+    ttrpc: None,
+    debug: None,
+    metrics: None,
+    disabled_plugins: Some(
+        [
+            "io.containerd.internal.v1.opt",
+            "io.containerd.snapshotter.v1.aufs",
+            "io.containerd.snapshotter.v1.devmapper",
+            "io.containerd.snapshotter.v1.native",
+            "io.containerd.snapshotter.v1.zfs",
+        ],
+    ),
+    required_plugins: None,
+    plugins: Some(
+        {
+            "plugins": Object {
+                "io.containerd.grpc.v1.cri": Object {
+                    "cni": Object {
+                        "bin_dir": String("/opt/cni/bin"),
+                        "conf_dir": String("/etc/cni/net.d"),
+                    },
+                    "containerd": Object {
+                        "default_runtime_name": String("runc"),
+                        "discard_unpacked_layers": Bool(true),
+                        "runtimes": Object {
+                            "runc": Object {
+                                "options": Object {
+                                    "SystemdCgroup": Bool(true),
+                                },
+                                "runtime_type": String("io.containerd.runc.v2"),
+                            },
+                        },
+                    },
+                    "registry": Object {
+                        "config_path": String("/etc/containerd/certs.d"),
+                    },
+                    "sandbox_image": String("602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8"),
+                },
+            },
+        },
+    ),
+    oom_score: None,
+    cgroup: None,
+    proxy_plugins: None,
+    timeouts: None,
+    imports: None,
+    stream_processors: None,
+}

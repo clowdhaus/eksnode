@@ -386,12 +386,12 @@
     - name: Pull standard images to cache
       when: not harden_fips|bool
       ansible.builtin.shell: |
-        eksnode pull --cached-images --no-color -vv
+        eksnode pull-image --cached-images --no-color -vv
 
     - name: Pull FIPs standard images to cache
       when: harden_fips|bool
       ansible.builtin.shell: |
-        eksnode pull --cached-images --enable-fips --no-color -vv
+        eksnode pull-image --cached-images --enable-fips --no-color -vv
 
     - name: Stop containerd service
       ansible.builtin.systemd:

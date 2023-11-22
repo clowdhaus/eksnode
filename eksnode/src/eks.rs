@@ -1,6 +1,7 @@
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 use anyhow::{bail, Result};
+use aws_config::BehaviorVersion;
 use aws_sdk_eks::{
   config::{self, retry::RetryConfig},
   Client,
@@ -12,7 +13,7 @@ use crate::{commands::join::Node, IpvFamily};
 
 /// Get the EKS client
 async fn get_client() -> Result<Client> {
-  let config = crate::get_sdk_config(None).await?;
+  let config = aws_config::load_defaults(BehaviorVersion::v2023_11_09()).await;
   let client = Client::from_conf(
     // Start with the shared environment configuration
     config::Builder::from(&config)

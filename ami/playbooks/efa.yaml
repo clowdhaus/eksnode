@@ -57,3 +57,15 @@
     name: deny_ptrace
     state: false
     persistent: true
+
+- name: Clean-up packages
+  ansible.builtin.dnf:
+    name: '{{ item }}'
+    state: absent
+    autoremove: true
+  loop:
+    - libstdc++-devel
+    - rpmdevtools
+    - rdma-core-devel
+    - cmake
+    - gcc

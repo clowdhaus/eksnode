@@ -2,13 +2,6 @@
 # Neuron packages
 #########################################################
 
-- name: Install Neuron prerequisites
-  ansible.builtin.dnf:
-    name: '{{ item }}'
-    state: present
-  loop:
-    - kernel-modules-extra
-
 - name: Add Neuron repo
   yum_repository:
     name: neuron
@@ -28,18 +21,10 @@
 - name: Install Neuron packages
   ansible.builtin.dnf:
     name: '{{ item }}'
-    state: present
+    state: installed
+    install_weak_deps: false
   loop:
+    # - oci-add-hooks
     - aws-neuronx-dkms-2.*
-    - aws-neuronx-oci-hook-2.*
-
-#########################################################
-# Clean-up
-#########################################################
-
-- name: Remove development/compilation packages
-  ansible.builtin.dnf:
-    name: '{{ item }}'
-    state: absent
-  loop:
-    - kernel-modules-extra
+    - aws-neuronx-tools-2.*
+    # - aws-neuronx-oci-hook-2.*

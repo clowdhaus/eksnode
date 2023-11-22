@@ -2,7 +2,7 @@
 
 ```sh
 packer init -upgrade=true .
-packer build -var-file=al2023_amd64.pkrvars.hcl -var 'subnet_id=subnet-xxx' .
+packer build -var-file=al2023_amd64.pkrvars.hcl .
 ```
 
 To update Packer docs:

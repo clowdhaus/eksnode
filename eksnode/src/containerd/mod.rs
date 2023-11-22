@@ -40,7 +40,7 @@ pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, 
 
   let contents = tmpl.replace(
     "{{EXEC_START}}",
-    &format!("eksnode pull --image {pause_image} --namespace k8s.io"),
+    &format!("eksnode pull-image --image {pause_image} --namespace k8s.io"),
   );
   utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
 }
@@ -68,17 +68,7 @@ fn get_plugins_config(default_runtime: &DefaultRuntime, sandbox_image: &str) -> 
               "conf_dir": "/etc/cni/net.d"
             },
             "containerd": {
-              "default_runtime_name": "runc",
               "discard_unpacked_layers": true,
-
-              "runtimes": {
-                "runc": {
-                  "runtime_type": "io.containerd.runc.v2",
-                  "options": {
-                    "SystemdCgroup": true
-                  }
-                }
-              }
             },
             "registry": {
               "config_path": "/etc/containerd/certs.d"
@@ -87,24 +77,6 @@ fn get_plugins_config(default_runtime: &DefaultRuntime, sandbox_image: &str) -> 
   });
 
   let runtime = match default_runtime {
-    DefaultRuntime::Containerd => json!({}),
-    DefaultRuntime::Neuron => json!({
-          "io.containerd.grpc.v1.cri": {
-            "containerd": {
-              "default_runtime_name": "neuron",
-
-              "runtimes": {
-                "neuron": {
-                  "runtime_type": "io.containerd.runc.v2",
-                  "options": {
-                    "SystemdCgroup": true,
-                    "BinaryName": "/opt/aws/neuron/bin/oci_neuron_hook_wrapper.sh"
-                  }
-                }
-              }
-            }
-          }
-    }),
     DefaultRuntime::Nvidia => json!({
           "io.containerd.grpc.v1.cri": {
             "containerd": {
@@ -121,6 +93,22 @@ fn get_plugins_config(default_runtime: &DefaultRuntime, sandbox_image: &str) -> 
               }
             }
         }
+    }),
+    _ => json!({
+            "io.containerd.grpc.v1.cri": {
+              "containerd": {
+                "default_runtime_name": "runc",
+
+                "runtimes": {
+                  "runc": {
+                    "runtime_type": "io.containerd.runc.v2",
+                    "options": {
+                      "SystemdCgroup": true
+                    }
+                  }
+                }
+              }
+            }
     }),
   };
   merge(&mut base, &runtime);
@@ -417,6 +405,20 @@ mod tests {
     let mut buf = String::new();
     file.read_to_string(&mut buf).unwrap();
     insta::assert_debug_snapshot!(buf);
+  }
+
+  #[test]
+  fn it_creates_neuron_containerd_config() {
+    let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8";
+    let config = ContainerdConfiguration::new(&DefaultRuntime::Neuron, sandbox_img).unwrap();
+    insta::assert_debug_snapshot!(config);
+  }
+
+  #[test]
+  fn it_creates_nvidia_containerd_config() {
+    let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8";
+    let config = ContainerdConfiguration::new(&DefaultRuntime::Nvidia, sandbox_img).unwrap();
+    insta::assert_debug_snapshot!(config);
   }
 
   #[test]

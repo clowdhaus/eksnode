@@ -1,4 +1,5 @@
 use anyhow::Result;
+use aws_config::BehaviorVersion;
 use aws_sdk_ecr::{
   config::{self, retry::RetryConfig, timeout::TimeoutConfig},
   Client,
@@ -8,8 +9,7 @@ use tracing::error;
 
 /// Get the ECR client
 pub async fn get_client() -> Result<Client> {
-  // TODO - standardize this across AWS clients
-  let sdk_config = crate::get_sdk_config(None).await?;
+  let sdk_config = aws_config::load_defaults(BehaviorVersion::v2023_11_09()).await;
   let timeout_config = TimeoutConfig::builder()
     .operation_attempt_timeout(Duration::from_secs(5))
     .build();

@@ -145,7 +145,7 @@ async fn get_images_to_cache(region: &str, enable_fips: bool, kubernetes_version
   images.push(format!("{ecr_uri}/amazon-k8s-cni:{}", vpc_cni_version.latest));
   images.push(format!("{ecr_uri}/amazon-k8s-cni-init:{}", vpc_cni_version.latest));
 
-  // // TODO - how to pull the correct image version
+  // TODO - how to pull the correct image version
   // images.push(format!("{ecr_uri}/aws-network-policy-agent:v1.0.2-eksbuild.1"));
 
   Ok(images)

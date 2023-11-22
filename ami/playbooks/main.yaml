@@ -23,37 +23,26 @@
           ansible.builtin.dnf:
             name: '{{ item }}'
             state: present
+            install_weak_deps: false
           loop:
-            - gcc
-            - kernel-devel
+            - kernel-headers-{{ansible_kernel}}
+            - kernel-devel-{{ansible_kernel}}
 
-        - name: Run NVIDIA tasks
-          when: install_nvidia|bool
-          ansible.builtin.import_tasks:
-            file: nvidia.yaml
-
-        - name: Run Neuron tasks
-          when: install_neuron|bool
-          ansible.builtin.import_tasks:
-            file: neuron.yaml
+        # - name: Run NVIDIA tasks
+        #   when: install_nvidia|bool
+        #   ansible.builtin.import_tasks:
+        #     file: nvidia.yaml
 
         - name: Run EFA tasks
           when: install_efa|bool
           ansible.builtin.import_tasks:
             file: efa.yaml
 
-        - name: Clean-up packages
-          ansible.builtin.dnf:
-            name: '{{ item }}'
-            state: absent
-            autoremove: true
-          loop:
-            - gcc
-            - kernel-devel
-            - libstdc++-devel
-            - rpmdevtools
-            - rdma-core-devel
-            - cmake
+        # Removing complilation libraries will remove aws-neuronx-dkms package
+        - name: Run Neuron tasks
+          when: install_neuron|bool
+          ansible.builtin.import_tasks:
+            file: neuron.yaml
 
     #########################################################
     # CIS Level 1 and 2 baseline
@@ -68,6 +57,7 @@
           ansible.builtin.dnf:
             name: '{{ item }}'
             state: present
+            install_weak_deps: false
           loop:
             - acl
             - aide
@@ -98,6 +88,7 @@
           ansible.builtin.dnf:
             name: '{{ item }}'
             state: present
+            install_weak_deps: false
           loop:
             - crypto-policies
             - crypto-policies-scripts

@@ -4,7 +4,7 @@ use std::{
 };
 
 use anyhow::{Context, Result};
-use aws_config::{imds::client::Client as ImdsClient, provider_config::ProviderConfig};
+use aws_config::{imds::client::Client as ImdsClient, provider_config::ProviderConfig, BehaviorVersion};
 use aws_sdk_ec2::{
   config::{self, retry::RetryConfig},
   Client,
@@ -27,7 +27,7 @@ const FIBONACCI_BACKOFF_BASE_DURATION_MILLIS: u64 = 200;
 
 /// Get the EC2 client
 pub async fn get_client() -> Result<Client> {
-  let sdk_config = crate::get_sdk_config(None).await?;
+  let sdk_config = aws_config::load_defaults(BehaviorVersion::v2023_11_09()).await;
   let client = Client::from_conf(
     // Start with the shared environment configuration
     config::Builder::from(&sdk_config)

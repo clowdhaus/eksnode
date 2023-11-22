@@ -1,13 +1,14 @@
-#########################################################
-# NVIDIA driver
-#########################################################
-
-- name: Install NVIDIA prerequisites
+- name: Install packages
   ansible.builtin.dnf:
     name: '{{ item }}'
     state: present
+    install_weak_deps: false
   loop:
-    - kernel-modules-extra
+    - gcc
+
+#########################################################
+# NVIDIA driver
+#########################################################
 
 - name: Download NVIDIA driver installer {{ nvidia_driver_version }}
   ansible.builtin.get_url:
@@ -62,14 +63,16 @@
     name: nvidia-container-toolkit
     state: latest
     update_cache: true
+    install_weak_deps: false
 
 #########################################################
 # Clean-up
 #########################################################
 
-- name: Remove development/compilation packages
+- name: Clean-up packages
   ansible.builtin.dnf:
     name: '{{ item }}'
     state: absent
+    autoremove: true
   loop:
-    - kernel-modules-extra
+    - gcc
