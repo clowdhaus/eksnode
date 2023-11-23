@@ -17,6 +17,7 @@ async fn main() -> Result<()> {
 
   match &cli.command {
     Commands::CalculateMaxPods(maxpods) => maxpods.result().await,
+    Commands::Debug(debug) => debug.debug().await,
     Commands::PullImage(image) => image.pull().await,
     Commands::JoinCluster(node) => node.join_node_to_cluster().await,
     Commands::ValidateNode(validate) => validate.validate().await,

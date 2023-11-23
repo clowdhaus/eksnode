@@ -50,6 +50,9 @@ pub enum Commands {
   /// the theoretical max pods limit.
   CalculateMaxPods(commands::calculate::MaxPods),
 
+  /// Expose and collect details about the node for debugging purposes
+  Debug(commands::debug::Debug),
+
   /// Pull images from a registry
   ///
   /// Supports pulling one image as specified or for pulling commonly used images
