@@ -30,6 +30,10 @@ pub struct CmdResult {
   pub status: i32,
 }
 
+pub trait CmdExecution {
+  fn exec() -> Result<CmdResult>;
+}
+
 /// Execute a command and return the output (stdout)
 pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<CmdResult> {
   let output = std::process::Command::new(cmd).args(args).output();

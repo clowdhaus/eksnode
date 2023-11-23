@@ -51,7 +51,7 @@ pub enum Commands {
   CalculateMaxPods(commands::calculate::MaxPods),
 
   /// Get the versions of the components installed
-  GetVersions(commands::versions::Versions),
+  GetVersions(commands::versions::GetVersionsInput),
 
   /// Expose and collect details about the node for debugging purposes
   Debug(commands::debug::Debug),
