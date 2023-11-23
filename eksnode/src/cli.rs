@@ -50,6 +50,9 @@ pub enum Commands {
   /// the theoretical max pods limit.
   CalculateMaxPods(commands::calculate::MaxPods),
 
+  /// Get the versions of the components installed
+  GetVersions(commands::versions::Versions),
+
   /// Expose and collect details about the node for debugging purposes
   Debug(commands::debug::Debug),
 

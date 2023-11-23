@@ -3,3 +3,4 @@ pub mod debug;
 pub mod join;
 pub mod pull;
 pub mod validate;
+pub mod versions;
