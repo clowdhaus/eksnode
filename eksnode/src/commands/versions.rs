@@ -1,6 +1,7 @@
 use anyhow::Result;
 use clap::Args;
 use serde::{Deserialize, Serialize};
+use tabled::{Table, Tabled};
 
 use crate::utils;
 
@@ -10,11 +11,10 @@ const RPM_SEPARATOR: char = '|';
 ///
 /// Release is optional as it is not always available; typically
 /// its only valid for RPM/Linux packages
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Tabled)]
 pub struct Package {
   name: String,
   version: String,
-  release: Option<String>,
 }
 
 pub trait PackageRepository {
@@ -46,6 +46,14 @@ impl GetVersionsInput {
   pub async fn get_versions(&self) -> Result<()> {
     let rpm = Rpm {};
     let rpm_versions = get_versions(rpm)?;
+
+    match self.output_markdown {
+      true => {
+        let table = Table::new(&rpm_versions).to_string();
+        println!("{}", table);
+      }
+      false => {}
+    }
 
     match self.output_json {
       true => {
@@ -86,8 +94,10 @@ impl PackageRepository for Rpm {
         let mut parts = line.split(RPM_SEPARATOR);
         Package {
           name: parts.next().unwrap_or_default().to_string(),
-          version: parts.next().unwrap_or_default().to_string(),
-          release: parts.next().map(|release| release.to_string()),
+          version: parts
+            .map(|release| release.to_string())
+            .collect::<Vec<String>>()
+            .join("-"),
         }
       })
       .collect::<Vec<Package>>();
@@ -111,12 +121,10 @@ mod tests {
           Package {
             name: "package1".to_string(),
             version: "1.0.0".to_string(),
-            release: Some("1".to_string()),
           },
           Package {
             name: "package2".to_string(),
             version: "2.0.0".to_string(),
-            release: None,
           },
         ];
         Ok(pkgs)
@@ -127,6 +135,5 @@ mod tests {
 
     assert_eq!(rpm_versions.first().unwrap().name, "package1");
     assert_eq!(rpm_versions.first().unwrap().version, "1.0.0");
-    assert_eq!(rpm_versions.first().unwrap().release, Some("1".to_string()));
   }
 }
