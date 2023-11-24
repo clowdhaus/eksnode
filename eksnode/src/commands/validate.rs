@@ -31,9 +31,9 @@ struct Validate<'a> {
 }
 
 #[derive(Args, Debug)]
-pub struct Validation {}
+pub struct ValidateNodeInput {}
 
-impl Validation {
+impl ValidateNodeInput {
   pub async fn validate(&self) -> Result<()> {
     let file = Assets::get("validate.yaml").unwrap();
     let contents = std::str::from_utf8(file.data.as_ref())?;

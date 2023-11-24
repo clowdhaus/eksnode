@@ -48,23 +48,23 @@ pub enum Commands {
   /// Unlike `calculate_eni_max_pods` which calculates the theoretical limit based on ENIs,
   /// this function calculates the actual limit based on all of the preceding factors including
   /// the theoretical max pods limit.
-  CalculateMaxPods(commands::calculate::MaxPods),
+  CalculateMaxPods(commands::calculate::CalculateMaxPodsInput),
 
   /// Get the versions of the components installed
   GetVersions(commands::versions::GetVersionsInput),
 
   /// Expose and collect details about the node for debugging purposes
-  Debug(commands::debug::Debug),
+  Debug(commands::debug::DebugInput),
 
   /// Pull images from a registry
   ///
   /// Supports pulling one image as specified or for pulling commonly used images
   /// to be cached on the host/AMI
-  PullImage(commands::pull::ImageInput),
+  PullImage(commands::pull::PullImageInput),
 
   /// Join an instance to the cluster
-  JoinCluster(commands::join::Node),
+  JoinCluster(commands::join::JoinClusterInput),
 
   /// Validate the node configuration
-  ValidateNode(commands::validate::Validation),
+  ValidateNode(commands::validate::ValidateNodeInput),
 }

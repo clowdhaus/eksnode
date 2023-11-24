@@ -15,7 +15,7 @@ const CONTAINERD_SOCK: &str = "/run/containerd/containerd.sock";
 
 #[derive(Args, Debug, Serialize, Deserialize)]
 #[command(group = clap::ArgGroup::new("pull").multiple(false).required(true))]
-pub struct ImageInput {
+pub struct PullImageInput {
   /// Container image
   #[arg(short, long, group = "pull")]
   image: Option<String>,
@@ -33,7 +33,7 @@ pub struct ImageInput {
   enable_fips: bool,
 }
 
-impl ImageInput {
+impl PullImageInput {
   /// Pull an image from a registry
   ///
   /// This is used to cache images on the host

@@ -6,7 +6,7 @@ use crate::{ec2, resource};
 
 #[derive(Args, Debug, Serialize, Deserialize)]
 #[command(group = clap::ArgGroup::new("instance-type").multiple(false).required(true))]
-pub struct MaxPods {
+pub struct CalculateMaxPodsInput {
   /// The instance type used to calculate max pods
   #[arg(short, long, group = "instance-type")]
   pub instance_type: Option<String>,
@@ -34,7 +34,7 @@ pub struct MaxPods {
   pub cni_max_enis: Option<i32>,
 }
 
-impl MaxPods {
+impl CalculateMaxPodsInput {
   pub async fn calculate(&self) -> Result<i32> {
     let instance_type = if self.instance_type_from_imds {
       ec2::get_instance_type().await?

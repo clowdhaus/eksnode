@@ -12,7 +12,7 @@ use tracing::{debug, error, info};
 use crate::{commands, containerd, ec2, ecr, eks, gpu, kubelet, resource, utils};
 
 #[derive(Args, Debug, Default, Serialize, Deserialize)]
-pub struct Node {
+pub struct JoinClusterInput {
   /// The EKS cluster API Server endpoint
   ///
   /// Only valid when used with --b64-cluster-ca. Bypasses calling "aws eks describe-cluster"
@@ -96,7 +96,7 @@ struct KubeletKubeConfig {
   path: PathBuf,
 }
 
-impl Node {
+impl JoinClusterInput {
   /// Get the cluster details required to join the node to the cluster
   async fn get_cluster(&self) -> Result<eks::Cluster> {
     let imds_data = ec2::get_imds_data().await?;
@@ -284,7 +284,7 @@ impl Node {
       None => {
         info!("Instance type {instance_type} not found in static instance data. Attempting to derive max pods");
 
-        let max_pods = commands::calculate::MaxPods {
+        let max_pods = commands::calculate::CalculateMaxPodsInput {
           instance_type: Some(instance_type.to_owned()),
           instance_type_from_imds: false,
           cni_version: "1.10.0".to_owned(),
@@ -368,9 +368,9 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_config_122() {
-    let cluster = Node {
+    let cluster = JoinClusterInput {
       use_max_pods: true,
-      ..Node::default()
+      ..JoinClusterInput::default()
     };
 
     let kubelet_config = cluster
@@ -391,7 +391,7 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_config_126() {
-    let cluster = Node::default();
+    let cluster = JoinClusterInput::default();
 
     let kubelet_config = cluster
       .get_kubelet_config(
@@ -414,7 +414,7 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_config_127() {
-    let cluster = Node::default();
+    let cluster = JoinClusterInput::default();
 
     let kubelet_config = cluster
       .get_kubelet_config(
@@ -437,10 +437,10 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_kubeconfig_local() {
-    let node = Node {
+    let node = JoinClusterInput {
       is_local_cluster: true,
       cluster_id: Some("6B29FC40-CA47-1067-B31D-00DD010662DA".to_string()),
-      ..Node::default()
+      ..JoinClusterInput::default()
     };
 
     let cluster = eks::Cluster {
@@ -462,7 +462,7 @@ mod tests {
 
   #[test]
   fn it_gets_kubelet_kubeconfig_eks() {
-    let node = Node::default();
+    let node = JoinClusterInput::default();
     let cluster = eks::Cluster {
       name: "example".to_string(),
       endpoint: "http://localhost:8080".to_string(),

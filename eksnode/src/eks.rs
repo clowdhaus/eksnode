@@ -9,7 +9,7 @@ use aws_sdk_eks::{
 use ipnet::{IpNet, Ipv4Net};
 use tracing::{debug, info};
 
-use crate::{commands::join::Node, IpvFamily};
+use crate::{commands::join::JoinClusterInput, IpvFamily};
 
 /// Get the EKS client
 async fn get_client() -> Result<Client> {
@@ -113,7 +113,7 @@ pub struct Cluster {
 }
 
 /// Return the cluster details from the input collected
-fn collect_cluster(node: &Node, cluster_dns_ip: IpAddr) -> Result<Option<Cluster>> {
+fn collect_cluster(node: &JoinClusterInput, cluster_dns_ip: IpAddr) -> Result<Option<Cluster>> {
   if let Some(endpoint) = node.apiserver_endpoint.to_owned() {
     if let Some(b64_ca) = node.b64_cluster_ca.to_owned() {
       return Ok(Some(Cluster {
@@ -133,7 +133,7 @@ fn collect_cluster(node: &Node, cluster_dns_ip: IpAddr) -> Result<Option<Cluster
 ///
 /// If all the necessary details required to join a node to the cluster are provided, then
 /// we can save an API call. Otherwise, we need to describe the cluster to get the details.
-pub async fn collect_or_get_cluster(node: &Node, vpc_ipv4_cidr_blocks: &[Ipv4Net]) -> Result<Cluster> {
+pub async fn collect_or_get_cluster(node: &JoinClusterInput, vpc_ipv4_cidr_blocks: &[Ipv4Net]) -> Result<Cluster> {
   // DNS cluster IP is not related to cluster - if it cannot be derived, it should fail
   let cluster_dns_ip = match node.cluster_dns_ip {
     Some(ip) => ip,
