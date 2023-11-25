@@ -28,7 +28,6 @@ impl DebugInput {
   }
 }
 
-
 fn collect_logs(src_dirs: &[&str], dst_file: &str) -> zip::result::ZipResult<()> {
   let path = Path::new(dst_file);
   let file = File::create(path).unwrap();
@@ -46,7 +45,6 @@ fn collect_logs(src_dirs: &[&str], dst_file: &str) -> zip::result::ZipResult<()>
 
   Ok(())
 }
-
 
 fn zip_dir<T>(it: &mut dyn Iterator<Item = DirEntry>, prefix: &str, writer: T) -> zip::result::ZipResult<()>
 where
