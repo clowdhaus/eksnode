@@ -24,7 +24,5 @@
     state: installed
     install_weak_deps: false
   loop:
-    # - oci-add-hooks
     - aws-neuronx-dkms-2.*
     - aws-neuronx-tools-2.*
-    # - aws-neuronx-oci-hook-2.*

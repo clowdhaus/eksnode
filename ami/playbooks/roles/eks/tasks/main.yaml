@@ -15,7 +15,9 @@
         state: present
       loop:
         - awscli
-        - iptables-nft # https://kubernetes.io/blog/2022/09/07/iptables-chains-not-api/#use-case-iptables-mode
+        - conntrack
+        # - iptables-nft # https://kubernetes.io/blog/2022/09/07/iptables-chains-not-api/#use-case-iptables-mode
+        - iptables-legacy
         - amazon-ssm-agent
         - glibc-minimal-langpack
         - glibc-langpack-en
@@ -26,10 +28,15 @@
         state: absent
         autoremove: true
       loop:
-        # ec2-net-utils interferes with the route setup on the instance
-        - ec2-net-utils
+        # # interferes with the route setup on the instance
+        # # https://github.com/awslabs/amazon-eks-ami/pull/1528/files#r1404621827
+        # - ec2-net-utils
+        # - amazon-ec2-net-utils
         # Swapping out for smaller min langpack
         - glibc-all-langpacks
+
+    - name: Temporary fix for https://github.com/aws/amazon-vpc-cni-k8s/pull/2118
+      shell: sed -i "s/^MACAddressPolicy=.*/MACAddressPolicy=none/" /usr/lib/systemd/network/99-default.link
 
 #########################################################
 # Logrotate

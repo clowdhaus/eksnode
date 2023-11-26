@@ -28,10 +28,10 @@
             - kernel-headers-{{ansible_kernel}}
             - kernel-devel-{{ansible_kernel}}
 
-        # - name: Run NVIDIA tasks
-        #   when: install_nvidia|bool
-        #   ansible.builtin.import_tasks:
-        #     file: nvidia.yaml
+        - name: Run NVIDIA tasks
+          when: install_nvidia|bool
+          ansible.builtin.import_tasks:
+            file: nvidia.yaml
 
         - name: Run EFA tasks
           when: install_efa|bool
