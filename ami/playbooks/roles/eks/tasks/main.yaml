@@ -16,8 +16,7 @@
       loop:
         - awscli
         - conntrack
-        # - iptables-nft # https://kubernetes.io/blog/2022/09/07/iptables-chains-not-api/#use-case-iptables-mode
-        - iptables-legacy
+        - iptables-nft
         - amazon-ssm-agent
         - glibc-minimal-langpack
         - glibc-langpack-en
@@ -28,15 +27,46 @@
         state: absent
         autoremove: true
       loop:
-        # # interferes with the route setup on the instance
-        # # https://github.com/awslabs/amazon-eks-ami/pull/1528/files#r1404621827
-        # - ec2-net-utils
-        # - amazon-ec2-net-utils
         # Swapping out for smaller min langpack
         - glibc-all-langpacks
 
     - name: Temporary fix for https://github.com/aws/amazon-vpc-cni-k8s/pull/2118
       shell: sed -i "s/^MACAddressPolicy=.*/MACAddressPolicy=none/" /usr/lib/systemd/network/99-default.link
+
+#########################################################
+# EC2 Networking
+#########################################################
+
+- name: Integrate EC2 networking
+  block:
+    # Mask udev triggers installed by amazon-ec2-net-utils package
+    - name: Create /etc/udev/rules.d/99-vpc-policy-routes.rules file
+      ansible.builtin.file:
+        path: /etc/udev/rules.d/99-vpc-policy-routes.rules
+        state: file
+        owner: root
+        group: root
+
+    - name: Create /usr/lib/systemd/networkd.conf.d/ directory
+      ansible.builtin.file:
+        path: /usr/lib/systemd/networkd.conf.d/
+        state: directory
+        owner: root
+        group: root
+      register: networkd_dir
+
+    # Make networkd ignore foreign settings, else it may unexpectedly
+    # delete IP rules and routes added by CNI
+    - name: Create {{ networkd_dir.path }}/80-release.conf file
+      copy:
+        dest: '{{ networkd_dir.path }}/80-release.conf'
+        mode: 0644
+        owner: root
+        group: root
+        content: |
+          [Network]
+          ManageForeignRoutes=no
+          ManageForeignRoutingPolicyRules=no
 
 #########################################################
 # Logrotate

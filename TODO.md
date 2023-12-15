@@ -1,5 +1,7 @@
 # TODO
-
+- [ ] https://github.com/awslabs/amazon-eks-ami/issues/951
+  - [ ] https://github.com/awslabs/amazon-eks-ami/issues/478
+- [ ] https://github.com/NVIDIA/nvidia-container-toolkit/issues/64#issuecomment-1597236350
 - [ ] https://github.com/containerd/containerd/issues/6964#issuecomment-1132580240
 - [ ] Add log collection functionality
   - Expand on this - this should be created from the perspective of `eksnode debug` perspective where `--collect-logs` can be used to collect logs from the node similar to current AMI functionality

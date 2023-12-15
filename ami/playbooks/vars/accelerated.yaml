@@ -11,4 +11,4 @@ efa_installer_url: 'https://efa-installer.amazonaws.com/{{ efa_installer_archive
 efa_installer_checksum: 'sha256:836655f87015547e733e7d9f7c760e4e24697f8bbc261bb5f3560abd4206bc36'
 
 # https://github.com/aws/aws-ofi-nccl/releases
-aws_ofi_nccl_version: '1.7.3'
+aws_ofi_nccl_version: '1.7.4'
