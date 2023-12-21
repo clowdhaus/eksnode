@@ -1,6 +1,6 @@
 ami_name_prefix  = "amazon-eks-neuron"
 ami_description  = "Amazon EKS x86_64/amd64 Neuron AL2023 image"
-instance_type    = "trn1.32xlarge"
+instance_type    = "trn1.2xlarge"
 cpu_architecture = "x86_64"
 launch_block_device_mappings = [
   {

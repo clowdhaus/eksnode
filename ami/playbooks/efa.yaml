@@ -52,6 +52,9 @@
     # be provided in the application container
     cmd: ./efa_installer.sh --enable-gdr --minimal --yes
 
+- name: Collect EFA installer version
+  shell: echo "efa-installer,{{ efa_installer_version }}" >> /etc/eks/versions.csv
+
 - name: Ensure ptrace protection is disabled
   ansible.posix.seboolean:
     name: deny_ptrace

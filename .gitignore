@@ -25,3 +25,5 @@ crash.log
 *.swp
 .idea
 .DS_Store
+
+eksnode-versions.csv

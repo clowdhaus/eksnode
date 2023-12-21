@@ -98,6 +98,16 @@
             fips-mode-setup --enable
 
     #########################################################
+    # Download Versions
+    #########################################################
+
+    - name: Copy remote /etc/eks/versions.csv file locally
+      ansible.builtin.fetch:
+        src: /etc/eks/versions.csv
+        dest: ./
+        flat: yes
+
+    #########################################################
     # Clean-up
     #########################################################
 

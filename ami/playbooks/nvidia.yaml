@@ -5,6 +5,7 @@
     install_weak_deps: false
   loop:
     - gcc
+    - kernel-modules-extra
 
 #########################################################
 # NVIDIA driver
@@ -19,6 +20,9 @@
 - name: Run NVIDIA driver installer
   ansible.builtin.shell: |
     sh {{ nvidia_driver_installer.dest }} -a -s --ui=none
+
+- name: Collect NVIDIA driver version
+  shell: echo "nvidia-driver,{{ nvidia_driver_version }}" >> /etc/eks/versions.csv
 
 - name: Pause for 180 seconds
   ansible.builtin.pause:
@@ -76,3 +80,4 @@
     autoremove: true
   loop:
     - gcc
+    - kernel-modules-extra

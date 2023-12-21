@@ -1,11 +1,24 @@
 ---
-- name: Install eksnode
+
+- name: Create /opt/versions
   copy:
-    src: ../../target/release/eksnode
-    dest: /usr/bin/eksnode
-    owner: root
-    group: root
-    mode: 0755
+    dest: /opt/versions
+    mode: 0644
+    content: |
+      package,version
+
+- name: Install eksnode
+  block:
+    - name: Install eksnode
+      copy:
+        src: ../../target/release/eksnode
+        dest: /usr/bin/eksnode
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Collect eksnode version
+      shell: echo "eksnode,$(eksnode --version | awk '{print $2}')" >> /opt/versions
 
 - name: Install dnf packages
   block:
@@ -43,7 +56,7 @@
     - name: Create /etc/udev/rules.d/99-vpc-policy-routes.rules file
       ansible.builtin.file:
         path: /etc/udev/rules.d/99-vpc-policy-routes.rules
-        state: file
+        state: touch
         owner: root
         group: root
 
@@ -122,13 +135,18 @@
 #########################################################
 
 - name: Install runc {{ runc_version }}
-  ansible.builtin.get_url:
-    url: '{{ runc_url }}'
-    dest: /usr/local/sbin/runc
-    checksum: '{{ runc_checksum }}'
-    mode: 0755
-    owner: root
-    group: root
+  block:
+    - name: Install runc {{ runc_version }}
+      ansible.builtin.get_url:
+        url: '{{ runc_url }}'
+        dest: /usr/local/sbin/runc
+        checksum: '{{ runc_checksum }}'
+        mode: 0755
+        owner: root
+        group: root
+
+    - name: Collect runc version
+      shell: echo "runc,{{ runc_version }}" >> /opt/versions
 
 #########################################################
 # containerd
@@ -159,6 +177,9 @@
         group: root
         remote_src: yes
       register: containerd
+
+    - name: Collect containerd version
+      shell: echo "containerd,{{ containerd_version }}" >> /opt/versions
 
     - name: Remove {{ containerd.dest }}/bin/containerd-stress
       ansible.builtin.file:
@@ -251,6 +272,9 @@
         group: root
         remote_src: yes
 
+    - name: Collect nerdctl version
+      shell: echo "nerdctl,$(nerdctl --version | awk '{print $3}')" >> /opt/versions
+
     - name: Remove ctr - nerdctl is used instead
       ansible.builtin.file:
         path: /usr/local/bin/ctr
@@ -294,6 +318,9 @@
         group: root
         remote_src: yes
         keep_newer: yes
+
+    - name: Collect CNI plugins version
+      shell: echo "cni-plugins,{{ cni_plugin_version }}" >> /opt/versions
 
 #########################################################
 # IAM authenticator / ECR credential provider
@@ -367,6 +394,9 @@
         group: root
         mode: 0755
 
+    - name: Collect kubelet version
+      shell: echo "kubelet,{{ kubernetes_version }}" >> /opt/versions
+
     - name: Create /var/lib/kubelet
       ansible.builtin.file:
         path: /var/lib/kubelet
@@ -436,6 +466,13 @@
         enabled: true
         masked: no
         state: stopped
+
+#########################################################
+# Misc
+#########################################################
+
+- name: Move /opt/versions to /etc/eks/versions.csv
+  command: mv /opt/versions /etc/eks/versions.csv
 
 # TODO - create /etc/eks/release AMI build metadata file
 # TODO - create psuedo bootstrap.sh script for backwards compat
