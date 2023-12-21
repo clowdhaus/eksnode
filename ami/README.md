@@ -61,13 +61,14 @@ No modules.
 | <a name="input_ebs_optimized"></a> [ebs\_optimized](#input\_ebs\_optimized) | Mark instance as EBS Optimized. Default `false` | `bool` | `null` | no |
 | <a name="input_eks_version"></a> [eks\_version](#input\_eks\_version) | The EKS cluster version associated with the AMI created | `string` | `"1.28"` | no |
 | <a name="input_ena_support"></a> [ena\_support](#input\_ena\_support) | Enable enhanced networking (ENA but not SriovNetSupport) on HVM-compatible AMIs | `bool` | `null` | no |
+| <a name="input_enable_cis"></a> [enable\_cis](#input\_enable\_cis) | If `true`, the CIS hardening role will be applied to the instance. Defaults to `false` | `bool` | `false` | no |
+| <a name="input_enable_fips"></a> [enable\_fips](#input\_enable\_fips) | If `true`, the [FIPS mode](https://docs.aws.amazon.com/linux/al2023/ug/fips-mode.html) will be enabled on the instance. Defaults to `false` | `bool` | `false` | no |
 | <a name="input_enable_nitro_enclave"></a> [enable\_nitro\_enclave](#input\_enable\_nitro\_enclave) | Enable support for Nitro Enclaves on the instance | `bool` | `null` | no |
 | <a name="input_enable_unlimited_credits"></a> [enable\_unlimited\_credits](#input\_enable\_unlimited\_credits) | Enabling Unlimited credits allows the source instance to burst additional CPU beyond its available CPU Credits for as long as the demand exists | `bool` | `null` | no |
 | <a name="input_encrypt_boot"></a> [encrypt\_boot](#input\_encrypt\_boot) | Whether or not to encrypt the resulting AMI when copying a provisioned instance to an AMI. By default, Packer will keep the encryption setting to what it was in the source image | `bool` | `null` | no |
 | <a name="input_fleet_tags"></a> [fleet\_tags](#input\_fleet\_tags) | Key/value pair tags to apply tags to the fleet that is issued | `map(string)` | `null` | no |
 | <a name="input_force_delete_snapshot"></a> [force\_delete\_snapshot](#input\_force\_delete\_snapshot) | Force Packer to delete snapshots associated with AMIs, which have been deregistered by force\_deregister. Default `false` | `bool` | `null` | no |
 | <a name="input_force_deregister"></a> [force\_deregister](#input\_force\_deregister) | Force Packer to first deregister an existing AMI if one with the same name already exists. Default `false` | `bool` | `null` | no |
-| <a name="input_harden_cis"></a> [harden\_cis](#input\_harden\_cis) | If `true`, the CIS hardening role will be applied to the instance. Defaults to `false` | `bool` | `false` | no |
 | <a name="input_iam_instance_profile"></a> [iam\_instance\_profile](#input\_iam\_instance\_profile) | The name of an IAM instance profile to launch the EC2 instance with | `string` | `null` | no |
 | <a name="input_imds_support"></a> [imds\_support](#input\_imds\_support) | Enforce version of the Instance Metadata Service on the built AMI. Valid options are `unset` (legacy) and `v2.0` | `string` | `"v2.0"` | no |
 | <a name="input_insecure_skip_tls_verify"></a> [insecure\_skip\_tls\_verify](#input\_insecure\_skip\_tls\_verify) | This allows skipping TLS verification of the AWS EC2 endpoint. The default is `false` | `bool` | `null` | no |

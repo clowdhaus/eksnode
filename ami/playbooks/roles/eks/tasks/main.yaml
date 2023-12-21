@@ -421,12 +421,12 @@
         state: started
 
     - name: Pull standard images to cache
-      when: not harden_fips|bool
+      when: not enable_fips|bool
       ansible.builtin.shell: |
         eksnode pull-image --cached-images --no-color -vv
 
     - name: Pull FIPs standard images to cache
-      when: harden_fips|bool
+      when: enable_fips|bool
       ansible.builtin.shell: |
         eksnode pull-image --cached-images --enable-fips --no-color -vv
 

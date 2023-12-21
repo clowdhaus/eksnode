@@ -279,7 +279,8 @@ build {
           install_nvidia = var.install_nvidia
           install_efa    = var.install_efa
 
-          harden_cis = var.harden_cis
+          enable_cis = var.enable_cis
+          enable_fips = var.enable_fips
         }
       )
     ]

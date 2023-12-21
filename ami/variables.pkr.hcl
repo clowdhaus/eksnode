@@ -38,8 +38,14 @@ variable "install_efa" {
   default     = false
 }
 
-variable "harden_cis" {
+variable "enable_cis" {
   description = "If `true`, the CIS hardening role will be applied to the instance. Defaults to `false`"
+  type        = bool
+  default     = false
+}
+
+variable "enable_fips" {
+  description = "If `true`, the [FIPS mode](https://docs.aws.amazon.com/linux/al2023/ug/fips-mode.html) will be enabled on the instance. Defaults to `false`"
   type        = bool
   default     = false
 }

@@ -49,7 +49,7 @@
     #########################################################
 
     - name: CIS Level 1 and 2 baseline
-      when: harden_cis|bool
+      when: enable_cis|bool
       become: true
       become_user: root
       block:
@@ -82,7 +82,7 @@
     #########################################################
 
     - name: Enable FIPS Mode
-      when: harden_fips|bool
+      when: enable_fips|bool
       block:
         - name: Install packages
           ansible.builtin.dnf:
