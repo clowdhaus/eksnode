@@ -19,7 +19,7 @@
 
 - name: Run NVIDIA driver installer
   ansible.builtin.shell: |
-    sh {{ nvidia_driver_installer.dest }} -a -s --ui=none
+    sh {{ nvidia_driver_installer.dest }} -a -s --ui=none -m=kernel-open
 
 - name: Collect NVIDIA driver version
   shell: echo "nvidia-driver,{{ nvidia_driver_version }}" >> /etc/eks/versions.csv

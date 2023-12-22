@@ -26,4 +26,4 @@ crash.log
 .idea
 .DS_Store
 
-eksnode-versions.csv
+*.csv

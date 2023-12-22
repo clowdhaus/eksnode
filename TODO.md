@@ -18,8 +18,6 @@
 
 - [ ] Merge default containerd config on host with config provided by users, if one is provided
 - [ ] [Drop-in directory for kubelet configuration files](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/#kubelet-conf-d)
-- [ ] Add support for running containerd snapshotter benchmarks <https://github.com/containerd/containerd/tree/main/contrib>
-  - Default snapshotter is overlayfs, are there any benefits with aufs/btrfs? What about when storage is located on instance store volume? Do we need to do anything additional for xfs when overlayfs is used?
 
 ## Max Pods
 
