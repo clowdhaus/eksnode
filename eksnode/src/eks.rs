@@ -13,7 +13,7 @@ use crate::{commands::join::JoinClusterInput, IpvFamily};
 
 /// Get the EKS client
 async fn get_client() -> Result<Client> {
-  let config = aws_config::load_defaults(BehaviorVersion::v2023_11_09()).await;
+  let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
   let client = Client::from_conf(
     // Start with the shared environment configuration
     config::Builder::from(&config)

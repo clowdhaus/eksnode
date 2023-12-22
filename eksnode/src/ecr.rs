@@ -9,7 +9,7 @@ use tracing::error;
 
 /// Get the ECR client
 pub async fn get_client() -> Result<Client> {
-  let sdk_config = aws_config::load_defaults(BehaviorVersion::v2023_11_09()).await;
+  let sdk_config = aws_config::load_defaults(BehaviorVersion::latest()).await;
   let timeout_config = TimeoutConfig::builder()
     .operation_attempt_timeout(Duration::from_secs(5))
     .build();
