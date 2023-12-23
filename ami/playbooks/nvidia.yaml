@@ -11,6 +11,11 @@
 # NVIDIA driver
 #########################################################
 
+- name: Blacklist nouveau
+  community.general.kernel_blacklist:
+    name: nouveau
+    state: present
+
 - name: Download NVIDIA driver installer {{ nvidia_driver_version }}
   ansible.builtin.get_url:
     url: '{{ nvidia_driver_url }}'
@@ -27,6 +32,59 @@
 - name: Pause for 180 seconds
   ansible.builtin.pause:
     seconds: 180
+
+- name: Setup persistenced mode
+  block:
+    - name: Create persistenced service
+      copy:
+        src: nvidia-persistenced-override.service
+        dest: /usr/lib/systemd/system/nvidia-persistenced-override.service
+
+    - name: Enable persistenced service
+      systemd:
+        name: nvidia-persistenced-override
+        daemon-reload: true
+        enabled: true
+
+#########################################################
+# NVIDIA Fabric Manager
+#########################################################
+
+- name: Install NVIDIA Fabric Manager
+  block:
+    - name: Download NVIDIA Fabric Manager
+      ansible.builtin.get_url:
+        url: '{{ nvidia_fabric_manager_url }}'
+        dest: '/tmp/{{ nvidia_fabric_manager_archive }}'
+      register: nvidia_fabric_manager_archive
+
+    - name: Extract NVIDIA Fabric Manager
+      ansible.builtin.unarchive:
+        src: '{{ nvidia_fabric_manager_archive.dest }}'
+        dest: '/usr/'
+        mode: 0755
+        owner: root
+        group: root
+        remote_src: true
+        extra_opts:
+          - --strip-components=1
+          - --exclude
+          - LICENSE
+
+    - name: Link NVIDIA Fabric Manager service file
+      copy:
+        remote_src: true
+        src: /usr/systemd/nvidia-fabricmanager.service
+        dest: /usr/lib/systemd/system/nvidia-fabricmanager.service
+
+    - name: Enable NVIDIA Fabric Manager
+      systemd:
+        name: nvidia-fabricmanager
+        daemon-reload: true
+        enabled: true
+
+    - name: Collect NVIDIA Fabric Manager version
+      shell: echo "nvidia-fabric-manager,{{ nvidia_driver_version }}" >> /etc/eks/versions.csv
 
 #########################################################
 # NVIDIA container toolkit
