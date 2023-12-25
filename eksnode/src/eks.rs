@@ -129,10 +129,10 @@ fn collect_cluster(node: &JoinClusterInput, cluster_dns_ip: IpAddr) -> Result<Op
   Ok(None)
 }
 
-/// Extract cluster details from CLI input, or get directly from cluster
+/// Collect cluster details from CLI input, or get from cluster describe call
 ///
 /// If all the necessary details required to join a node to the cluster are provided, then
-/// we can save an API call. Otherwise, we need to describe the cluster to get the details.
+/// we can save an API call. Otherwise, we need to describe the cluster to get the required info.
 pub async fn collect_or_get_cluster(node: &JoinClusterInput, vpc_ipv4_cidr_blocks: &[Ipv4Net]) -> Result<Cluster> {
   // DNS cluster IP is not related to cluster - if it cannot be derived, it should fail
   let cluster_dns_ip = match node.cluster_dns_ip {

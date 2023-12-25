@@ -43,7 +43,7 @@ impl CalculateMaxPodsInput {
     };
     let instance = match ec2::get_instance(&instance_type)? {
       Some(instance) => instance,
-      None => return Err(anyhow!("Instance type {} is not supported or invalid", &instance_type)),
+      None => return Err(anyhow!("Instance type {instance_type} is not supported or invalid")),
     };
 
     let prefix_supported = resource::prefix_delegation_supported(&self.cni_version)?;

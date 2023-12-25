@@ -9,14 +9,11 @@ use taplo::formatter;
 
 use crate::utils;
 
+pub const SANDBOX_IMAGE_SERVICE: &str = "sandbox-image.service";
 pub const SANDBOX_IMAGE_SERVICE_PATH: &str = "/etc/systemd/system/sandbox-image.service";
 pub const SANDBOX_IMAGE_TAG: &str = "3.8";
 
 /// Embeds the contents of the `templates/` directory into the binary
-///
-/// This struct contains both the templates used for rendering the playbook
-/// as well as the static data used for populating the playbook templates
-/// embedded into the binary for distribution
 #[derive(RustEmbed)]
 #[folder = "src/containerd/templates/"]
 pub struct Templates;
@@ -24,7 +21,6 @@ pub struct Templates;
 #[derive(Copy, Clone, Debug, ValueEnum, Serialize, Deserialize)]
 pub enum DefaultRuntime {
   Containerd,
-  Neuron,
   Nvidia,
 }
 
@@ -35,7 +31,7 @@ impl Default for DefaultRuntime {
 }
 
 pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
-  let tmpl = Templates::get("sandbox-image.service").unwrap();
+  let tmpl = Templates::get(SANDBOX_IMAGE_SERVICE).unwrap();
   let tmpl = std::str::from_utf8(tmpl.data.as_ref())?;
 
   let contents = tmpl.replace(
@@ -61,54 +57,54 @@ fn merge(a: &mut JsonValue, b: &JsonValue) {
 
 fn get_plugins_config(default_runtime: &DefaultRuntime, sandbox_image: &str) -> Result<JsonValue> {
   let mut base = json!({
-          "io.containerd.grpc.v1.cri": {
-            "sandbox_image": sandbox_image,
-            "cni": {
-              "bin_dir": "/opt/cni/bin",
-              "conf_dir": "/etc/cni/net.d"
-            },
-            "containerd": {
-              "discard_unpacked_layers": true,
-            },
-            "registry": {
-              "config_path": "/etc/containerd/certs.d"
-            }
-          }
+    "io.containerd.grpc.v1.cri": {
+      "sandbox_image": sandbox_image,
+      "cni": {
+        "bin_dir": "/opt/cni/bin",
+        "conf_dir": "/etc/cni/net.d"
+      },
+      "containerd": {
+        "discard_unpacked_layers": true,
+      },
+      "registry": {
+        "config_path": "/etc/containerd/certs.d"
+      }
+    }
   });
 
   let runtime = match default_runtime {
     DefaultRuntime::Nvidia => json!({
-          "io.containerd.grpc.v1.cri": {
-            "containerd": {
-              "default_runtime_name": "nvidia",
+      "io.containerd.grpc.v1.cri": {
+        "containerd": {
+          "default_runtime_name": "nvidia",
 
-              "runtimes": {
-                "nvidia": {
-                  "runtime_type": "io.containerd.runc.v2",
-                  "options": {
-                    "SystemdCgroup": true,
-                    "BinaryName": "/usr/bin/nvidia-container-runtime"
-                  }
-                }
+          "runtimes": {
+            "nvidia": {
+              "runtime_type": "io.containerd.runc.v2",
+              "options": {
+                "SystemdCgroup": true,
+                "BinaryName": "/usr/bin/nvidia-container-runtime"
               }
             }
+          }
         }
+      }
     }),
     _ => json!({
-            "io.containerd.grpc.v1.cri": {
-              "containerd": {
-                "default_runtime_name": "runc",
+      "io.containerd.grpc.v1.cri": {
+        "containerd": {
+          "default_runtime_name": "runc",
 
-                "runtimes": {
-                  "runc": {
-                    "runtime_type": "io.containerd.runc.v2",
-                    "options": {
-                      "SystemdCgroup": true
-                    }
-                  }
-                }
+          "runtimes": {
+            "runc": {
+              "runtime_type": "io.containerd.runc.v2",
+              "options": {
+                "SystemdCgroup": true
               }
             }
+          }
+        }
+      }
     }),
   };
   merge(&mut base, &runtime);
@@ -405,13 +401,6 @@ mod tests {
     let mut buf = String::new();
     file.read_to_string(&mut buf).unwrap();
     insta::assert_debug_snapshot!(buf);
-  }
-
-  #[test]
-  fn it_creates_neuron_containerd_config() {
-    let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8";
-    let config = ContainerdConfiguration::new(&DefaultRuntime::Neuron, sandbox_img).unwrap();
-    insta::assert_debug_snapshot!(config);
   }
 
   #[test]

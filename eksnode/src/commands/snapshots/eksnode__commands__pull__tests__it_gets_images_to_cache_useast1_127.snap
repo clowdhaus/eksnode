@@ -10,6 +10,6 @@ expression: imgs
     "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.27.6-minimal-eksbuild.2",
     "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.12.6-eksbuild.2",
     "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.12.6-eksbuild.2",
-    "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.15.4-eksbuild.1",
-    "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.15.4-eksbuild.1",
+    "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.15.5-eksbuild.1",
+    "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.15.5-eksbuild.1",
 ]

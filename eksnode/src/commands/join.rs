@@ -97,14 +97,14 @@ struct KubeletKubeConfig {
 }
 
 impl JoinClusterInput {
-  /// Get the cluster details required to join the node to the cluster
+  /// Get the cluster info required to join the node to the cluster
   async fn get_cluster(&self) -> Result<eks::Cluster> {
     let imds_data = ec2::get_imds_data().await?;
     debug!("Instance metadata: {imds_data:#?}");
 
-    // Details required to join node to cluster
+    // Info required to join node to cluster
     let cluster = eks::collect_or_get_cluster(self, &imds_data.vpc_ipv4_cidr_blocks).await?;
-    debug!("Node details: {cluster:#?}");
+    debug!("Cluster: {cluster:#?}");
 
     Ok(cluster)
   }
