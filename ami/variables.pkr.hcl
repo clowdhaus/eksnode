@@ -658,12 +658,12 @@ variable "skip_profile_validation" {
 
 variable "subnet_filter" {
   description = "Filters used to populate the subnet_id field. `subnet_id` take precedence over this"
-  default     = {
-  filters = {
-        "tag:eksnode" = "private"
+  default = {
+    filters = {
+      "tag:eksnode" = "private"
+    }
+    random = true
   }
-  random = true
-}
 }
 
 variable "subnet_id" {

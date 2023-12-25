@@ -47,7 +47,7 @@ struct Version {
   nerdctl_version: String,
 
   /// The version of the CNI plugin - this is not pulled from S3, but statically set in `versions.yaml`
-  cni_plugin_version: String,
+  cni_plugins_version: String,
 }
 
 impl Versions {

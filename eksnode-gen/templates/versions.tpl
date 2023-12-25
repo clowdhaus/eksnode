@@ -14,7 +14,7 @@ versions: {
       runc_version: '{{ version.runc_version }}',
       containerd_version: '{{ version.containerd_version }}',
       nerdctl_version: '{{ version.nerdctl_version }}',
-      cni_plugin_version: '{{ version.cni_plugin_version }}',
+      cni_plugins_version: '{{ version.cni_plugins_version }}',
   },
 {{ /each }}
 }

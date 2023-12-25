@@ -284,7 +284,7 @@
 # CNI
 #########################################################
 
-- name: Install CNI {{ cni_plugin_version }}
+- name: Install CNI {{ cni_plugins_version }}
   block:
     - name: Create /etc/cni/net.d directory
       ansible.builtin.file:
@@ -302,14 +302,14 @@
       register: cni_dir
 
     # This separate task is used to validate checksum
-    - name: Download CNI {{ cni_plugin_version }}
+    - name: Download CNI {{ cni_plugins_version }}
       ansible.builtin.get_url:
-        url: '{{ cni_plugin_url}}'
-        dest: '/tmp/{{ cni_plugin_archive }}'
-        checksum: '{{ cni_plugin_checksum }}'
+        url: '{{ cni_plugins_url}}'
+        dest: '/tmp/{{ cni_plugins_archive }}'
+        checksum: '{{ cni_plugins_checksum }}'
       register: cni_archive
 
-    - name: Extract CNI {{ cni_plugin_version }}
+    - name: Extract CNI {{ cni_plugins_version }}
       ansible.builtin.unarchive:
         src: '{{ cni_archive.dest }}'
         dest: '{{ cni_dir.path }}'
@@ -320,7 +320,7 @@
         keep_newer: yes
 
     - name: Collect CNI plugins version
-      shell: echo "cni-plugins,{{ cni_plugin_version }}" >> /opt/versions
+      shell: echo "cni-plugins,{{ cni_plugins_version }}" >> /opt/versions
 
 #########################################################
 # IAM authenticator / ECR credential provider
