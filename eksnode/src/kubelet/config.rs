@@ -770,6 +770,8 @@ impl KubeletConfiguration {
       protect_kernel_defaults: Some(true),
       serialize_image_pulls: Some(false),
       server_tls_bootstrap: Some(true),
+      shutdown_grace_period: Some("45s".to_string()),
+      shutdown_grace_period_critical_pods: Some("15s".to_string()),
       tls_cipher_suites: Some(vec![
         "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256".to_string(),
         "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256".to_string(),
