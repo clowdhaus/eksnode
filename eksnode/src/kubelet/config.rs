@@ -757,7 +757,7 @@ impl KubeletConfiguration {
       ])),
       kube_reserved: Some(BTreeMap::from([
         ("cpu".to_string(), format!("{cpu_millicores_to_reserve}m")),
-        ("ephemeral-storage".to_string(), "1Gi".to_string()),
+        ("ephemeral-storage".to_string(), "3Gi".to_string()),
         ("memory".to_string(), format!("{mebibytes_to_reserve}Mi")),
       ])),
       hairpin_mode: Some(HairpinMode::HairpinVeth),
