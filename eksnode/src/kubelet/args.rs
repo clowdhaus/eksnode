@@ -17,7 +17,7 @@ pub struct Args {
 }
 
 impl Args {
-  pub fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
+  pub async fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
     let end = " \\\n";
     let mut args = format!("--v=2{end}");
 
@@ -41,7 +41,7 @@ impl Args {
 
     let args = args.strip_suffix(end).unwrap();
     let content = format!("[Service]\nEnvironment='KUBELET_ARGS={args}'\n",);
-    utils::write_file(content.as_bytes(), path, Some(0o644), chown)
+    utils::write_file(content.as_bytes(), path, Some(0o644), chown).await
   }
 }
 
@@ -55,7 +55,7 @@ impl ExtraArgs {
     Self { args }
   }
 
-  pub fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
+  pub async fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
     let args = match self.args {
       Some(ref args) => args,
       None => "",
@@ -67,7 +67,7 @@ impl ExtraArgs {
     }
 
     let contents = format!("[Service]\nEnvironment='KUBELET_EXTRA_ARGS={args}'\n");
-    utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
+    utils::write_file(contents.as_bytes(), path, Some(0o644), chown).await
   }
 }
 
@@ -79,8 +79,8 @@ mod tests {
 
   use super::*;
 
-  #[test]
-  fn it_creates_args() {
+  #[tokio::test]
+  async fn it_creates_args() {
     let args = Args {
       node_ip: "10.0.0.1".to_string(),
       pod_infra_container_image: "k8s.gcr.io/pause:3.1".to_string(),
@@ -91,7 +91,7 @@ mod tests {
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();
-    args.write(file.path(), false).unwrap();
+    args.write(file.path(), false).await.unwrap();
     file.seek(SeekFrom::Start(0)).unwrap();
 
     // Read back contents written to file
@@ -100,13 +100,13 @@ mod tests {
     insta::assert_debug_snapshot!(buf);
   }
 
-  #[test]
-  fn it_creates_empty_extrargs() {
+  #[tokio::test]
+  async fn it_creates_empty_extrargs() {
     let args = ExtraArgs::new(None);
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();
-    args.write(file.path(), false).unwrap();
+    args.write(file.path(), false).await.unwrap();
     file.seek(SeekFrom::Start(0)).unwrap();
 
     // Read back contents written to file
@@ -115,13 +115,13 @@ mod tests {
     insta::assert_debug_snapshot!(buf);
   }
 
-  #[test]
-  fn it_creates_extrargs() {
+  #[tokio::test]
+  async fn it_creates_extrargs() {
     let args = ExtraArgs::new(Some("--max-pods=true".to_string()));
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();
-    args.write(file.path(), false).unwrap();
+    args.write(file.path(), false).await.unwrap();
     file.seek(SeekFrom::Start(0)).unwrap();
 
     // Read back contents written to file

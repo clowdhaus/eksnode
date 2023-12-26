@@ -1,4 +1,4 @@
-use std::{fs, io::Write, net::IpAddr, path::PathBuf};
+use std::{net::IpAddr, path::PathBuf};
 
 use anyhow::Result;
 use base64::{engine::general_purpose, Engine as _};
@@ -7,6 +7,7 @@ use ipnet::IpNet;
 use rand::{seq::SliceRandom, thread_rng};
 use semver::Version;
 use serde::{Deserialize, Serialize};
+use tokio::{fs::OpenOptions, io::AsyncWriteExt};
 use tracing::{debug, error, info};
 
 use crate::{commands, containerd, ec2, ecr, eks, gpu, kubelet, resource, utils};
@@ -257,24 +258,23 @@ impl JoinClusterInput {
   }
 
   /// Decode the base64 encoded CA certificate and write it to disk
-  fn write_ca_cert(&self, base64_ca: &str) -> Result<()> {
+  async fn write_ca_cert(&self, base64_ca: &str) -> Result<()> {
     let decoded = general_purpose::STANDARD_NO_PAD.decode(base64_ca)?;
 
-    utils::write_file(&decoded, "/etc/kubernetes/pki/ca.crt", Some(0o644), true)
+    utils::write_file(&decoded, "/etc/kubernetes/pki/ca.crt", Some(0o644), true).await
   }
 
   /// Update /etc/hosts for the cluster endpoint IPs for Outpost local cluster
-  fn update_etc_hosts(&self, endpoint: &str, path: PathBuf) -> Result<()> {
-    let mut hostfile = fs::OpenOptions::new().append(true).open(path)?;
+  async fn update_etc_hosts(&self, endpoint: &str, path: PathBuf) -> Result<()> {
+    let mut hostfile = OpenOptions::new().append(true).open(path).await?;
     let mut ips: Vec<IpAddr> = dns_lookup::lookup_host(endpoint)?;
 
     // Shuffle the IPs to avoid always using the first IP
     ips.shuffle(&mut thread_rng());
     let entries: Vec<String> = ips.iter().map(|ip| format!("{ip} {endpoint}\n")).collect();
 
-    hostfile
-      .write_all(entries.join("").as_bytes())
-      .map_err(anyhow::Error::from)
+    hostfile.write_all(entries.join("").as_bytes()).await?;
+    hostfile.flush().await.map_err(anyhow::Error::from)
   }
 
   /// Get the max pods for the instance
@@ -308,9 +308,11 @@ impl JoinClusterInput {
     let ec2_client = ec2::get_client().await?;
     let private_dns_name = ec2::get_private_dns_name(&instance_metadata.instance_id, &ec2_client).await?;
 
-    self.write_ca_cert(&cluster.b64_ca)?;
+    self.write_ca_cert(&cluster.b64_ca).await?;
     if self.is_local_cluster {
-      self.update_etc_hosts(&cluster.endpoint, PathBuf::from("/etc/hosts"))?;
+      self
+        .update_etc_hosts(&cluster.endpoint, PathBuf::from("/etc/hosts"))
+        .await?;
     }
 
     let cred_provider_config = kubelet::CredentialProviderConfig::new(&kubelet_version)?;
@@ -335,15 +337,15 @@ impl JoinClusterInput {
       }
     };
     let kubelet_args = self.get_kubelet_args(&instance_metadata, &kubelet_version, &private_dns_name)?;
-    kubelet_args.write(kubelet::ARGS_PATH, true)?;
+    kubelet_args.write(kubelet::ARGS_PATH, true).await?;
     let kubelet_extra_args = self.get_kubelet_extra_args()?;
-    kubelet_extra_args.write(kubelet::EXTRA_ARGS_PATH, true)?;
+    kubelet_extra_args.write(kubelet::EXTRA_ARGS_PATH, true).await?;
 
     let containerd_config = self.get_containerd_config(instance_metadata).await?;
-    containerd_config.write("/etc/containerd/config.toml", true)?;
+    containerd_config.write("/etc/containerd/config.toml", true).await?;
 
     // Requries that containerd is running - should be running at boot from AMI build
-    containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true)?;
+    containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true).await?;
 
     if let containerd::DefaultRuntime::Nvidia = self.default_container_runtime {
       // Set the max clock for Nvidia GPUs

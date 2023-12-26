@@ -30,7 +30,7 @@ impl Default for DefaultRuntime {
   }
 }
 
-pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
+pub async fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {
   let tmpl = Templates::get(SANDBOX_IMAGE_SERVICE).unwrap();
   let tmpl = std::str::from_utf8(tmpl.data.as_ref())?;
 
@@ -38,7 +38,7 @@ pub fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, 
     "{{EXEC_START}}",
     &format!("eksnode pull-image --image {pause_image} --namespace k8s.io"),
   );
-  utils::write_file(contents.as_bytes(), path, Some(0o644), chown)
+  utils::write_file(contents.as_bytes(), path, Some(0o644), chown).await
 }
 
 // https://github.com/serde-rs/json/issues/377#issuecomment-341490464
@@ -222,7 +222,7 @@ impl ContainerdConfiguration {
     Ok(config)
   }
 
-  pub fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
+  pub async fn write<P: AsRef<Path>>(&self, path: P, chown: bool) -> Result<()> {
     let conf = toml::to_string(self)?;
     let options = formatter::Options {
       align_entries: true,
@@ -238,7 +238,7 @@ impl ContainerdConfiguration {
       ..Default::default()
     };
     let formatted = formatter::format(&conf, options);
-    utils::write_file(formatted.as_bytes(), &path, Some(0o644), chown)
+    utils::write_file(formatted.as_bytes(), &path, Some(0o644), chown).await
   }
 }
 
@@ -385,14 +385,14 @@ mod tests {
     insta::assert_debug_snapshot!(serialized);
   }
 
-  #[test]
-  fn it_creates_containerd_config() {
+  #[tokio::test]
+  async fn it_creates_containerd_config() {
     let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.8";
     let config = ContainerdConfiguration::new(&DefaultRuntime::Containerd, sandbox_img).unwrap();
     insta::assert_debug_snapshot!(config);
 
     let mut file = NamedTempFile::new().unwrap();
-    config.write(&file, false).unwrap();
+    config.write(&file, false).await.unwrap();
 
     // Seek to start
     file.seek(SeekFrom::Start(0)).unwrap();
@@ -410,13 +410,13 @@ mod tests {
     insta::assert_debug_snapshot!(config);
   }
 
-  #[test]
-  fn it_creates_sandbox_image_service() {
+  #[tokio::test]
+  async fn it_creates_sandbox_image_service() {
     let sandbox_img = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.9";
 
     // Write to file
     let mut file = NamedTempFile::new().unwrap();
-    create_sandbox_image_service(&file, sandbox_img, false).unwrap();
+    create_sandbox_image_service(&file, sandbox_img, false).await.unwrap();
     file.seek(SeekFrom::Start(0)).unwrap();
 
     // Read back contents written to file

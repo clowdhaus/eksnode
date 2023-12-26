@@ -1,13 +1,9 @@
-use std::{
-  fs::OpenOptions,
-  io::Write,
-  os::unix::fs::{self, OpenOptionsExt},
-  path::Path,
-};
+use std::{os::unix::fs, path::Path};
 
 use anyhow::{anyhow, Result};
 use regex_lite::Regex;
 use semver::Version;
+use tokio::{fs::OpenOptions, io::AsyncWriteExt};
 
 /// Extract the semantic version from the version string provided
 pub fn get_semver(ver: &str) -> Result<Version> {
@@ -18,23 +14,19 @@ pub fn get_semver(ver: &str) -> Result<Version> {
         let version = Version::parse(cap.as_str()).unwrap();
         Ok(version)
       }
-      None => Err(anyhow!("Unable to parse version")),
+      None => Err(anyhow!("Unable to parse semantic version: {ver}")),
     },
-    None => Err(anyhow!("Unable to parse version")),
+    None => Err(anyhow!("Semantic version not found: {ver}")),
   };
 }
 
+/// Command execution results
 pub struct CmdResult {
   pub stdout: String,
   pub stderr: String,
   pub status: i32,
 }
 
-pub trait CmdExecution {
-  fn exec() -> Result<CmdResult>;
-}
-
-/// Execute a command and return the output (stdout)
 pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<CmdResult> {
   let output = std::process::Command::new(cmd).args(args).output();
 
@@ -49,13 +41,15 @@ pub fn cmd_exec(cmd: &str, args: Vec<&str>) -> Result<CmdResult> {
 }
 
 /// Write a file to disk, setting the file mode and owner (gid/uid)
-pub fn write_file<P: AsRef<Path>>(contents: &[u8], path: P, mode: Option<u32>, chown: bool) -> Result<()> {
+pub async fn write_file<P: AsRef<Path>>(contents: &[u8], path: P, mode: Option<u32>, chown: bool) -> Result<()> {
   let mut file = OpenOptions::new()
     .write(true)
     .create(true)
     .mode(mode.unwrap_or(0o644))
-    .open(&path)?;
-  file.write_all(contents)?;
+    .open(&path)
+    .await?;
+  file.write_all(contents).await?;
+  file.flush().await?;
 
   if chown {
     fs::chown(&path, Some(0), Some(0))?

@@ -95,13 +95,10 @@ where
 #[cfg(target_os = "linux")]
 #[cfg(test)]
 mod tests {
-  use std::{
-    fs::OpenOptions,
-    io::Write,
-    os::unix::fs::{chown, OpenOptionsExt},
-  };
+  use std::os::unix::fs::chown;
 
   use tempfile::tempdir;
+  use tokio::{fs::OpenOptions, io::AsyncWriteExt};
 
   use super::*;
 
@@ -114,9 +111,12 @@ mod tests {
       .create(true)
       .mode(0o644)
       .open(&path)
+      .await
       .unwrap();
 
-    file.write_all(b"hello world").unwrap();
+    file.write_all(b"hello world").await.unwrap();
+    file.flush().await.unwrap();
+
     // chown(&dir, Some(1000), Some(1000)).unwrap();
     chown(&path, Some(1000), Some(1000)).unwrap();
 
