@@ -13,17 +13,8 @@ use http::Uri;
 use ipnet::Ipv4Net;
 use serde::{Deserialize, Serialize};
 use tokio::time::Duration;
-use tokio_retry::{
-  strategy::{jitter, FibonacciBackoff},
-  Retry,
-};
 
 use crate::Assets;
-
-// Limit the timeout for fetching the private DNS name of the EC2 instance to 5 minutes.
-const FETCH_PRIVATE_DNS_NAME_TIMEOUT: Duration = Duration::from_secs(300);
-// Fibonacci backoff base duration when retrying requests
-const FIBONACCI_BACKOFF_BASE_DURATION_MILLIS: u64 = 200;
 
 /// Get the EC2 client
 pub async fn get_client() -> Result<Client> {
@@ -88,34 +79,24 @@ async fn get_imds_client() -> Result<ImdsClient> {
 }
 
 pub async fn get_private_dns_name(instance_id: &str, client: &Client) -> Result<String> {
-  tokio::time::timeout(
-    FETCH_PRIVATE_DNS_NAME_TIMEOUT,
-    Retry::spawn(
-      FibonacciBackoff::from_millis(FIBONACCI_BACKOFF_BASE_DURATION_MILLIS).map(jitter),
-      || async {
-        client
-          .describe_instances()
-          .instance_ids(instance_id.to_owned())
-          .send()
-          .await
-          .context(format!("Unable to describe instance {instance_id}"))?
-          .reservations
-          .and_then(|reservations| {
-            reservations.first().and_then(|r| {
-              r.instances.clone().and_then(|instances| {
-                instances
-                  .first()
-                  .and_then(|i| i.private_dns_name().map(|s| s.to_string()))
-              })
-            })
-          })
-          .filter(|private_dns_name| !private_dns_name.is_empty())
-          .context("Reservation.Instance.PrivateDNSName is empty")
-      },
-    ),
-  )
-  .await
-  .context("Failed to get PrivateDnsName")?
+  client
+    .describe_instances()
+    .instance_ids(instance_id.to_owned())
+    .send()
+    .await
+    .context(format!("Unable to describe instance {instance_id}"))?
+    .reservations
+    .and_then(|reservations| {
+      reservations.first().and_then(|r| {
+        r.instances.clone().and_then(|instances| {
+          instances
+            .first()
+            .and_then(|i| i.private_dns_name().map(|s| s.to_string()))
+        })
+      })
+    })
+    .filter(|private_dns_name| !private_dns_name.is_empty())
+    .context("Reservation.Instance.PrivateDNSName is empty")
 }
 
 /// EC2 Instance metadata
