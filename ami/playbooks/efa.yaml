@@ -1,29 +1,4 @@
 #########################################################
-# Limit deeper C-states
-# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/processor_state_control.html#c-states
-#########################################################
-
-- name: Limit Intel processors deeper C-state
-  ansible.builtin.lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="((?:(?!intel_idle.max_cstate=1).)*?)"$'
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 intel_idle.max_cstate=1"'
-    backup: true
-    backrefs: true
-
-- name: Limit AMD processors deeper C-state
-  ansible.builtin.lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="((?:(?!processor.max_cstate=1).)*?)"$'
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1 processor.max_cstate=1"'
-    backup: true
-    backrefs: true
-
-- name: Rebuild grub boot configuration
-  ansible.builtin.shell: |
-    grub2-mkconfig -o /boot/grub2/grub.cfg
-
-#########################################################
 # AWS EFA
 #########################################################
 

@@ -1,8 +1,13 @@
 # eksnode
 
+
+## Local Development
+
 protobuf is required for compiling (containerd)
 
-## MacOS
+### MacOS
+
+Note: not all tests run on MacOS since the binary is designed/intended to run on Linux
 
 ```sh
 brew install FiloSottile/musl-cross/musl-cross
