@@ -1,4 +1,5 @@
 nav:
   - Overview: index.md
   - Accelerated AMIs : accelerated.md
+  - Images: images.md
   - Compliance : compliance.md

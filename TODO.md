@@ -1,5 +1,5 @@
 # TODO
-- [ ] Remove `container-runtim` argument and infer the appropriate runtime for the given instance type (NVIDIA or other currently)
+- [ ] Remove `container-runtime` argument and infer the appropriate runtime for the given instance type (NVIDIA or other currently)
 - [ ] https://github.com/awslabs/amazon-eks-ami/issues/951
   - [ ] https://github.com/awslabs/amazon-eks-ami/issues/478
 - [ ] https://github.com/NVIDIA/nvidia-container-toolkit/issues/64#issuecomment-1597236350

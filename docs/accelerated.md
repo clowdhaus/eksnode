@@ -46,6 +46,10 @@ For more information on Neuron, see the [AWS Neuron documentation](https://awsdo
 
 When building an AMI for use with NVIDIA GPUs, users can specify `enable_nvidia = true` to enable NVIDIA support. This will install the NVIDIA driver and NVIDIA container toolkit on the host. When `enable_efa = true`, NVIDIA Fabric Manager will also be installed on the host. The associated NVIDIA runtime and communication collective libraries such as CUDA, CUDNN, and NCCL should be installed in the application containers that are deployed onto the instance.
 
+!!! warning "Supported NVIDIA GPU cards"
+
+    `eksnode` installs the NVIDIA driver with open-source kernel modules that are dual licensed MIT/GPLv2. The open-source kernel modules support Turing, Ampere, and forward architectures (i.e. - Hopper). The open kernel modules cannot support GPUs before Turing, because the open kernel modules depend on the GPU System Processor (GSP) first introduced in Turing. This means that AMIs created with `eksnode` will not support Amazon EC2 instance types `p2`, `p3`, and `g3` due to their older GPU architectures.
+
 ```hcl
 # Example *.pkrvars.hcl values
 enable_nvidia = true
