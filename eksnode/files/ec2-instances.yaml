@@ -7,6 +7,7 @@
 a1.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -14,6 +15,7 @@ a1.2xlarge:
 a1.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -21,6 +23,7 @@ a1.4xlarge:
 a1.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -28,6 +31,7 @@ a1.large:
 a1.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -35,6 +39,7 @@ a1.medium:
 a1.metal:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -42,6 +47,7 @@ a1.metal:
 a1.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -49,6 +55,7 @@ a1.xlarge:
 bmn-sf1.metal:
   default_vcpus: 1
   eni_maximum_pods: 737
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -56,6 +63,7 @@ bmn-sf1.metal:
 c1.medium:
   default_vcpus: 2
   eni_maximum_pods: 12
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 6
@@ -63,6 +71,7 @@ c1.medium:
 c1.xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -70,6 +79,7 @@ c1.xlarge:
 c3.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -77,6 +87,7 @@ c3.2xlarge:
 c3.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -84,6 +95,7 @@ c3.4xlarge:
 c3.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -91,6 +103,7 @@ c3.8xlarge:
 c3.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -98,6 +111,7 @@ c3.large:
 c3.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -105,6 +119,7 @@ c3.xlarge:
 c4.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -112,6 +127,7 @@ c4.2xlarge:
 c4.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -119,6 +135,7 @@ c4.4xlarge:
 c4.8xlarge:
   default_vcpus: 36
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -126,6 +143,7 @@ c4.8xlarge:
 c4.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -133,6 +151,7 @@ c4.large:
 c4.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -140,6 +159,7 @@ c4.xlarge:
 c5.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -147,6 +167,7 @@ c5.12xlarge:
 c5.18xlarge:
   default_vcpus: 72
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -154,6 +175,7 @@ c5.18xlarge:
 c5.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -161,6 +183,7 @@ c5.24xlarge:
 c5.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -168,6 +191,7 @@ c5.2xlarge:
 c5.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -175,6 +199,7 @@ c5.4xlarge:
 c5.9xlarge:
   default_vcpus: 36
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -182,6 +207,7 @@ c5.9xlarge:
 c5.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -189,6 +215,7 @@ c5.large:
 c5.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -196,6 +223,7 @@ c5.metal:
 c5.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -203,6 +231,7 @@ c5.xlarge:
 c5a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -210,6 +239,7 @@ c5a.12xlarge:
 c5a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -217,6 +247,7 @@ c5a.16xlarge:
 c5a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -224,6 +255,7 @@ c5a.24xlarge:
 c5a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -231,6 +263,7 @@ c5a.2xlarge:
 c5a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -238,6 +271,7 @@ c5a.4xlarge:
 c5a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -245,6 +279,7 @@ c5a.8xlarge:
 c5a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -252,6 +287,7 @@ c5a.large:
 c5a.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -259,6 +295,7 @@ c5a.metal:
 c5a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -266,6 +303,7 @@ c5a.xlarge:
 c5ad.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -273,6 +311,7 @@ c5ad.12xlarge:
 c5ad.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -280,6 +319,7 @@ c5ad.16xlarge:
 c5ad.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -287,6 +327,7 @@ c5ad.24xlarge:
 c5ad.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -294,6 +335,7 @@ c5ad.2xlarge:
 c5ad.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -301,6 +343,7 @@ c5ad.4xlarge:
 c5ad.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -308,6 +351,7 @@ c5ad.8xlarge:
 c5ad.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -315,6 +359,7 @@ c5ad.large:
 c5ad.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -322,6 +367,7 @@ c5ad.metal:
 c5ad.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -329,6 +375,7 @@ c5ad.xlarge:
 c5d.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -336,6 +383,7 @@ c5d.12xlarge:
 c5d.18xlarge:
   default_vcpus: 72
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -343,6 +391,7 @@ c5d.18xlarge:
 c5d.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -350,6 +399,7 @@ c5d.24xlarge:
 c5d.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -357,6 +407,7 @@ c5d.2xlarge:
 c5d.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -364,6 +415,7 @@ c5d.4xlarge:
 c5d.9xlarge:
   default_vcpus: 36
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -371,6 +423,7 @@ c5d.9xlarge:
 c5d.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -378,6 +431,7 @@ c5d.large:
 c5d.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -385,6 +439,7 @@ c5d.metal:
 c5d.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -392,6 +447,7 @@ c5d.xlarge:
 c5n.18xlarge:
   default_vcpus: 72
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -399,6 +455,7 @@ c5n.18xlarge:
 c5n.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -406,6 +463,7 @@ c5n.2xlarge:
 c5n.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -413,6 +471,7 @@ c5n.4xlarge:
 c5n.9xlarge:
   default_vcpus: 36
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -420,6 +479,7 @@ c5n.9xlarge:
 c5n.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -427,6 +487,7 @@ c5n.large:
 c5n.metal:
   default_vcpus: 72
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -434,6 +495,7 @@ c5n.metal:
 c5n.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -441,6 +503,7 @@ c5n.xlarge:
 c6a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -448,6 +511,7 @@ c6a.12xlarge:
 c6a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -455,6 +519,7 @@ c6a.16xlarge:
 c6a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -462,6 +527,7 @@ c6a.24xlarge:
 c6a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -469,6 +535,7 @@ c6a.2xlarge:
 c6a.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -476,6 +543,7 @@ c6a.32xlarge:
 c6a.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -483,6 +551,7 @@ c6a.48xlarge:
 c6a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -490,6 +559,7 @@ c6a.4xlarge:
 c6a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -497,6 +567,7 @@ c6a.8xlarge:
 c6a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -504,6 +575,7 @@ c6a.large:
 c6a.metal:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -511,6 +583,7 @@ c6a.metal:
 c6a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -518,6 +591,7 @@ c6a.xlarge:
 c6g.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -525,6 +599,7 @@ c6g.12xlarge:
 c6g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -532,6 +607,7 @@ c6g.16xlarge:
 c6g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -539,6 +615,7 @@ c6g.2xlarge:
 c6g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -546,6 +623,7 @@ c6g.4xlarge:
 c6g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -553,6 +631,7 @@ c6g.8xlarge:
 c6g.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -560,6 +639,7 @@ c6g.large:
 c6g.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -567,6 +647,7 @@ c6g.medium:
 c6g.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -574,6 +655,7 @@ c6g.metal:
 c6g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -581,6 +663,7 @@ c6g.xlarge:
 c6gd.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -588,6 +671,7 @@ c6gd.12xlarge:
 c6gd.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -595,6 +679,7 @@ c6gd.16xlarge:
 c6gd.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -602,6 +687,7 @@ c6gd.2xlarge:
 c6gd.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -609,6 +695,7 @@ c6gd.4xlarge:
 c6gd.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -616,6 +703,7 @@ c6gd.8xlarge:
 c6gd.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -623,6 +711,7 @@ c6gd.large:
 c6gd.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -630,6 +719,7 @@ c6gd.medium:
 c6gd.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -637,6 +727,7 @@ c6gd.metal:
 c6gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -644,6 +735,7 @@ c6gd.xlarge:
 c6gn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -651,6 +743,7 @@ c6gn.12xlarge:
 c6gn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -658,6 +751,7 @@ c6gn.16xlarge:
 c6gn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -665,6 +759,7 @@ c6gn.2xlarge:
 c6gn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -672,6 +767,7 @@ c6gn.4xlarge:
 c6gn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -679,6 +775,7 @@ c6gn.8xlarge:
 c6gn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -686,6 +783,7 @@ c6gn.large:
 c6gn.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -693,6 +791,7 @@ c6gn.medium:
 c6gn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -700,6 +799,7 @@ c6gn.xlarge:
 c6i.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -707,6 +807,7 @@ c6i.12xlarge:
 c6i.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -714,6 +815,7 @@ c6i.16xlarge:
 c6i.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -721,6 +823,7 @@ c6i.24xlarge:
 c6i.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -728,6 +831,7 @@ c6i.2xlarge:
 c6i.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -735,6 +839,7 @@ c6i.32xlarge:
 c6i.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -742,6 +847,7 @@ c6i.4xlarge:
 c6i.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -749,6 +855,7 @@ c6i.8xlarge:
 c6i.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -756,6 +863,7 @@ c6i.large:
 c6i.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -763,6 +871,7 @@ c6i.metal:
 c6i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -770,6 +879,7 @@ c6i.xlarge:
 c6id.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -777,6 +887,7 @@ c6id.12xlarge:
 c6id.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -784,6 +895,7 @@ c6id.16xlarge:
 c6id.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -791,6 +903,7 @@ c6id.24xlarge:
 c6id.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -798,6 +911,7 @@ c6id.2xlarge:
 c6id.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -805,6 +919,7 @@ c6id.32xlarge:
 c6id.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -812,6 +927,7 @@ c6id.4xlarge:
 c6id.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -819,6 +935,7 @@ c6id.8xlarge:
 c6id.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -826,6 +943,7 @@ c6id.large:
 c6id.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -833,6 +951,7 @@ c6id.metal:
 c6id.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -840,6 +959,7 @@ c6id.xlarge:
 c6in.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -847,6 +967,7 @@ c6in.12xlarge:
 c6in.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -854,6 +975,7 @@ c6in.16xlarge:
 c6in.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -861,6 +983,7 @@ c6in.24xlarge:
 c6in.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -868,6 +991,7 @@ c6in.2xlarge:
 c6in.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -875,6 +999,7 @@ c6in.32xlarge:
 c6in.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -882,6 +1007,7 @@ c6in.4xlarge:
 c6in.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -889,6 +1015,7 @@ c6in.8xlarge:
 c6in.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -896,6 +1023,7 @@ c6in.large:
 c6in.metal:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -903,6 +1031,7 @@ c6in.metal:
 c6in.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -910,6 +1039,7 @@ c6in.xlarge:
 c7a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -917,6 +1047,7 @@ c7a.12xlarge:
 c7a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -924,6 +1055,7 @@ c7a.16xlarge:
 c7a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -931,6 +1063,7 @@ c7a.24xlarge:
 c7a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -938,6 +1071,7 @@ c7a.2xlarge:
 c7a.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -945,6 +1079,7 @@ c7a.32xlarge:
 c7a.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -952,6 +1087,7 @@ c7a.48xlarge:
 c7a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -959,6 +1095,7 @@ c7a.4xlarge:
 c7a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -966,6 +1103,7 @@ c7a.8xlarge:
 c7a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -973,6 +1111,7 @@ c7a.large:
 c7a.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -980,6 +1119,7 @@ c7a.medium:
 c7a.metal-48xl:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -987,6 +1127,7 @@ c7a.metal-48xl:
 c7a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -994,6 +1135,7 @@ c7a.xlarge:
 c7g.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1001,6 +1143,7 @@ c7g.12xlarge:
 c7g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1008,6 +1151,7 @@ c7g.16xlarge:
 c7g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1015,6 +1159,7 @@ c7g.2xlarge:
 c7g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1022,6 +1167,7 @@ c7g.4xlarge:
 c7g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1029,6 +1175,7 @@ c7g.8xlarge:
 c7g.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -1036,6 +1183,7 @@ c7g.large:
 c7g.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -1043,6 +1191,7 @@ c7g.medium:
 c7g.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1050,6 +1199,7 @@ c7g.metal:
 c7g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1057,6 +1207,7 @@ c7g.xlarge:
 c7gd.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1064,6 +1215,7 @@ c7gd.12xlarge:
 c7gd.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1071,6 +1223,7 @@ c7gd.16xlarge:
 c7gd.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1078,6 +1231,7 @@ c7gd.2xlarge:
 c7gd.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1085,6 +1239,7 @@ c7gd.4xlarge:
 c7gd.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1092,6 +1247,7 @@ c7gd.8xlarge:
 c7gd.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1099,6 +1255,7 @@ c7gd.large:
 c7gd.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -1106,6 +1263,7 @@ c7gd.medium:
 c7gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1113,6 +1271,7 @@ c7gd.xlarge:
 c7gn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1120,6 +1279,7 @@ c7gn.12xlarge:
 c7gn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1127,6 +1287,7 @@ c7gn.16xlarge:
 c7gn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1134,6 +1295,7 @@ c7gn.2xlarge:
 c7gn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1141,6 +1303,7 @@ c7gn.4xlarge:
 c7gn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1148,6 +1311,7 @@ c7gn.8xlarge:
 c7gn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -1155,6 +1319,7 @@ c7gn.large:
 c7gn.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -1162,6 +1327,7 @@ c7gn.medium:
 c7gn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1169,6 +1335,7 @@ c7gn.xlarge:
 c7i.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1176,6 +1343,7 @@ c7i.12xlarge:
 c7i.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1183,6 +1351,7 @@ c7i.16xlarge:
 c7i.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1190,6 +1359,7 @@ c7i.24xlarge:
 c7i.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1197,6 +1367,7 @@ c7i.2xlarge:
 c7i.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1204,6 +1375,7 @@ c7i.48xlarge:
 c7i.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1211,6 +1383,7 @@ c7i.4xlarge:
 c7i.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1218,6 +1391,7 @@ c7i.8xlarge:
 c7i.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -1225,6 +1399,7 @@ c7i.large:
 c7i.metal-24xl:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1232,6 +1407,7 @@ c7i.metal-24xl:
 c7i.metal-48xl:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1239,6 +1415,7 @@ c7i.metal-48xl:
 c7i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1246,6 +1423,7 @@ c7i.xlarge:
 cr1.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1253,6 +1431,7 @@ cr1.8xlarge:
 d2.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1260,6 +1439,7 @@ d2.2xlarge:
 d2.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1267,6 +1447,7 @@ d2.4xlarge:
 d2.8xlarge:
   default_vcpus: 36
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1274,6 +1455,7 @@ d2.8xlarge:
 d2.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1281,6 +1463,7 @@ d2.xlarge:
 d3.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 18
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 5
@@ -1288,6 +1471,7 @@ d3.2xlarge:
 d3.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 38
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1295,6 +1479,7 @@ d3.4xlarge:
 d3.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 59
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 20
@@ -1302,6 +1487,7 @@ d3.8xlarge:
 d3.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 10
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 3
@@ -1309,6 +1495,7 @@ d3.xlarge:
 d3en.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 89
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1316,6 +1503,7 @@ d3en.12xlarge:
 d3en.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 18
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 5
@@ -1323,6 +1511,7 @@ d3en.2xlarge:
 d3en.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 38
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1330,6 +1519,7 @@ d3en.4xlarge:
 d3en.6xlarge:
   default_vcpus: 24
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1337,6 +1527,7 @@ d3en.6xlarge:
 d3en.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 78
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 20
@@ -1344,6 +1535,7 @@ d3en.8xlarge:
 d3en.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 10
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 3
@@ -1351,6 +1543,7 @@ d3en.xlarge:
 dl1.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: Habana
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1358,6 +1551,7 @@ dl1.24xlarge:
 dl2q.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1365,6 +1559,7 @@ dl2q.24xlarge:
 f1.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 394
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1372,6 +1567,7 @@ f1.16xlarge:
 f1.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1379,6 +1575,7 @@ f1.2xlarge:
 f1.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1386,6 +1583,7 @@ f1.4xlarge:
 g3.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1393,6 +1591,7 @@ g3.16xlarge:
 g3.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1400,6 +1599,7 @@ g3.4xlarge:
 g3.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1407,6 +1607,7 @@ g3.8xlarge:
 g3s.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1414,6 +1615,7 @@ g3s.xlarge:
 g4ad.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 234
+  gpu_manufacturer: AMD
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1421,6 +1623,7 @@ g4ad.16xlarge:
 g4ad.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 8
+  gpu_manufacturer: AMD
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -1428,6 +1631,7 @@ g4ad.2xlarge:
 g4ad.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 29
+  gpu_manufacturer: AMD
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1435,6 +1639,7 @@ g4ad.4xlarge:
 g4ad.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 58
+  gpu_manufacturer: AMD
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1442,6 +1647,7 @@ g4ad.8xlarge:
 g4ad.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 8
+  gpu_manufacturer: AMD
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -1449,6 +1655,7 @@ g4ad.xlarge:
 g4dn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1456,6 +1663,7 @@ g4dn.12xlarge:
 g4dn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1463,6 +1671,7 @@ g4dn.16xlarge:
 g4dn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 29
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1470,6 +1679,7 @@ g4dn.2xlarge:
 g4dn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 29
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1477,6 +1687,7 @@ g4dn.4xlarge:
 g4dn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1484,6 +1695,7 @@ g4dn.8xlarge:
 g4dn.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1491,6 +1703,7 @@ g4dn.metal:
 g4dn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 29
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1498,6 +1711,7 @@ g4dn.xlarge:
 g5.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1505,6 +1719,7 @@ g5.12xlarge:
 g5.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1512,6 +1727,7 @@ g5.16xlarge:
 g5.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1519,6 +1735,7 @@ g5.24xlarge:
 g5.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1526,6 +1743,7 @@ g5.2xlarge:
 g5.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 345
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1533,6 +1751,7 @@ g5.48xlarge:
 g5.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1540,6 +1759,7 @@ g5.4xlarge:
 g5.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1547,6 +1767,7 @@ g5.8xlarge:
 g5.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1554,6 +1775,7 @@ g5.xlarge:
 g5g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1561,6 +1783,7 @@ g5g.16xlarge:
 g5g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1568,6 +1791,7 @@ g5g.2xlarge:
 g5g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1575,6 +1799,7 @@ g5g.4xlarge:
 g5g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1582,6 +1807,7 @@ g5g.8xlarge:
 g5g.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1589,6 +1815,7 @@ g5g.metal:
 g5g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -1596,6 +1823,7 @@ g5g.xlarge:
 h1.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1603,6 +1831,7 @@ h1.16xlarge:
 h1.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1610,6 +1839,7 @@ h1.2xlarge:
 h1.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1617,41 +1847,15 @@ h1.4xlarge:
 h1.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
   maximum_network_interfaces: 8
-hpc7a.12xlarge:
-  default_vcpus: 24
-  eni_maximum_pods: 100
-  hypervisor: nitro
-  instance_storage_supported: false
-  ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 2
-hpc7a.24xlarge:
-  default_vcpus: 48
-  eni_maximum_pods: 100
-  hypervisor: nitro
-  instance_storage_supported: false
-  ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 2
-hpc7a.48xlarge:
-  default_vcpus: 96
-  eni_maximum_pods: 100
-  hypervisor: nitro
-  instance_storage_supported: false
-  ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 2
-hpc7a.96xlarge:
-  default_vcpus: 192
-  eni_maximum_pods: 100
-  hypervisor: nitro
-  instance_storage_supported: false
-  ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 2
 hpc7g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 198
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1659,6 +1863,7 @@ hpc7g.16xlarge:
 hpc7g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 198
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1666,6 +1871,7 @@ hpc7g.4xlarge:
 hpc7g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 198
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -1673,6 +1879,7 @@ hpc7g.8xlarge:
 hs1.8xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1680,6 +1887,7 @@ hs1.8xlarge:
 i2.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1687,6 +1895,7 @@ i2.2xlarge:
 i2.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1694,6 +1903,7 @@ i2.4xlarge:
 i2.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1701,6 +1911,7 @@ i2.8xlarge:
 i2.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1708,6 +1919,7 @@ i2.xlarge:
 i3.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1715,6 +1927,7 @@ i3.16xlarge:
 i3.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1722,6 +1935,7 @@ i3.2xlarge:
 i3.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1729,6 +1943,7 @@ i3.4xlarge:
 i3.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1736,6 +1951,7 @@ i3.8xlarge:
 i3.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1743,6 +1959,7 @@ i3.large:
 i3.metal:
   default_vcpus: 72
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1750,6 +1967,7 @@ i3.metal:
 i3.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1757,6 +1975,7 @@ i3.xlarge:
 i3en.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1764,6 +1983,7 @@ i3en.12xlarge:
 i3en.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1771,6 +1991,7 @@ i3en.24xlarge:
 i3en.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1778,6 +1999,7 @@ i3en.2xlarge:
 i3en.3xlarge:
   default_vcpus: 12
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1785,6 +2007,7 @@ i3en.3xlarge:
 i3en.6xlarge:
   default_vcpus: 24
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1792,6 +2015,7 @@ i3en.6xlarge:
 i3en.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1799,6 +2023,7 @@ i3en.large:
 i3en.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1806,6 +2031,7 @@ i3en.metal:
 i3en.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1813,6 +2039,7 @@ i3en.xlarge:
 i4g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1820,6 +2047,7 @@ i4g.16xlarge:
 i4g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1827,6 +2055,7 @@ i4g.2xlarge:
 i4g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1834,6 +2063,7 @@ i4g.4xlarge:
 i4g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1841,6 +2071,7 @@ i4g.8xlarge:
 i4g.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1848,6 +2079,7 @@ i4g.large:
 i4g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1855,6 +2087,7 @@ i4g.xlarge:
 i4i.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1862,6 +2095,7 @@ i4i.12xlarge:
 i4i.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1869,6 +2103,7 @@ i4i.16xlarge:
 i4i.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 437
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1876,6 +2111,7 @@ i4i.24xlarge:
 i4i.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1883,6 +2119,7 @@ i4i.2xlarge:
 i4i.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1890,6 +2127,7 @@ i4i.32xlarge:
 i4i.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1897,6 +2135,7 @@ i4i.4xlarge:
 i4i.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1904,6 +2143,7 @@ i4i.8xlarge:
 i4i.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1911,6 +2151,7 @@ i4i.large:
 i4i.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1918,6 +2159,7 @@ i4i.metal:
 i4i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1925,6 +2167,7 @@ i4i.xlarge:
 im4gn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -1932,6 +2175,7 @@ im4gn.16xlarge:
 im4gn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1939,6 +2183,7 @@ im4gn.2xlarge:
 im4gn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1946,6 +2191,7 @@ im4gn.4xlarge:
 im4gn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -1953,6 +2199,7 @@ im4gn.8xlarge:
 im4gn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -1960,6 +2207,7 @@ im4gn.large:
 im4gn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -1967,6 +2215,7 @@ im4gn.xlarge:
 inf1.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 321
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1974,6 +2223,7 @@ inf1.24xlarge:
 inf1.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 38
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -1981,6 +2231,7 @@ inf1.2xlarge:
 inf1.6xlarge:
   default_vcpus: 24
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -1988,6 +2239,7 @@ inf1.6xlarge:
 inf1.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 38
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -1995,6 +2247,7 @@ inf1.xlarge:
 inf2.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2002,6 +2255,7 @@ inf2.24xlarge:
 inf2.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2009,6 +2263,7 @@ inf2.48xlarge:
 inf2.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2016,6 +2271,7 @@ inf2.8xlarge:
 inf2.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2023,6 +2279,7 @@ inf2.xlarge:
 is4gen.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2030,6 +2287,7 @@ is4gen.2xlarge:
 is4gen.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2037,6 +2295,7 @@ is4gen.4xlarge:
 is4gen.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2044,6 +2303,7 @@ is4gen.8xlarge:
 is4gen.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2051,6 +2311,7 @@ is4gen.large:
 is4gen.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -2058,6 +2319,7 @@ is4gen.medium:
 is4gen.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2065,6 +2327,7 @@ is4gen.xlarge:
 m1.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2072,6 +2335,7 @@ m1.large:
 m1.medium:
   default_vcpus: 1
   eni_maximum_pods: 12
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 6
@@ -2079,6 +2343,7 @@ m1.medium:
 m1.small:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -2086,6 +2351,7 @@ m1.small:
 m1.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2093,6 +2359,7 @@ m1.xlarge:
 m2.2xlarge:
   default_vcpus: 4
   eni_maximum_pods: 118
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2100,6 +2367,7 @@ m2.2xlarge:
 m2.4xlarge:
   default_vcpus: 8
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2107,6 +2375,7 @@ m2.4xlarge:
 m2.xlarge:
   default_vcpus: 2
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2114,6 +2383,7 @@ m2.xlarge:
 m3.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 118
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2121,6 +2391,7 @@ m3.2xlarge:
 m3.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2128,6 +2399,7 @@ m3.large:
 m3.medium:
   default_vcpus: 1
   eni_maximum_pods: 12
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 6
@@ -2135,6 +2407,7 @@ m3.medium:
 m3.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2142,6 +2415,7 @@ m3.xlarge:
 m4.10xlarge:
   default_vcpus: 40
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2149,6 +2423,7 @@ m4.10xlarge:
 m4.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2156,6 +2431,7 @@ m4.16xlarge:
 m4.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2163,6 +2439,7 @@ m4.2xlarge:
 m4.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2170,6 +2447,7 @@ m4.4xlarge:
 m4.large:
   default_vcpus: 2
   eni_maximum_pods: 20
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2177,6 +2455,7 @@ m4.large:
 m4.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2184,6 +2463,7 @@ m4.xlarge:
 m5.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2191,6 +2471,7 @@ m5.12xlarge:
 m5.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2198,6 +2479,7 @@ m5.16xlarge:
 m5.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2205,6 +2487,7 @@ m5.24xlarge:
 m5.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2212,6 +2495,7 @@ m5.2xlarge:
 m5.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2219,6 +2503,7 @@ m5.4xlarge:
 m5.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2226,6 +2511,7 @@ m5.8xlarge:
 m5.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2233,6 +2519,7 @@ m5.large:
 m5.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2240,6 +2527,7 @@ m5.metal:
 m5.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2247,6 +2535,7 @@ m5.xlarge:
 m5a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2254,6 +2543,7 @@ m5a.12xlarge:
 m5a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2261,6 +2551,7 @@ m5a.16xlarge:
 m5a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2268,6 +2559,7 @@ m5a.24xlarge:
 m5a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2275,6 +2567,7 @@ m5a.2xlarge:
 m5a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2282,6 +2575,7 @@ m5a.4xlarge:
 m5a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2289,6 +2583,7 @@ m5a.8xlarge:
 m5a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2296,6 +2591,7 @@ m5a.large:
 m5a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2303,6 +2599,7 @@ m5a.xlarge:
 m5ad.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2310,6 +2607,7 @@ m5ad.12xlarge:
 m5ad.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2317,6 +2615,7 @@ m5ad.16xlarge:
 m5ad.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2324,6 +2623,7 @@ m5ad.24xlarge:
 m5ad.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2331,6 +2631,7 @@ m5ad.2xlarge:
 m5ad.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2338,6 +2639,7 @@ m5ad.4xlarge:
 m5ad.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2345,6 +2647,7 @@ m5ad.8xlarge:
 m5ad.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2352,6 +2655,7 @@ m5ad.large:
 m5ad.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2359,6 +2663,7 @@ m5ad.xlarge:
 m5d.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2366,6 +2671,7 @@ m5d.12xlarge:
 m5d.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2373,6 +2679,7 @@ m5d.16xlarge:
 m5d.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2380,6 +2687,7 @@ m5d.24xlarge:
 m5d.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2387,6 +2695,7 @@ m5d.2xlarge:
 m5d.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2394,6 +2703,7 @@ m5d.4xlarge:
 m5d.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2401,6 +2711,7 @@ m5d.8xlarge:
 m5d.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2408,6 +2719,7 @@ m5d.large:
 m5d.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2415,6 +2727,7 @@ m5d.metal:
 m5d.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2422,6 +2735,7 @@ m5d.xlarge:
 m5dn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2429,6 +2743,7 @@ m5dn.12xlarge:
 m5dn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2436,6 +2751,7 @@ m5dn.16xlarge:
 m5dn.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2443,6 +2759,7 @@ m5dn.24xlarge:
 m5dn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2450,6 +2767,7 @@ m5dn.2xlarge:
 m5dn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2457,6 +2775,7 @@ m5dn.4xlarge:
 m5dn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2464,6 +2783,7 @@ m5dn.8xlarge:
 m5dn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2471,6 +2791,7 @@ m5dn.large:
 m5dn.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2478,6 +2799,7 @@ m5dn.metal:
 m5dn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2485,6 +2807,7 @@ m5dn.xlarge:
 m5n.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2492,6 +2815,7 @@ m5n.12xlarge:
 m5n.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2499,6 +2823,7 @@ m5n.16xlarge:
 m5n.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2506,6 +2831,7 @@ m5n.24xlarge:
 m5n.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2513,6 +2839,7 @@ m5n.2xlarge:
 m5n.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2520,6 +2847,7 @@ m5n.4xlarge:
 m5n.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2527,6 +2855,7 @@ m5n.8xlarge:
 m5n.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2534,6 +2863,7 @@ m5n.large:
 m5n.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2541,6 +2871,7 @@ m5n.metal:
 m5n.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2548,6 +2879,7 @@ m5n.xlarge:
 m5zn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2555,6 +2887,7 @@ m5zn.12xlarge:
 m5zn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2562,6 +2895,7 @@ m5zn.2xlarge:
 m5zn.3xlarge:
   default_vcpus: 12
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2569,6 +2903,7 @@ m5zn.3xlarge:
 m5zn.6xlarge:
   default_vcpus: 24
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2576,6 +2911,7 @@ m5zn.6xlarge:
 m5zn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2583,6 +2919,7 @@ m5zn.large:
 m5zn.metal:
   default_vcpus: 48
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2590,6 +2927,7 @@ m5zn.metal:
 m5zn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2597,6 +2935,7 @@ m5zn.xlarge:
 m6a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2604,6 +2943,7 @@ m6a.12xlarge:
 m6a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2611,6 +2951,7 @@ m6a.16xlarge:
 m6a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2618,6 +2959,7 @@ m6a.24xlarge:
 m6a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2625,6 +2967,7 @@ m6a.2xlarge:
 m6a.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2632,6 +2975,7 @@ m6a.32xlarge:
 m6a.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2639,6 +2983,7 @@ m6a.48xlarge:
 m6a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2646,6 +2991,7 @@ m6a.4xlarge:
 m6a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2653,6 +2999,7 @@ m6a.8xlarge:
 m6a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2660,6 +3007,7 @@ m6a.large:
 m6a.metal:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2667,6 +3015,7 @@ m6a.metal:
 m6a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2674,6 +3023,7 @@ m6a.xlarge:
 m6g.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2681,6 +3031,7 @@ m6g.12xlarge:
 m6g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2688,6 +3039,7 @@ m6g.16xlarge:
 m6g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2695,6 +3047,7 @@ m6g.2xlarge:
 m6g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2702,6 +3055,7 @@ m6g.4xlarge:
 m6g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2709,6 +3063,7 @@ m6g.8xlarge:
 m6g.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2716,6 +3071,7 @@ m6g.large:
 m6g.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -2723,6 +3079,7 @@ m6g.medium:
 m6g.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2730,6 +3087,7 @@ m6g.metal:
 m6g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2737,6 +3095,7 @@ m6g.xlarge:
 m6gd.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2744,6 +3103,7 @@ m6gd.12xlarge:
 m6gd.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2751,6 +3111,7 @@ m6gd.16xlarge:
 m6gd.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2758,6 +3119,7 @@ m6gd.2xlarge:
 m6gd.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2765,6 +3127,7 @@ m6gd.4xlarge:
 m6gd.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2772,6 +3135,7 @@ m6gd.8xlarge:
 m6gd.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2779,6 +3143,7 @@ m6gd.large:
 m6gd.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -2786,6 +3151,7 @@ m6gd.medium:
 m6gd.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2793,6 +3159,7 @@ m6gd.metal:
 m6gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2800,6 +3167,7 @@ m6gd.xlarge:
 m6i.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2807,6 +3175,7 @@ m6i.12xlarge:
 m6i.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2814,6 +3183,7 @@ m6i.16xlarge:
 m6i.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2821,6 +3191,7 @@ m6i.24xlarge:
 m6i.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2828,6 +3199,7 @@ m6i.2xlarge:
 m6i.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2835,6 +3207,7 @@ m6i.32xlarge:
 m6i.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2842,6 +3215,7 @@ m6i.4xlarge:
 m6i.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -2849,6 +3223,7 @@ m6i.8xlarge:
 m6i.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -2856,6 +3231,7 @@ m6i.large:
 m6i.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -2863,6 +3239,7 @@ m6i.metal:
 m6i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -2870,6 +3247,7 @@ m6i.xlarge:
 m6id.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2877,6 +3255,7 @@ m6id.12xlarge:
 m6id.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2884,6 +3263,7 @@ m6id.16xlarge:
 m6id.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2891,6 +3271,7 @@ m6id.24xlarge:
 m6id.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2898,6 +3279,7 @@ m6id.2xlarge:
 m6id.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2905,6 +3287,7 @@ m6id.32xlarge:
 m6id.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2912,6 +3295,7 @@ m6id.4xlarge:
 m6id.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2919,6 +3303,7 @@ m6id.8xlarge:
 m6id.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2926,6 +3311,7 @@ m6id.large:
 m6id.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2933,6 +3319,7 @@ m6id.metal:
 m6id.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2940,6 +3327,7 @@ m6id.xlarge:
 m6idn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2947,6 +3335,7 @@ m6idn.12xlarge:
 m6idn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2954,6 +3343,7 @@ m6idn.16xlarge:
 m6idn.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2961,6 +3351,7 @@ m6idn.24xlarge:
 m6idn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -2968,6 +3359,7 @@ m6idn.2xlarge:
 m6idn.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -2975,6 +3367,7 @@ m6idn.32xlarge:
 m6idn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2982,6 +3375,7 @@ m6idn.4xlarge:
 m6idn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -2989,6 +3383,7 @@ m6idn.8xlarge:
 m6idn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -2996,6 +3391,7 @@ m6idn.large:
 m6idn.metal:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3003,6 +3399,7 @@ m6idn.metal:
 m6idn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3010,6 +3407,7 @@ m6idn.xlarge:
 m6in.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3017,6 +3415,7 @@ m6in.12xlarge:
 m6in.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3024,6 +3423,7 @@ m6in.16xlarge:
 m6in.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3031,6 +3431,7 @@ m6in.24xlarge:
 m6in.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3038,6 +3439,7 @@ m6in.2xlarge:
 m6in.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3045,6 +3447,7 @@ m6in.32xlarge:
 m6in.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3052,6 +3455,7 @@ m6in.4xlarge:
 m6in.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3059,6 +3463,7 @@ m6in.8xlarge:
 m6in.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3066,6 +3471,7 @@ m6in.large:
 m6in.metal:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3073,6 +3479,7 @@ m6in.metal:
 m6in.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3080,6 +3487,7 @@ m6in.xlarge:
 m7a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3087,6 +3495,7 @@ m7a.12xlarge:
 m7a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3094,6 +3503,7 @@ m7a.16xlarge:
 m7a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3101,6 +3511,7 @@ m7a.24xlarge:
 m7a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3108,6 +3519,7 @@ m7a.2xlarge:
 m7a.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3115,6 +3527,7 @@ m7a.32xlarge:
 m7a.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3122,6 +3535,7 @@ m7a.48xlarge:
 m7a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3129,6 +3543,7 @@ m7a.4xlarge:
 m7a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3136,6 +3551,7 @@ m7a.8xlarge:
 m7a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3143,6 +3559,7 @@ m7a.large:
 m7a.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -3150,6 +3567,7 @@ m7a.medium:
 m7a.metal-48xl:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3157,6 +3575,7 @@ m7a.metal-48xl:
 m7a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3164,6 +3583,7 @@ m7a.xlarge:
 m7g.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3171,6 +3591,7 @@ m7g.12xlarge:
 m7g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3178,6 +3599,7 @@ m7g.16xlarge:
 m7g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3185,6 +3607,7 @@ m7g.2xlarge:
 m7g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3192,6 +3615,7 @@ m7g.4xlarge:
 m7g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3199,6 +3623,7 @@ m7g.8xlarge:
 m7g.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3206,6 +3631,7 @@ m7g.large:
 m7g.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -3213,6 +3639,7 @@ m7g.medium:
 m7g.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3220,6 +3647,7 @@ m7g.metal:
 m7g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3227,6 +3655,7 @@ m7g.xlarge:
 m7gd.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3234,6 +3663,7 @@ m7gd.12xlarge:
 m7gd.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3241,6 +3671,7 @@ m7gd.16xlarge:
 m7gd.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3248,6 +3679,7 @@ m7gd.2xlarge:
 m7gd.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3255,6 +3687,7 @@ m7gd.4xlarge:
 m7gd.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3262,6 +3695,7 @@ m7gd.8xlarge:
 m7gd.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -3269,6 +3703,7 @@ m7gd.large:
 m7gd.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -3276,6 +3711,7 @@ m7gd.medium:
 m7gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3283,6 +3719,7 @@ m7gd.xlarge:
 m7i-flex.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3290,6 +3727,7 @@ m7i-flex.2xlarge:
 m7i-flex.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3297,6 +3735,7 @@ m7i-flex.4xlarge:
 m7i-flex.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3304,6 +3743,7 @@ m7i-flex.8xlarge:
 m7i-flex.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3311,6 +3751,7 @@ m7i-flex.large:
 m7i-flex.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3318,6 +3759,7 @@ m7i-flex.xlarge:
 m7i.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3325,6 +3767,7 @@ m7i.12xlarge:
 m7i.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3332,6 +3775,7 @@ m7i.16xlarge:
 m7i.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3339,6 +3783,7 @@ m7i.24xlarge:
 m7i.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3346,6 +3791,7 @@ m7i.2xlarge:
 m7i.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3353,6 +3799,7 @@ m7i.48xlarge:
 m7i.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3360,6 +3807,7 @@ m7i.4xlarge:
 m7i.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3367,6 +3815,7 @@ m7i.8xlarge:
 m7i.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3374,6 +3823,7 @@ m7i.large:
 m7i.metal-24xl:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3381,6 +3831,7 @@ m7i.metal-24xl:
 m7i.metal-48xl:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3388,6 +3839,7 @@ m7i.metal-48xl:
 m7i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3395,6 +3847,7 @@ m7i.xlarge:
 mac1.metal:
   default_vcpus: 12
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3402,6 +3855,7 @@ mac1.metal:
 mac2-m2.metal:
   default_vcpus: 8
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3409,6 +3863,7 @@ mac2-m2.metal:
 mac2-m2pro.metal:
   default_vcpus: 12
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3416,6 +3871,7 @@ mac2-m2pro.metal:
 mac2.metal:
   default_vcpus: 8
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3423,6 +3879,7 @@ mac2.metal:
 p2.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3430,6 +3887,7 @@ p2.16xlarge:
 p2.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3437,6 +3895,7 @@ p2.8xlarge:
 p2.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3444,6 +3903,7 @@ p2.xlarge:
 p3.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3451,6 +3911,7 @@ p3.16xlarge:
 p3.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3458,6 +3919,7 @@ p3.2xlarge:
 p3.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: NVIDIA
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3465,6 +3927,7 @@ p3.8xlarge:
 p3dn.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3472,6 +3935,7 @@ p3dn.24xlarge:
 p4d.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3479,6 +3943,7 @@ p4d.24xlarge:
 p4de.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3486,6 +3951,7 @@ p4de.24xlarge:
 p5.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 100
+  gpu_manufacturer: NVIDIA
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3493,6 +3959,7 @@ p5.48xlarge:
 r3.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3500,6 +3967,7 @@ r3.2xlarge:
 r3.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3507,6 +3975,7 @@ r3.4xlarge:
 r3.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3514,6 +3983,7 @@ r3.8xlarge:
 r3.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -3521,6 +3991,7 @@ r3.large:
 r3.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3528,6 +3999,7 @@ r3.xlarge:
 r4.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3535,6 +4007,7 @@ r4.16xlarge:
 r4.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3542,6 +4015,7 @@ r4.2xlarge:
 r4.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3549,6 +4023,7 @@ r4.4xlarge:
 r4.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3556,6 +4031,7 @@ r4.8xlarge:
 r4.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3563,6 +4039,7 @@ r4.large:
 r4.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3570,6 +4047,7 @@ r4.xlarge:
 r5.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3577,6 +4055,7 @@ r5.12xlarge:
 r5.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3584,6 +4063,7 @@ r5.16xlarge:
 r5.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3591,6 +4071,7 @@ r5.24xlarge:
 r5.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3598,6 +4079,7 @@ r5.2xlarge:
 r5.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3605,6 +4087,7 @@ r5.4xlarge:
 r5.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3612,6 +4095,7 @@ r5.8xlarge:
 r5.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3619,6 +4103,7 @@ r5.large:
 r5.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3626,6 +4111,7 @@ r5.metal:
 r5.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3633,6 +4119,7 @@ r5.xlarge:
 r5a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3640,6 +4127,7 @@ r5a.12xlarge:
 r5a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3647,6 +4135,7 @@ r5a.16xlarge:
 r5a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3654,6 +4143,7 @@ r5a.24xlarge:
 r5a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3661,6 +4151,7 @@ r5a.2xlarge:
 r5a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3668,6 +4159,7 @@ r5a.4xlarge:
 r5a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3675,6 +4167,7 @@ r5a.8xlarge:
 r5a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3682,6 +4175,7 @@ r5a.large:
 r5a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3689,6 +4183,7 @@ r5a.xlarge:
 r5ad.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3696,6 +4191,7 @@ r5ad.12xlarge:
 r5ad.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3703,6 +4199,7 @@ r5ad.16xlarge:
 r5ad.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3710,6 +4207,7 @@ r5ad.24xlarge:
 r5ad.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3717,6 +4215,7 @@ r5ad.2xlarge:
 r5ad.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3724,6 +4223,7 @@ r5ad.4xlarge:
 r5ad.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3731,6 +4231,7 @@ r5ad.8xlarge:
 r5ad.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -3738,6 +4239,7 @@ r5ad.large:
 r5ad.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3745,6 +4247,7 @@ r5ad.xlarge:
 r5b.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3752,6 +4255,7 @@ r5b.12xlarge:
 r5b.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3759,6 +4263,7 @@ r5b.16xlarge:
 r5b.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3766,6 +4271,7 @@ r5b.24xlarge:
 r5b.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3773,6 +4279,7 @@ r5b.2xlarge:
 r5b.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3780,6 +4287,7 @@ r5b.4xlarge:
 r5b.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3787,6 +4295,7 @@ r5b.8xlarge:
 r5b.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3794,6 +4303,7 @@ r5b.large:
 r5b.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3801,6 +4311,7 @@ r5b.metal:
 r5b.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3808,6 +4319,7 @@ r5b.xlarge:
 r5d.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3815,6 +4327,7 @@ r5d.12xlarge:
 r5d.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3822,6 +4335,7 @@ r5d.16xlarge:
 r5d.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3829,6 +4343,7 @@ r5d.24xlarge:
 r5d.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3836,6 +4351,7 @@ r5d.2xlarge:
 r5d.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3843,6 +4359,7 @@ r5d.4xlarge:
 r5d.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3850,6 +4367,7 @@ r5d.8xlarge:
 r5d.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -3857,6 +4375,7 @@ r5d.large:
 r5d.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3864,6 +4383,7 @@ r5d.metal:
 r5d.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3871,6 +4391,7 @@ r5d.xlarge:
 r5dn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3878,6 +4399,7 @@ r5dn.12xlarge:
 r5dn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3885,6 +4407,7 @@ r5dn.16xlarge:
 r5dn.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3892,6 +4415,7 @@ r5dn.24xlarge:
 r5dn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3899,6 +4423,7 @@ r5dn.2xlarge:
 r5dn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3906,6 +4431,7 @@ r5dn.4xlarge:
 r5dn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -3913,6 +4439,7 @@ r5dn.8xlarge:
 r5dn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -3920,6 +4447,7 @@ r5dn.large:
 r5dn.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -3927,6 +4455,7 @@ r5dn.metal:
 r5dn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -3934,6 +4463,7 @@ r5dn.xlarge:
 r5n.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3941,6 +4471,7 @@ r5n.12xlarge:
 r5n.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3948,6 +4479,7 @@ r5n.16xlarge:
 r5n.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3955,6 +4487,7 @@ r5n.24xlarge:
 r5n.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3962,6 +4495,7 @@ r5n.2xlarge:
 r5n.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3969,6 +4503,7 @@ r5n.4xlarge:
 r5n.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -3976,6 +4511,7 @@ r5n.8xlarge:
 r5n.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -3983,6 +4519,7 @@ r5n.large:
 r5n.metal:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -3990,6 +4527,7 @@ r5n.metal:
 r5n.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -3997,6 +4535,7 @@ r5n.xlarge:
 r6a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4004,6 +4543,7 @@ r6a.12xlarge:
 r6a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4011,6 +4551,7 @@ r6a.16xlarge:
 r6a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4018,6 +4559,7 @@ r6a.24xlarge:
 r6a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4025,6 +4567,7 @@ r6a.2xlarge:
 r6a.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4032,6 +4575,7 @@ r6a.32xlarge:
 r6a.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4039,6 +4583,7 @@ r6a.48xlarge:
 r6a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4046,6 +4591,7 @@ r6a.4xlarge:
 r6a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4053,6 +4599,7 @@ r6a.8xlarge:
 r6a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4060,6 +4607,7 @@ r6a.large:
 r6a.metal:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4067,6 +4615,7 @@ r6a.metal:
 r6a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4074,6 +4623,7 @@ r6a.xlarge:
 r6g.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4081,6 +4631,7 @@ r6g.12xlarge:
 r6g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4088,6 +4639,7 @@ r6g.16xlarge:
 r6g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4095,6 +4647,7 @@ r6g.2xlarge:
 r6g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4102,6 +4655,7 @@ r6g.4xlarge:
 r6g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4109,6 +4663,7 @@ r6g.8xlarge:
 r6g.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4116,6 +4671,7 @@ r6g.large:
 r6g.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -4123,6 +4679,7 @@ r6g.medium:
 r6g.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4130,6 +4687,7 @@ r6g.metal:
 r6g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4137,6 +4695,7 @@ r6g.xlarge:
 r6gd.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4144,6 +4703,7 @@ r6gd.12xlarge:
 r6gd.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4151,6 +4711,7 @@ r6gd.16xlarge:
 r6gd.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4158,6 +4719,7 @@ r6gd.2xlarge:
 r6gd.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4165,6 +4727,7 @@ r6gd.4xlarge:
 r6gd.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4172,6 +4735,7 @@ r6gd.8xlarge:
 r6gd.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -4179,6 +4743,7 @@ r6gd.large:
 r6gd.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -4186,6 +4751,7 @@ r6gd.medium:
 r6gd.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4193,6 +4759,7 @@ r6gd.metal:
 r6gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4200,6 +4767,7 @@ r6gd.xlarge:
 r6i.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4207,6 +4775,7 @@ r6i.12xlarge:
 r6i.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4214,6 +4783,7 @@ r6i.16xlarge:
 r6i.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4221,6 +4791,7 @@ r6i.24xlarge:
 r6i.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4228,6 +4799,7 @@ r6i.2xlarge:
 r6i.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4235,6 +4807,7 @@ r6i.32xlarge:
 r6i.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4242,6 +4815,7 @@ r6i.4xlarge:
 r6i.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4249,6 +4823,7 @@ r6i.8xlarge:
 r6i.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4256,6 +4831,7 @@ r6i.large:
 r6i.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4263,6 +4839,7 @@ r6i.metal:
 r6i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4270,6 +4847,7 @@ r6i.xlarge:
 r6id.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4277,6 +4855,7 @@ r6id.12xlarge:
 r6id.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4284,6 +4863,7 @@ r6id.16xlarge:
 r6id.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4291,6 +4871,7 @@ r6id.24xlarge:
 r6id.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4298,6 +4879,7 @@ r6id.2xlarge:
 r6id.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4305,6 +4887,7 @@ r6id.32xlarge:
 r6id.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4312,6 +4895,7 @@ r6id.4xlarge:
 r6id.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4319,6 +4903,7 @@ r6id.8xlarge:
 r6id.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -4326,6 +4911,7 @@ r6id.large:
 r6id.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4333,6 +4919,7 @@ r6id.metal:
 r6id.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4340,6 +4927,7 @@ r6id.xlarge:
 r6idn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4347,6 +4935,7 @@ r6idn.12xlarge:
 r6idn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4354,6 +4943,7 @@ r6idn.16xlarge:
 r6idn.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4361,6 +4951,7 @@ r6idn.24xlarge:
 r6idn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4368,6 +4959,7 @@ r6idn.2xlarge:
 r6idn.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4375,6 +4967,7 @@ r6idn.32xlarge:
 r6idn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4382,6 +4975,7 @@ r6idn.4xlarge:
 r6idn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4389,6 +4983,7 @@ r6idn.8xlarge:
 r6idn.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -4396,6 +4991,7 @@ r6idn.large:
 r6idn.metal:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4403,6 +4999,7 @@ r6idn.metal:
 r6idn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4410,6 +5007,7 @@ r6idn.xlarge:
 r6in.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4417,6 +5015,7 @@ r6in.12xlarge:
 r6in.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4424,6 +5023,7 @@ r6in.16xlarge:
 r6in.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4431,6 +5031,7 @@ r6in.24xlarge:
 r6in.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4438,6 +5039,7 @@ r6in.2xlarge:
 r6in.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4445,6 +5047,7 @@ r6in.32xlarge:
 r6in.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4452,6 +5055,7 @@ r6in.4xlarge:
 r6in.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4459,6 +5063,7 @@ r6in.8xlarge:
 r6in.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4466,6 +5071,7 @@ r6in.large:
 r6in.metal:
   default_vcpus: 128
   eni_maximum_pods: 345
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4473,6 +5079,7 @@ r6in.metal:
 r6in.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4480,6 +5087,7 @@ r6in.xlarge:
 r7a.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4487,6 +5095,7 @@ r7a.12xlarge:
 r7a.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4494,6 +5103,7 @@ r7a.16xlarge:
 r7a.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4501,6 +5111,7 @@ r7a.24xlarge:
 r7a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4508,6 +5119,7 @@ r7a.2xlarge:
 r7a.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4515,6 +5127,7 @@ r7a.32xlarge:
 r7a.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4522,6 +5135,7 @@ r7a.48xlarge:
 r7a.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4529,6 +5143,7 @@ r7a.4xlarge:
 r7a.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4536,6 +5151,7 @@ r7a.8xlarge:
 r7a.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4543,6 +5159,7 @@ r7a.large:
 r7a.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -4550,6 +5167,7 @@ r7a.medium:
 r7a.metal-48xl:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4557,6 +5175,7 @@ r7a.metal-48xl:
 r7a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4564,6 +5183,7 @@ r7a.xlarge:
 r7g.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4571,6 +5191,7 @@ r7g.12xlarge:
 r7g.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4578,6 +5199,7 @@ r7g.16xlarge:
 r7g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4585,6 +5207,7 @@ r7g.2xlarge:
 r7g.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4592,6 +5215,7 @@ r7g.4xlarge:
 r7g.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4599,6 +5223,7 @@ r7g.8xlarge:
 r7g.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4606,6 +5231,7 @@ r7g.large:
 r7g.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -4613,6 +5239,7 @@ r7g.medium:
 r7g.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4620,6 +5247,7 @@ r7g.metal:
 r7g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4627,6 +5255,7 @@ r7g.xlarge:
 r7gd.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4634,6 +5263,7 @@ r7gd.12xlarge:
 r7gd.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -4641,6 +5271,7 @@ r7gd.16xlarge:
 r7gd.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4648,6 +5279,7 @@ r7gd.2xlarge:
 r7gd.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4655,6 +5287,7 @@ r7gd.4xlarge:
 r7gd.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -4662,6 +5295,7 @@ r7gd.8xlarge:
 r7gd.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -4669,6 +5303,7 @@ r7gd.large:
 r7gd.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -4676,6 +5311,7 @@ r7gd.medium:
 r7gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -4683,6 +5319,7 @@ r7gd.xlarge:
 r7i.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4690,6 +5327,7 @@ r7i.12xlarge:
 r7i.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4697,6 +5335,7 @@ r7i.16xlarge:
 r7i.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4704,6 +5343,7 @@ r7i.24xlarge:
 r7i.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4711,6 +5351,7 @@ r7i.2xlarge:
 r7i.48xlarge:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4718,6 +5359,7 @@ r7i.48xlarge:
 r7i.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4725,6 +5367,7 @@ r7i.4xlarge:
 r7i.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4732,6 +5375,7 @@ r7i.8xlarge:
 r7i.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4739,6 +5383,7 @@ r7i.large:
 r7i.metal-24xl:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4746,6 +5391,7 @@ r7i.metal-24xl:
 r7i.metal-48xl:
   default_vcpus: 192
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4753,6 +5399,7 @@ r7i.metal-48xl:
 r7i.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4760,6 +5407,7 @@ r7i.xlarge:
 r7iz.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4767,6 +5415,7 @@ r7iz.12xlarge:
 r7iz.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4774,6 +5423,7 @@ r7iz.16xlarge:
 r7iz.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4781,6 +5431,7 @@ r7iz.2xlarge:
 r7iz.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4788,6 +5439,7 @@ r7iz.32xlarge:
 r7iz.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4795,6 +5447,7 @@ r7iz.4xlarge:
 r7iz.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -4802,6 +5455,7 @@ r7iz.8xlarge:
 r7iz.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 10
@@ -4809,6 +5463,7 @@ r7iz.large:
 r7iz.metal-16xl:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4816,6 +5471,7 @@ r7iz.metal-16xl:
 r7iz.metal-32xl:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -4823,6 +5479,7 @@ r7iz.metal-32xl:
 r7iz.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4830,6 +5487,7 @@ r7iz.xlarge:
 t1.micro:
   default_vcpus: 1
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -4837,6 +5495,7 @@ t1.micro:
 t2.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 44
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4844,6 +5503,7 @@ t2.2xlarge:
 t2.large:
   default_vcpus: 2
   eni_maximum_pods: 35
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 12
@@ -4851,6 +5511,7 @@ t2.large:
 t2.medium:
   default_vcpus: 2
   eni_maximum_pods: 17
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 6
@@ -4858,6 +5519,7 @@ t2.medium:
 t2.micro:
   default_vcpus: 1
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -4865,6 +5527,7 @@ t2.micro:
 t2.nano:
   default_vcpus: 1
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -4872,6 +5535,7 @@ t2.nano:
 t2.small:
   default_vcpus: 1
   eni_maximum_pods: 11
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -4879,6 +5543,7 @@ t2.small:
 t2.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 44
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4886,6 +5551,7 @@ t2.xlarge:
 t3.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4893,6 +5559,7 @@ t3.2xlarge:
 t3.large:
   default_vcpus: 2
   eni_maximum_pods: 35
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 12
@@ -4900,6 +5567,7 @@ t3.large:
 t3.medium:
   default_vcpus: 2
   eni_maximum_pods: 17
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 6
@@ -4907,6 +5575,7 @@ t3.medium:
 t3.micro:
   default_vcpus: 2
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -4914,6 +5583,7 @@ t3.micro:
 t3.nano:
   default_vcpus: 2
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -4921,6 +5591,7 @@ t3.nano:
 t3.small:
   default_vcpus: 2
   eni_maximum_pods: 11
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -4928,6 +5599,7 @@ t3.small:
 t3.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4935,6 +5607,7 @@ t3.xlarge:
 t3a.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4942,6 +5615,7 @@ t3a.2xlarge:
 t3a.large:
   default_vcpus: 2
   eni_maximum_pods: 35
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 12
@@ -4949,6 +5623,7 @@ t3a.large:
 t3a.medium:
   default_vcpus: 2
   eni_maximum_pods: 17
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 6
@@ -4956,6 +5631,7 @@ t3a.medium:
 t3a.micro:
   default_vcpus: 2
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -4963,6 +5639,7 @@ t3a.micro:
 t3a.nano:
   default_vcpus: 2
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -4970,6 +5647,7 @@ t3a.nano:
 t3a.small:
   default_vcpus: 2
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -4977,6 +5655,7 @@ t3a.small:
 t3a.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4984,6 +5663,7 @@ t3a.xlarge:
 t4g.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -4991,6 +5671,7 @@ t4g.2xlarge:
 t4g.large:
   default_vcpus: 2
   eni_maximum_pods: 35
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 12
@@ -4998,6 +5679,7 @@ t4g.large:
 t4g.medium:
   default_vcpus: 2
   eni_maximum_pods: 17
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 6
@@ -5005,6 +5687,7 @@ t4g.medium:
 t4g.micro:
   default_vcpus: 2
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -5012,6 +5695,7 @@ t4g.micro:
 t4g.nano:
   default_vcpus: 2
   eni_maximum_pods: 4
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 2
@@ -5019,6 +5703,7 @@ t4g.nano:
 t4g.small:
   default_vcpus: 2
   eni_maximum_pods: 11
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 4
@@ -5026,6 +5711,7 @@ t4g.small:
 t4g.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -5033,6 +5719,7 @@ t4g.xlarge:
 trn1.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5040,6 +5727,7 @@ trn1.2xlarge:
 trn1.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 247
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5047,6 +5735,7 @@ trn1.32xlarge:
 trn1n.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 247
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5054,6 +5743,7 @@ trn1n.32xlarge:
 u-12tb1.112xlarge:
   default_vcpus: 448
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5061,6 +5751,7 @@ u-12tb1.112xlarge:
 u-12tb1.metal:
   default_vcpus: 448
   eni_maximum_pods: 147
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5068,6 +5759,7 @@ u-12tb1.metal:
 u-18tb1.112xlarge:
   default_vcpus: 448
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5075,6 +5767,7 @@ u-18tb1.112xlarge:
 u-18tb1.metal:
   default_vcpus: 448
   eni_maximum_pods: 737
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5082,6 +5775,7 @@ u-18tb1.metal:
 u-24tb1.112xlarge:
   default_vcpus: 448
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5089,6 +5783,7 @@ u-24tb1.112xlarge:
 u-24tb1.metal:
   default_vcpus: 448
   eni_maximum_pods: 737
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5096,6 +5791,7 @@ u-24tb1.metal:
 u-3tb1.56xlarge:
   default_vcpus: 224
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5103,6 +5799,7 @@ u-3tb1.56xlarge:
 u-6tb1.112xlarge:
   default_vcpus: 448
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5110,6 +5807,7 @@ u-6tb1.112xlarge:
 u-6tb1.56xlarge:
   default_vcpus: 224
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5117,6 +5815,7 @@ u-6tb1.56xlarge:
 u-6tb1.metal:
   default_vcpus: 448
   eni_maximum_pods: 147
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5124,6 +5823,7 @@ u-6tb1.metal:
 u-9tb1.112xlarge:
   default_vcpus: 448
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5131,6 +5831,7 @@ u-9tb1.112xlarge:
 u-9tb1.metal:
   default_vcpus: 448
   eni_maximum_pods: 147
+  gpu_manufacturer: None
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5138,6 +5839,7 @@ u-9tb1.metal:
 vt1.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5145,6 +5847,7 @@ vt1.24xlarge:
 vt1.3xlarge:
   default_vcpus: 12
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -5152,6 +5855,7 @@ vt1.3xlarge:
 vt1.6xlarge:
   default_vcpus: 24
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5159,6 +5863,7 @@ vt1.6xlarge:
 x1.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5166,6 +5871,7 @@ x1.16xlarge:
 x1.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5173,6 +5879,7 @@ x1.32xlarge:
 x1e.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5180,6 +5887,7 @@ x1e.16xlarge:
 x1e.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5187,6 +5895,7 @@ x1e.2xlarge:
 x1e.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5194,6 +5903,7 @@ x1e.32xlarge:
 x1e.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5201,6 +5911,7 @@ x1e.4xlarge:
 x1e.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5208,6 +5919,7 @@ x1e.8xlarge:
 x1e.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: xen
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -5215,6 +5927,7 @@ x1e.xlarge:
 x2gd.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5222,6 +5935,7 @@ x2gd.12xlarge:
 x2gd.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5229,6 +5943,7 @@ x2gd.16xlarge:
 x2gd.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5236,6 +5951,7 @@ x2gd.2xlarge:
 x2gd.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5243,6 +5959,7 @@ x2gd.4xlarge:
 x2gd.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5250,6 +5967,7 @@ x2gd.8xlarge:
 x2gd.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -5257,6 +5975,7 @@ x2gd.large:
 x2gd.medium:
   default_vcpus: 1
   eni_maximum_pods: 8
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
@@ -5264,6 +5983,7 @@ x2gd.medium:
 x2gd.metal:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5271,6 +5991,7 @@ x2gd.metal:
 x2gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5278,6 +5999,7 @@ x2gd.xlarge:
 x2idn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5285,6 +6007,7 @@ x2idn.16xlarge:
 x2idn.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5292,6 +6015,7 @@ x2idn.24xlarge:
 x2idn.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5299,6 +6023,7 @@ x2idn.32xlarge:
 x2idn.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5306,6 +6031,7 @@ x2idn.metal:
 x2iedn.16xlarge:
   default_vcpus: 64
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5313,6 +6039,7 @@ x2iedn.16xlarge:
 x2iedn.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5320,6 +6047,7 @@ x2iedn.24xlarge:
 x2iedn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5327,6 +6055,7 @@ x2iedn.2xlarge:
 x2iedn.32xlarge:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5334,6 +6063,7 @@ x2iedn.32xlarge:
 x2iedn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5341,6 +6071,7 @@ x2iedn.4xlarge:
 x2iedn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5348,6 +6079,7 @@ x2iedn.8xlarge:
 x2iedn.metal:
   default_vcpus: 128
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5355,6 +6087,7 @@ x2iedn.metal:
 x2iedn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5362,6 +6095,7 @@ x2iedn.xlarge:
 x2iezn.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5369,6 +6103,7 @@ x2iezn.12xlarge:
 x2iezn.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 15
@@ -5376,6 +6111,7 @@ x2iezn.2xlarge:
 x2iezn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5383,6 +6119,7 @@ x2iezn.4xlarge:
 x2iezn.6xlarge:
   default_vcpus: 24
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5390,6 +6127,7 @@ x2iezn.6xlarge:
 x2iezn.8xlarge:
   default_vcpus: 32
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
@@ -5397,6 +6135,7 @@ x2iezn.8xlarge:
 x2iezn.metal:
   default_vcpus: 48
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
@@ -5404,6 +6143,7 @@ x2iezn.metal:
 z1d.12xlarge:
   default_vcpus: 48
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5411,6 +6151,7 @@ z1d.12xlarge:
 z1d.2xlarge:
   default_vcpus: 8
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15
@@ -5418,6 +6159,7 @@ z1d.2xlarge:
 z1d.3xlarge:
   default_vcpus: 12
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5425,6 +6167,7 @@ z1d.3xlarge:
 z1d.6xlarge:
   default_vcpus: 24
   eni_maximum_pods: 234
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 30
@@ -5432,6 +6175,7 @@ z1d.6xlarge:
 z1d.large:
   default_vcpus: 2
   eni_maximum_pods: 29
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 10
@@ -5439,6 +6183,7 @@ z1d.large:
 z1d.metal:
   default_vcpus: 48
   eni_maximum_pods: 737
+  gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
@@ -5446,6 +6191,7 @@ z1d.metal:
 z1d.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
+  gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 15

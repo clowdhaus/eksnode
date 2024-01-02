@@ -8,6 +8,7 @@
 {{ @key }}:
   default_vcpus: {{ instance.default_vcpus }}
   eni_maximum_pods: {{ instance.eni_maximum_pods }}
+  gpu_manufacturer: {{ instance.gpu_manufacturer }}
   hypervisor: {{ instance.hypervisor }}
   instance_storage_supported: {{ instance.instance_storage_supported }}
   ipv4_addresses_per_interface: {{ instance.ipv4_addresses_per_interface }}

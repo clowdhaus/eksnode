@@ -38,9 +38,6 @@ pub struct JoinClusterInput {
   #[arg(long)]
   pub containerd_config_file: Option<String>,
 
-  #[arg(long, value_enum, default_value_t)]
-  pub default_container_runtime: containerd::DefaultRuntime,
-
   /// Overrides the IP address used for DNS queries within the cluster
   ///
   /// Defaults to 10.100.0.10 or 172.20.0.10 for IPv4 based on the IP address of the primary interface
@@ -250,9 +247,13 @@ impl JoinClusterInput {
   }
 
   /// Get the rendered containerd configuration
-  async fn get_containerd_config(&self, imds: ec2::InstanceMetadata) -> Result<containerd::ContainerdConfiguration> {
+  async fn get_containerd_config(
+    &self,
+    imds: ec2::InstanceMetadata,
+    container_runtime: containerd::DefaultRuntime,
+  ) -> Result<containerd::ContainerdConfiguration> {
     let sandbox_img = self.get_pause_container_image(&imds)?;
-    let config = containerd::ContainerdConfiguration::new(&self.default_container_runtime, &sandbox_img)?;
+    let config = containerd::ContainerdConfiguration::new(&container_runtime, &sandbox_img)?;
 
     Ok(config)
   }
@@ -341,13 +342,24 @@ impl JoinClusterInput {
     let kubelet_extra_args = self.get_kubelet_extra_args()?;
     kubelet_extra_args.write(kubelet::EXTRA_ARGS_PATH, true).await?;
 
-    let containerd_config = self.get_containerd_config(instance_metadata).await?;
+    // If the instance has NVIDIA GPUs, use the NVIDIA container runtime
+    let default_container_runtime = match ec2::get_instance(&instance_metadata.instance_type)? {
+      Some(instance) => match instance.gpu_manufacturer.as_str() {
+        "NVIDIA" => containerd::DefaultRuntime::Nvidia,
+        _ => containerd::DefaultRuntime::Containerd,
+      },
+      None => containerd::DefaultRuntime::Containerd,
+    };
+
+    let containerd_config = self
+      .get_containerd_config(instance_metadata, default_container_runtime)
+      .await?;
     containerd_config.write("/etc/containerd/config.toml", true).await?;
 
     // Requries that containerd is running - should be running at boot from AMI build
     containerd::create_sandbox_image_service(containerd::SANDBOX_IMAGE_SERVICE_PATH, &pause_image, true).await?;
 
-    if let containerd::DefaultRuntime::Nvidia = self.default_container_runtime {
+    if let containerd::DefaultRuntime::Nvidia = default_container_runtime {
       // Set the max clock for Nvidia GPUs
       gpu::set_nvidia_max_clock()?;
     }

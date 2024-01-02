@@ -39,6 +39,9 @@ pub struct Instance {
   /// This is based off the maximum number of ENIs and the maximum number of IPv4 addresses per ENI
   pub eni_maximum_pods: i32,
 
+  /// The GPU manufacturer (NVIDIA | AMD | Habana | None)
+  pub gpu_manufacturer: String,
+
   /// The hypervisor (nitro | xen | unknown)
   pub hypervisor: String,
 

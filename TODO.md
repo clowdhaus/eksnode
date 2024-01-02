@@ -1,19 +1,16 @@
 # TODO
-- [ ] Remove `container-runtime` argument and infer the appropriate runtime for the given instance type (NVIDIA or other currently)
 - [ ] https://github.com/awslabs/amazon-eks-ami/issues/951
   - [ ] https://github.com/awslabs/amazon-eks-ami/issues/478
-- [ ] https://github.com/NVIDIA/nvidia-container-toolkit/issues/64#issuecomment-1597236350
 - [ ] https://github.com/containerd/containerd/issues/6964#issuecomment-1132580240
 - [ ] Add log collection functionality
-  - Expand on this - this should be created from the perspective of `eksnode debug` perspective where `--collect-logs` can be used to collect logs from the node similar to current AMI functionality
 - [ ] Add validate functionality
-  - Will need to write a config file to use for validation - will capture the build-spec and join-spec so that when running `eksnode validate`, the default behavior will be to load this file to infer how the node was intended to be setup. Users should have the option to override and check specifics with something like `eksnode validate --nvidia-gpu` or `eksnode validate --containerd` or even `eksnode validate --containerd --nvidia-gpu`, etc.
-- [ ] Add Ansible role for STIG hardening
-- [ ] Add Ansible role for FedRAMP hardening
-- [ ] Add checks and reporting of CIS, STIG, FedRAMP hardening with OpenSCAP
-- [ ] Add functionality to generate SBOM
-  - [ ] Both locally and remotely in S3 for use in AMI pipeline
-- Compare with <https://github.com/kubernetes/kops/blob/master/nodeup/pkg/model/sysctls.go>
+  - Will need to write a config file to use for validation - will capture the build-spec and join-spec so that when running `eksnode validate`, the default behavior will be to load this file to infer how the node was intended to be setup
+- [ ] Enable STIG support
+- [ ] Enable FedRAMP support
+- [ ] Add reporting for CIS, STIG, FedRAMP compliance with OpenSCAP
+- [ ] Add functionality to generate SBOM; both locally and remotely in S3 for use in AMI pipeline
+- [ ] Add support for profiles - a profile is a set of customizations to optimize for a particular workload (Spark, ML training, etc.)
+  - Compare with <https://github.com/kubernetes/kops/blob/master/nodeup/pkg/model/sysctls.go>
 
 ## Containerd/Kubelet
 

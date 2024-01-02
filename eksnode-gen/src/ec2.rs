@@ -7,33 +7,9 @@ use std::{
 use anyhow::Result;
 use aws_sdk_ec2::types::InstanceTypeInfo;
 use aws_types::region::Region;
-use eksnode::resource::calculate_eni_max_pods;
+use eksnode::{ec2::Instance, resource::calculate_eni_max_pods};
 use handlebars::Handlebars;
-use serde::{Deserialize, Serialize};
 use serde_json::json;
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Instance {
-  /// The default number of vCPUs for the instance
-  default_vcpus: i32,
-
-  /// The (theoretical) maximum number of pods
-  ///
-  /// This is based off the maximum number of ENIs and the maximum number of IPv4 addresses per ENI
-  eni_maximum_pods: i32,
-
-  /// The hypervisor (nitro | xen | unknown)
-  hypervisor: String,
-
-  /// Indicates whether instance storage is supported
-  instance_storage_supported: bool,
-
-  /// The maximum number of IPv4 addresses per ENI
-  ipv4_addresses_per_interface: i32,
-
-  /// The maximum number of ENIs
-  maximum_network_interfaces: i32,
-}
 
 /// Collects all instances and their details from the region provided
 async fn get_instances(region: Region) -> Result<Vec<InstanceTypeInfo>> {
@@ -58,21 +34,22 @@ async fn get_instances(region: Region) -> Result<Vec<InstanceTypeInfo>> {
 fn get_manual_instances() -> Result<BTreeMap<String, Instance>> {
   let mut result = BTreeMap::new();
   for inst in vec![
-    ("cr1.8xlarge", 32, "unknown", true, 30, 8),
-    ("hs1.8xlarge", 16, "unknown", true, 30, 8),
-    ("u-12tb1.metal", 448, "unknown", false, 30, 5),
-    ("u-18tb1.metal", 448, "unknown", false, 50, 15),
-    ("u-24tb1.metal", 448, "unknown", false, 50, 15),
-    ("u-6tb1.metal", 448, "unknown", false, 30, 5),
-    ("u-9tb1.metal", 448, "unknown", false, 30, 5),
-    ("c5a.metal", 96, "unknown", false, 50, 15),
-    ("c5ad.metal", 96, "unknown", true, 50, 15),
-    ("p4de.24xlarge", 96, "nitro", true, 50, 15),
-    ("bmn-sf1.metal", 1, "unknown", false, 50, 15),
+    ("cr1.8xlarge", 32, "unknown", true, 30, 8, "None"),
+    ("hs1.8xlarge", 16, "unknown", true, 30, 8, "None"),
+    ("u-12tb1.metal", 448, "unknown", false, 30, 5, "None"),
+    ("u-18tb1.metal", 448, "unknown", false, 50, 15, "None"),
+    ("u-24tb1.metal", 448, "unknown", false, 50, 15, "None"),
+    ("u-6tb1.metal", 448, "unknown", false, 30, 5, "None"),
+    ("u-9tb1.metal", 448, "unknown", false, 30, 5, "None"),
+    ("c5a.metal", 96, "unknown", false, 50, 15, "None"),
+    ("c5ad.metal", 96, "unknown", true, 50, 15, "None"),
+    ("p4de.24xlarge", 96, "nitro", true, 50, 15, "NVIDIA"),
+    ("bmn-sf1.metal", 1, "unknown", false, 50, 15, "None"),
   ] {
     let instance_type = inst.0.to_string();
     let instance = Instance {
       default_vcpus: inst.1,
+      gpu_manufacturer: inst.6.to_string(),
       eni_maximum_pods: calculate_eni_max_pods(inst.5, inst.4, false),
       hypervisor: inst.2.to_string(),
       instance_storage_supported: inst.3,
@@ -102,25 +79,7 @@ fn write_ec2(instances: &BTreeMap<String, Instance>, cur_dir: &Path) -> Result<(
 }
 
 pub async fn write_files(cur_dir: &Path) -> Result<()> {
-  let regions = vec![
-    // "ap-northeast-1",
-    // "ap-northeast-2",
-    // "ap-northeast-3",
-    // "ap-south-1",
-    // "ap-southeast-1",
-    // "ap-southeast-2",
-    // "ca-central-1",
-    // "eu-central-1",
-    // "eu-north-1",
-    "eu-west-1",
-    // "eu-west-2",
-    // "eu-west-3",
-    // "sa-east-1",
-    "us-east-1",
-    // "us-east-2",
-    // "us-west-1",
-    "us-west-2",
-  ];
+  let regions = vec!["us-east-1", "us-west-2"];
 
   // Start with manually inserted instances
   let mut instances = get_manual_instances()?;
@@ -148,9 +107,24 @@ pub async fn write_files(cur_dir: &Path) -> Result<()> {
             .maximum_network_interfaces()
             .unwrap();
 
+          let gpu_manufacturer = match instance.gpu_info.as_ref() {
+            Some(gpu_info) => gpu_info
+              .gpus
+              .as_ref()
+              .unwrap()
+              .first()
+              .unwrap()
+              .manufacturer
+              .as_ref()
+              .unwrap()
+              .to_string(),
+            None => "none".to_string(),
+          };
+
           let inst = Instance {
             default_vcpus: instance.v_cpu_info.unwrap().default_v_cpus().unwrap(),
             eni_maximum_pods: calculate_eni_max_pods(network_interfaces, ipv4_addresses, false),
+            gpu_manufacturer,
             hypervisor: match instance.hypervisor {
               Some(hypervisor) => hypervisor.as_str().to_owned(),
               None => "unknown".to_string(),
