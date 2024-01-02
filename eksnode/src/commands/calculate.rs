@@ -69,6 +69,7 @@ impl CalculateMaxPodsInput {
 
     Ok(result)
   }
+
   pub async fn result(&self) -> Result<()> {
     let result = self.calculate().await?;
 
