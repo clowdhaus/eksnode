@@ -1,13 +1,12 @@
 # eksnode
 
-
 ## Local Development
 
-protobuf is required for compiling (containerd)
+The `protoc` Protocol Buffers compiler is required for compiling (containerd). See [grpc docs](https://grpc.io/docs/protoc-installation/) for installation instructions.
 
 ### MacOS
 
-Note: not all tests run on MacOS since the binary is designed/intended to run on Linux
+Note: not all tests run on MacOS since the binary is designed/intended to run on Amazon Linux 2023+
 
 ```sh
 brew install FiloSottile/musl-cross/musl-cross
