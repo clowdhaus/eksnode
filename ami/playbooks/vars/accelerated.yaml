@@ -1,6 +1,6 @@
 ---
 # https://docs.nvidia.com/datacenter/tesla/index.html
-nvidia_driver_version: '535.129.03'
+nvidia_driver_version: '535.154.05'
 nvidia_driver_executable: 'NVIDIA-Linux-x86_64-{{ nvidia_driver_version }}.run'
 nvidia_driver_url: 'https://us.download.nvidia.com/tesla/{{ nvidia_driver_version }}/{{ nvidia_driver_executable }}'
 
