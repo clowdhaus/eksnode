@@ -23,10 +23,3 @@ containerd_checksum: 'sha256:https://github.com/containerd/containerd/releases/d
 nerdctl_version: "{{ [version]| map('extract', versions, 'nerdctl_version') | last}}"
 nerdctl_archive: 'nerdctl-{{ nerdctl_version }}-linux-{{ arch }}.tar.gz'
 nerdctl_url: 'https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/{{ nerdctl_archive }}'
-
-#### CNI plugins ####
-
-cni_plugins_version: "{{ [version]| map('extract', versions, 'cni_plugins_version') | last}}"
-cni_plugins_archive: 'cni-plugins-linux-{{ arch }}-{{ cni_plugins_version }}.tgz'
-cni_plugins_url: 'https://github.com/containernetworking/plugins/releases/download/{{ cni_plugins_version }}/{{ cni_plugins_archive }}'
-cni_plugins_checksum: 'sha256:https://github.com/containernetworking/plugins/releases/download/{{ cni_plugins_version }}/{{ cni_plugins_archive }}.sha256'

@@ -31,17 +31,6 @@
         - conntrack
         - iptables-nft
         - amazon-ssm-agent
-        - glibc-minimal-langpack
-        - glibc-langpack-en
-
-    - name: Install dnf packages
-      ansible.builtin.dnf:
-        name: '{{ item }}'
-        state: absent
-        autoremove: true
-      loop:
-        # Swapping out for smaller min langpack
-        - glibc-all-langpacks
 
     - name: Temporary fix for https://github.com/aws/amazon-vpc-cni-k8s/pull/2118
       shell: sed -i "s/^MACAddressPolicy=.*/MACAddressPolicy=none/" /usr/lib/systemd/network/99-default.link
@@ -279,48 +268,6 @@
       ansible.builtin.file:
         path: /usr/local/bin/ctr
         state: absent
-
-#########################################################
-# CNI
-#########################################################
-
-- name: Install CNI {{ cni_plugins_version }}
-  block:
-    - name: Create /etc/cni/net.d directory
-      ansible.builtin.file:
-        path: /etc/cni/net.d
-        state: directory
-        owner: root
-        group: root
-
-    - name: Create /opt/cni/bin
-      ansible.builtin.file:
-        path: /opt/cni/bin
-        state: directory
-        owner: root
-        group: root
-      register: cni_dir
-
-    # This separate task is used to validate checksum
-    - name: Download CNI {{ cni_plugins_version }}
-      ansible.builtin.get_url:
-        url: '{{ cni_plugins_url}}'
-        dest: '/tmp/{{ cni_plugins_archive }}'
-        checksum: '{{ cni_plugins_checksum }}'
-      register: cni_archive
-
-    - name: Extract CNI {{ cni_plugins_version }}
-      ansible.builtin.unarchive:
-        src: '{{ cni_archive.dest }}'
-        dest: '{{ cni_dir.path }}'
-        mode: 0755
-        owner: root
-        group: root
-        remote_src: yes
-        keep_newer: yes
-
-    - name: Collect CNI plugins version
-      shell: echo "cni-plugins,{{ cni_plugins_version }}" >> /opt/versions
 
 #########################################################
 # IAM authenticator / ECR credential provider
