@@ -106,7 +106,12 @@ impl KubeConfig {
   }
 
   pub fn write<P: AsRef<Path>>(&self, path: P, id: Option<u32>) -> Result<()> {
-    let file = OpenOptions::new().write(true).create(true).mode(0o644).open(&path)?;
+    let file = OpenOptions::new()
+      .write(true)
+      .create(true)
+      .truncate(true)
+      .mode(0o644)
+      .open(&path)?;
     let writer = BufWriter::new(file);
 
     serde_yaml::to_writer(writer, self).map_err(anyhow::Error::from)?;

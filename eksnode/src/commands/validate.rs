@@ -109,6 +109,7 @@ mod tests {
     let mut file = OpenOptions::new()
       .write(true)
       .create(true)
+      .truncate(true)
       .mode(0o644)
       .open(&path)
       .await

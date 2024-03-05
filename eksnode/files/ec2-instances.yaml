@@ -3708,6 +3708,14 @@ m7gd.medium:
   instance_storage_supported: true
   ipv4_addresses_per_interface: 4
   maximum_network_interfaces: 2
+m7gd.metal:
+  default_vcpus: 64
+  eni_maximum_pods: 737
+  gpu_manufacturer: none
+  hypervisor: unknown
+  instance_storage_supported: true
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
 m7gd.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58

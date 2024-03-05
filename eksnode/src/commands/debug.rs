@@ -1,9 +1,4 @@
-use std::{
-  fs::File,
-  io::{prelude::*, Seek, Write},
-  iter::Iterator,
-  path::Path,
-};
+use std::{fs::File, io::prelude::*, path::Path};
 
 use anyhow::Result;
 use clap::Args;

@@ -45,6 +45,7 @@ pub async fn write_file<P: AsRef<Path>>(contents: &[u8], path: P, mode: Option<u
   let mut file = OpenOptions::new()
     .write(true)
     .create(true)
+    .truncate(true)
     .mode(mode.unwrap_or(0o644))
     .open(&path)
     .await?;
