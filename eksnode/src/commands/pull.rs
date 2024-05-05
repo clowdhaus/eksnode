@@ -171,6 +171,7 @@ async fn tag_image(image: &str, cur_region: &str, enable_fips: bool, client: &mu
               name: tagged_name,
               ..image
             }),
+            source_date_epoch: None,
           };
           client.create(with_namespace!(create_req, NAMESPACE)).await?;
         }

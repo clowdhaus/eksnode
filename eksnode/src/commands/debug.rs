@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::Args;
 use serde::{Deserialize, Serialize};
 use walkdir::{DirEntry, WalkDir};
-use zip::{result::ZipError, write::FileOptions};
+use zip::{result::ZipError, write::SimpleFileOptions};
 
 #[derive(Args, Debug, Default, Serialize, Deserialize)]
 pub struct DebugInput {
@@ -46,7 +46,7 @@ where
   T: Write + Seek,
 {
   let mut zip = zip::ZipWriter::new(writer);
-  let options = FileOptions::default()
+  let options = SimpleFileOptions::default()
     .compression_method(zip::CompressionMethod::BZIP2)
     .unix_permissions(0o755);
 

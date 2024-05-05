@@ -29,7 +29,7 @@ aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
 clap-verbosity-flag.workspace = true
-containerd-client = "0.4"
+containerd-client = "0.5"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
 rust-embed = { version = "8.0", features = ["compression"] }
@@ -51,12 +51,12 @@ toml = "0.8"
 tracing.workspace = true
 tracing-log.workspace = true
 tracing-subscriber.workspace = true
-walkdir = {version="2.4", default-features = false}
-zip = { version = "0.6" }
+walkdir = { version = "2.4", default-features = false }
+zip = { version = "1.1" }
 
 [dev-dependencies]
 assert_cmd = "2.0"
 escargot = "0.5"
 insta = "1.29"
-rstest = "0.18"
+rstest = "0.19"
 tempfile = "3.6"

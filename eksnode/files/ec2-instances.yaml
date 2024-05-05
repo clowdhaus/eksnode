@@ -990,12 +990,12 @@ c6in.2xlarge:
   maximum_network_interfaces: 4
 c6in.32xlarge:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 c6in.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
@@ -1022,12 +1022,12 @@ c6in.large:
   maximum_network_interfaces: 3
 c6in.metal:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 c6in.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
@@ -3454,12 +3454,12 @@ m6idn.2xlarge:
   maximum_network_interfaces: 4
 m6idn.32xlarge:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 m6idn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
@@ -3486,12 +3486,12 @@ m6idn.large:
   maximum_network_interfaces: 3
 m6idn.metal:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 m6idn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
@@ -3534,12 +3534,12 @@ m6in.2xlarge:
   maximum_network_interfaces: 4
 m6in.32xlarge:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 m6in.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
@@ -3566,12 +3566,12 @@ m6in.large:
   maximum_network_interfaces: 3
 m6in.metal:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 m6in.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
@@ -5062,12 +5062,12 @@ r6idn.2xlarge:
   maximum_network_interfaces: 4
 r6idn.32xlarge:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 r6idn.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
@@ -5094,12 +5094,12 @@ r6idn.large:
   maximum_network_interfaces: 3
 r6idn.metal:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: true
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 r6idn.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
@@ -5142,12 +5142,12 @@ r6in.2xlarge:
   maximum_network_interfaces: 4
 r6in.32xlarge:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: nitro
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 r6in.4xlarge:
   default_vcpus: 16
   eni_maximum_pods: 234
@@ -5174,12 +5174,12 @@ r6in.large:
   maximum_network_interfaces: 3
 r6in.metal:
   default_vcpus: 128
-  eni_maximum_pods: 345
+  eni_maximum_pods: 394
   gpu_manufacturer: none
   hypervisor: unknown
   instance_storage_supported: false
   ipv4_addresses_per_interface: 50
-  maximum_network_interfaces: 7
+  maximum_network_interfaces: 8
 r6in.xlarge:
   default_vcpus: 4
   eni_maximum_pods: 58
