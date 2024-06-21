@@ -3956,6 +3956,14 @@ mac1.metal:
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
   maximum_network_interfaces: 8
+mac2-m1ultra.metal:
+  default_vcpus: 20
+  eni_maximum_pods: 234
+  gpu_manufacturer: none
+  hypervisor: unknown
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 30
+  maximum_network_interfaces: 8
 mac2-m2.metal:
   default_vcpus: 8
   eni_maximum_pods: 234
@@ -5948,6 +5956,38 @@ u-9tb1.metal:
   instance_storage_supported: false
   ipv4_addresses_per_interface: 30
   maximum_network_interfaces: 5
+u7i-12tb.224xlarge:
+  default_vcpus: 896
+  eni_maximum_pods: 737
+  gpu_manufacturer: none
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 15
+u7in-16tb.224xlarge:
+  default_vcpus: 896
+  eni_maximum_pods: 394
+  gpu_manufacturer: none
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 8
+u7in-24tb.224xlarge:
+  default_vcpus: 896
+  eni_maximum_pods: 394
+  gpu_manufacturer: none
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 8
+u7in-32tb.224xlarge:
+  default_vcpus: 896
+  eni_maximum_pods: 394
+  gpu_manufacturer: none
+  hypervisor: nitro
+  instance_storage_supported: false
+  ipv4_addresses_per_interface: 50
+  maximum_network_interfaces: 8
 vt1.24xlarge:
   default_vcpus: 96
   eni_maximum_pods: 737
