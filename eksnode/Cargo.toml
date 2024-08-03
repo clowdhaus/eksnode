@@ -36,7 +36,6 @@ rust-embed = { version = "8.0", features = ["compression"] }
 http = "1.0"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.16"
-prost-types = "0.12"
 rand = "0.8"
 regex-lite.workspace = true
 semver = "1.0"
@@ -46,17 +45,19 @@ serde_yaml.workspace = true
 tabled = "0.15"
 taplo = "0.13"
 tokio.workspace = true
-tokio-retry = "0.3"
 toml = "0.8"
 tracing.workspace = true
 tracing-log.workspace = true
 tracing-subscriber.workspace = true
 walkdir = { version = "2.4", default-features = false }
-zip = { version = "1.1" }
+zip = { version = "2.1" }
 
 [dev-dependencies]
 assert_cmd = "2.0"
 escargot = "0.5"
 insta = "1.29"
-rstest = "0.19"
+rstest = "0.21"
 tempfile = "3.6"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(tarpaulin_include)"] }

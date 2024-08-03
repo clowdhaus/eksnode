@@ -1,6 +1,6 @@
 ---
 # https://docs.nvidia.com/datacenter/tesla/index.html
-nvidia_driver_version: '550.54.15'
+nvidia_driver_version: '550.90.07'
 nvidia_driver_executable: 'NVIDIA-Linux-x86_64-{{ nvidia_driver_version }}.run'
 nvidia_driver_url: 'https://us.download.nvidia.com/tesla/{{ nvidia_driver_version }}/{{ nvidia_driver_executable }}'
 
@@ -8,10 +8,10 @@ nvidia_fabric_manager_archive: 'fabricmanager-linux-x86_64-{{ nvidia_driver_vers
 nvidia_fabric_manager_url: 'https://developer.download.nvidia.com/compute/nvidia-driver/redist/fabricmanager/linux-x86_64/{{ nvidia_fabric_manager_archive }}'
 
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-verify.html
-efa_installer_version: '1.32.0'
+efa_installer_version: '1.33.0'
 efa_installer_archive: 'aws-efa-installer-{{ efa_installer_version }}.tar.gz'
 efa_installer_url: 'https://efa-installer.amazonaws.com/{{ efa_installer_archive }}'
 efa_installer_checksum: 'sha256:5f7233760be57f6fee6de8c09acbfbf59238de848e06048dc54d156ef578fc66'
 
 # https://github.com/aws/aws-ofi-nccl/releases
-aws_ofi_nccl_version: '1.9.1'
+aws_ofi_nccl_version: '1.9.2'

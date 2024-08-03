@@ -22,7 +22,7 @@ aws-types.workspace = true
 clap.workspace = true
 clap-verbosity-flag.workspace = true
 eksnode = { path = "../eksnode", version ="*"}
-handlebars = "5.0"
+handlebars = "6.0"
 serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
@@ -31,3 +31,6 @@ tracing-log.workspace = true
 tracing-subscriber.workspace = true
 tokio.workspace = true
 tokio-stream.workspace = true
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(tarpaulin_include)"] }
