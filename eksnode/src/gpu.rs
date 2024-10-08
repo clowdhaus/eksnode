@@ -72,8 +72,5 @@ pub fn set_nvidia_max_clock() -> Result<()> {
     vec!["--applications-clocks", &format!("{mem_max_clock},{graph_max_clock}")],
   )?;
 
-  cmd_exec("nvidia-smi", vec!["--lock-gpu-clocks", &format!("{mem_max_clock}")])?;
-  cmd_exec("nvidia-smi", vec!["--lock-memory-clocks", &format!("{mem_max_clock}")])?;
-
   Ok(())
 }
