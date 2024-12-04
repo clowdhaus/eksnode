@@ -29,20 +29,20 @@ aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
 clap-verbosity-flag.workspace = true
-containerd-client = "0.5"
+containerd-client = "0.8"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
 rust-embed = { version = "8.0", features = ["compression"] }
 http = "1.0"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.16"
-rand = "0.8"
+rand = "0.9"
 regex-lite.workspace = true
 semver = "1.0"
 serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
-tabled = "0.15"
+tabled = "0.18"
 taplo = "0.13"
 tokio.workspace = true
 toml = "0.8"
@@ -56,7 +56,7 @@ zip = { version = "2.1" }
 assert_cmd = "2.0"
 escargot = "0.5"
 insta = "1.29"
-rstest = "0.21"
+rstest = "0.24"
 tempfile = "3.6"
 
 [lints.rust]
