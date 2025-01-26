@@ -29,7 +29,7 @@ aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
 clap-verbosity-flag.workspace = true
-containerd-client = "0.8"
+containerd-client = "0.6"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "2.0"
 rust-embed = { version = "8.0", features = ["compression"] }
@@ -56,7 +56,7 @@ zip = { version = "2.1" }
 assert_cmd = "2.0"
 escargot = "0.5"
 insta = "1.29"
-rstest = "0.24"
+rstest = "0.23"
 tempfile = "3.6"
 
 [lints.rust]
