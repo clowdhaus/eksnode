@@ -264,9 +264,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sdk-ec2"
-version = "1.108.0"
+version = "1.110.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c08a77aa7c3c45e8d41916a4d2abc16941afbd5f6d41e2f60abb54e525467ca2"
+checksum = "3c11b1875f8930a2ee7d45e1088af402fde11a03bfd79a391fde84dfe87da8a1"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -288,9 +288,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sdk-ecr"
-version = "1.64.0"
+version = "1.65.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe9a5b8d447351821e7251ecba7f3aa76692b4453ea67b94e24127d2a3f25d5b"
+checksum = "e4a6955cd14b8e57b2454e6cec5d3a0668249a23fb7184a5f204e9a398544218"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -310,9 +310,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sdk-eks"
-version = "1.73.0"
+version = "1.74.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "938e93faa8ef02141b0133a1cf55c24fbdf4d3a1879829269fa3debf111bdf61"
+checksum = "d97acf08cbb1b3b527e9cfe23cc80f9f60d22ae1e2ab157a96f1ce0051503a8d"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -869,9 +869,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.28"
+version = "4.5.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3e77c3243bd94243c03672cb5154667347c457ca271254724f9f393aee1c05ff"
+checksum = "8acebd8ad879283633b343856142139f2da2317c96b05b4dd6181c61e2480184"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -889,9 +889,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.27"
+version = "4.5.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b26884eb4b57140e4d2d93652abfa49498b938b3c9179f9fc487b0acc3edad7"
+checksum = "f6ba32cbda51c7e1dfd49acc1457ba1a7dec5b64fe360e828acb13ca8dc9c2f9"
 dependencies = [
  "anstream",
  "anstyle",
@@ -3322,9 +3322,9 @@ dependencies = [
 
 [[package]]
 name = "tempfile"
-version = "3.16.0"
+version = "3.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38c246215d7d24f48ae091a2902398798e05d978b24315d6efbc00ede9a8bb91"
+checksum = "a40f762a77d2afa88c2d919489e390a12bdd261ed568e60cfa7e48d4e20f0d33"
 dependencies = [
  "cfg-if",
  "fastrand",
