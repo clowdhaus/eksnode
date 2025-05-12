@@ -21,7 +21,7 @@ anstyle = "1.0"
 anyhow = "1.0"
 aws-config = {version="1.6", features=["behavior-version-latest"]}
 aws-types = "1.0"
-aws-sdk-ec2 = "1.124"
+aws-sdk-ec2 = "1.128"
 clap = { version = "4.5", features = ["derive", "env", "color"] }
 clap-verbosity-flag = "3.0"
 regex-lite = "0.1"
@@ -31,7 +31,7 @@ serde_yaml = "0.9"
 tracing = {version = "0.1", default-features = false, features = ["log-always"] }
 tracing-log = "0.2"
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "std", "ansi"] }
-tokio = { version = "1.44", default-features = false, features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.45", default-features = false, features = ["macros", "rt-multi-thread"] }
 tokio-stream = "0.1"
 
 [profile.release]

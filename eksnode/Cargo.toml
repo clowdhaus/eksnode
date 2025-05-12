@@ -23,8 +23,8 @@ anstyle.workspace = true
 anyhow.workspace = true
 aws-config.workspace = true
 aws-sdk-ec2.workspace = true
-aws-sdk-ecr = "1.72"
-aws-sdk-eks = "1.84"
+aws-sdk-ecr = "1.74"
+aws-sdk-eks = "1.86"
 aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
@@ -57,7 +57,7 @@ assert_cmd = "2.0"
 escargot = "0.5"
 insta = "1.43"
 rstest = "0.25"
-tempfile = "3.19"
+tempfile = "3.20"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ["cfg(tarpaulin_include)"] }
