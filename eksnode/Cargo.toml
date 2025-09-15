@@ -57,7 +57,7 @@ assert_cmd = "2.0"
 escargot = "0.5"
 insta = "1.43"
 rstest = "0.26"
-tempfile = "3.21"
+tempfile = "3.22"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ["cfg(tarpaulin_include)"] }
