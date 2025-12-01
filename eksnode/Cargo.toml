@@ -33,7 +33,7 @@ containerd-client = "0.8"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "3.0"
 rust-embed = { version = "8.9", features = ["compression"] }
-http = "1.3"
+http = "1.4"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.17"
 rand = "0.9"
