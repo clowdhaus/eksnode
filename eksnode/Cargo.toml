@@ -55,7 +55,7 @@ zip = { version = "7.0" }
 [dev-dependencies]
 assert_cmd = "2.1"
 escargot = "0.5"
-insta = "1.45"
+insta = "1.46"
 rstest = "0.26"
 tempfile = "3.24"
 

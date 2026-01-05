@@ -22,7 +22,7 @@ aws-types.workspace = true
 clap.workspace = true
 clap-verbosity-flag.workspace = true
 eksnode = { path = "../eksnode", version ="*"}
-handlebars = "6.3"
+handlebars = "6.4"
 serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true

@@ -31,7 +31,7 @@ serde_yaml = "0.9"
 tracing = {version = "0.1", default-features = false, features = ["log-always"] }
 tracing-log = "0.2"
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "std", "ansi"] }
-tokio = { version = "1.48", default-features = false, features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.49", default-features = false, features = ["macros", "rt-multi-thread"] }
 tokio-stream = "0.1"
 
 [profile.release]
