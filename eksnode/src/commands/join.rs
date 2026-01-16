@@ -4,7 +4,7 @@ use anyhow::Result;
 use base64::{engine::general_purpose, Engine as _};
 use clap::{Args, ValueEnum};
 use ipnet::IpNet;
-use rand::{seq::SliceRandom, thread_rng};
+use rand::{rng, seq::SliceRandom};
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use tokio::{fs::OpenOptions, io::AsyncWriteExt};
@@ -75,18 +75,13 @@ pub struct JoinClusterInput {
   pub use_max_pods: bool,
 }
 
-#[derive(Clone, Debug, ValueEnum, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, ValueEnum, Serialize, Deserialize)]
 pub enum LocalDisks {
   /// Mount local disks individually
   Mount,
   /// Mount local disk in a raid0 configuration
+  #[default]
   Raid0,
-}
-
-impl Default for LocalDisks {
-  fn default() -> Self {
-    Self::Raid0
-  }
 }
 
 struct KubeletKubeConfig {
@@ -268,10 +263,10 @@ impl JoinClusterInput {
   /// Update /etc/hosts for the cluster endpoint IPs for Outpost local cluster
   async fn update_etc_hosts(&self, endpoint: &str, path: PathBuf) -> Result<()> {
     let mut hostfile = OpenOptions::new().append(true).open(path).await?;
-    let mut ips: Vec<IpAddr> = dns_lookup::lookup_host(endpoint)?;
+    let mut ips: Vec<IpAddr> = dns_lookup::lookup_host(endpoint)?.collect();
 
     // Shuffle the IPs to avoid always using the first IP
-    ips.shuffle(&mut thread_rng());
+    ips.shuffle(&mut rng());
     let entries: Vec<String> = ips.iter().map(|ip| format!("{ip} {endpoint}\n")).collect();
 
     hostfile.write_all(entries.join("").as_bytes()).await?;

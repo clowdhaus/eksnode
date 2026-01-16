@@ -35,10 +35,7 @@ fn get_nvidia_max_clock(clock_type: &NvidiaGpuClock) -> Result<i32> {
       let mut clock = line.split_whitespace();
 
       match clock.next() {
-        Some(clock) => match clock.parse::<i32>() {
-          Ok(clock) => Some(clock),
-          Err(_) => None,
-        },
+        Some(clock) => clock.parse::<i32>().ok(),
         None => None,
       }
     })

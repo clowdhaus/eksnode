@@ -47,20 +47,14 @@ impl GetVersionsInput {
     let rpm = Rpm {};
     let rpm_versions = get_versions(rpm)?;
 
-    match self.output_markdown {
-      true => {
-        let table = Table::new(&rpm_versions).to_string();
-        println!("{}", table);
-      }
-      false => {}
+    if self.output_markdown {
+      let table = Table::new(&rpm_versions).to_string();
+      println!("{}", table);
     }
 
-    match self.output_json {
-      true => {
-        let versions = Versions { linux: rpm_versions };
-        println!("{}", serde_json::to_string_pretty(&versions)?);
-      }
-      false => {}
+    if self.output_json {
+      let versions = Versions { linux: rpm_versions };
+      println!("{}", serde_json::to_string_pretty(&versions)?);
     }
 
     Ok(())

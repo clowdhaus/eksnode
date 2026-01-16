@@ -8,7 +8,8 @@ use tokio::{fs::OpenOptions, io::AsyncWriteExt};
 /// Extract the semantic version from the version string provided
 pub fn get_semver(ver: &str) -> Result<Version> {
   let re = Regex::new(r"v?(\d+\.\d+\.\d+)(-.*)?")?;
-  return match re.captures(ver) {
+
+  match re.captures(ver) {
     Some(cap) => match cap.get(1) {
       Some(cap) => {
         let version = Version::parse(cap.as_str()).unwrap();
@@ -17,7 +18,7 @@ pub fn get_semver(ver: &str) -> Result<Version> {
       None => Err(anyhow!("Unable to parse semantic version: {ver}")),
     },
     None => Err(anyhow!("Semantic version not found: {ver}")),
-  };
+  }
 }
 
 /// Command execution results

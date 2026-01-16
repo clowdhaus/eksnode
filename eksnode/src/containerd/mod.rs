@@ -18,16 +18,11 @@ pub const SANDBOX_IMAGE_TAG: &str = "3.8";
 #[folder = "src/containerd/templates/"]
 pub struct Templates;
 
-#[derive(Copy, Clone, Debug, ValueEnum, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, Default, ValueEnum, Serialize, Deserialize)]
 pub enum DefaultRuntime {
+  #[default]
   Containerd,
   Nvidia,
-}
-
-impl Default for DefaultRuntime {
-  fn default() -> Self {
-    Self::Containerd
-  }
 }
 
 pub async fn create_sandbox_image_service<P: AsRef<Path>>(path: P, pause_image: &str, chown: bool) -> Result<()> {

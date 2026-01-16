@@ -21,14 +21,9 @@ use serde::{Deserialize, Serialize};
 #[folder = "files/"]
 pub struct Assets;
 
-#[derive(Copy, Clone, Debug, ValueEnum, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, Default, ValueEnum, Serialize, Deserialize)]
 pub enum IpvFamily {
+  #[default]
   Ipv4,
   Ipv6,
-}
-
-impl Default for IpvFamily {
-  fn default() -> Self {
-    Self::Ipv4
-  }
 }
