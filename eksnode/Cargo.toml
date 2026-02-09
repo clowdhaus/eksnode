@@ -23,8 +23,8 @@ anstyle.workspace = true
 anyhow.workspace = true
 aws-config.workspace = true
 aws-sdk-ec2.workspace = true
-aws-sdk-ecr = "1.82"
-aws-sdk-eks = "1.95"
+aws-sdk-ecr = "1.106"
+aws-sdk-eks = "1.120"
 aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
@@ -36,7 +36,7 @@ rust-embed = { version = "8.9", features = ["compression"] }
 http = "1.4"
 ipnet = {version = "2.7", features = ["json"]}
 num_cpus = "1.17"
-rand = "0.9"
+rand = "0.10"
 regex-lite.workspace = true
 semver = "1.0"
 serde.workspace = true
@@ -50,7 +50,7 @@ tracing.workspace = true
 tracing-log.workspace = true
 tracing-subscriber.workspace = true
 walkdir = { version = "2.4", default-features = false }
-zip = { version = "7.2" }
+zip = { version = "7.4" }
 
 [dev-dependencies]
 assert_cmd = "2.1"
