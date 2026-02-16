@@ -23,8 +23,8 @@ anstyle.workspace = true
 anyhow.workspace = true
 aws-config.workspace = true
 aws-sdk-ec2.workspace = true
-aws-sdk-ecr = "1.106"
-aws-sdk-eks = "1.120"
+aws-sdk-ecr = "1.107"
+aws-sdk-eks = "1.123"
 aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
@@ -45,19 +45,19 @@ serde_yaml.workspace = true
 tabled = "0.20"
 taplo = "0.14"
 tokio.workspace = true
-toml = "0.9"
+toml = "1.0"
 tracing.workspace = true
 tracing-log.workspace = true
 tracing-subscriber.workspace = true
 walkdir = { version = "2.4", default-features = false }
-zip = { version = "7.4" }
+zip = { version = "8.0" }
 
 [dev-dependencies]
 assert_cmd = "2.1"
 escargot = "0.5"
 insta = "1.46"
 rstest = "0.26"
-tempfile = "3.24"
+tempfile = "3.25"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ["cfg(tarpaulin_include)"] }
