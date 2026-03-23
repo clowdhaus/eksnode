@@ -23,8 +23,8 @@ anstyle.workspace = true
 anyhow.workspace = true
 aws-config.workspace = true
 aws-sdk-ec2.workspace = true
-aws-sdk-ecr = "1.112"
-aws-sdk-eks = "1.126"
+aws-sdk-ecr = "1.113"
+aws-sdk-eks = "1.127"
 aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
@@ -50,7 +50,7 @@ tracing.workspace = true
 tracing-log.workspace = true
 tracing-subscriber.workspace = true
 walkdir = { version = "2.4", default-features = false }
-zip = { version = "8.2" }
+zip = { version = "8.3" }
 
 [dev-dependencies]
 assert_cmd = "2.2"
