@@ -101,7 +101,7 @@ async fn pull_image(image: &str, namespace: &str) -> Result<utils::CmdResult> {
   if out.status == 0 {
     debug!("Image pulled {image}: {}", &out.stdout);
   } else {
-    bail!("Failed to pull image: {image}\n{}", &out.stderr);
+    bail!("Failed to pull image: {image}\n{}", out.stderr);
   };
 
   Ok(out)
