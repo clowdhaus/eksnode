@@ -23,7 +23,7 @@ fn get_nvidia_max_clock(clock_type: &NvidiaGpuClock) -> Result<i32> {
   let output = cmd_exec(
     "nvidia-smi",
     vec![
-      &format!("--query-supported-clocks={}", &clock_type.to_string()),
+      &format!("--query-supported-clocks={clock_type}"),
       "--format=csv",
     ],
   )?;

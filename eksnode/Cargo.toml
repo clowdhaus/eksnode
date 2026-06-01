@@ -23,16 +23,16 @@ anstyle.workspace = true
 anyhow.workspace = true
 aws-config.workspace = true
 aws-sdk-ec2.workspace = true
-aws-sdk-ecr = "1.113"
-aws-sdk-eks = "1.127"
+aws-sdk-ecr = "1.117"
+aws-sdk-eks = "1.132"
 aws-types.workspace = true
 base64 = "0.22"
 clap.workspace = true
 clap-verbosity-flag.workspace = true
-containerd-client = "0.8"
+containerd-client = "0.9"
 # config = { version = "0.13", features = ["json", "yaml", "toml"] }
 dns-lookup = "3.0"
-rust-embed = { version = "8.9", features = ["compression"] }
+rust-embed = { version = "8.11", features = ["compression"] }
 http = "1.4"
 ipnet = {version = "2.12", features = ["json"]}
 num_cpus = "1.17"
@@ -42,20 +42,20 @@ semver = "1.0"
 serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
-tabled = "0.20"
+tabled = "0.21"
 taplo = "0.14"
 tokio.workspace = true
-toml = "1.0"
+toml = "1.1"
 tracing.workspace = true
 tracing-log.workspace = true
 tracing-subscriber.workspace = true
-walkdir = { version = "2.4", default-features = false }
-zip = { version = "8.3" }
+walkdir = { version = "2.5", default-features = false }
+zip = { version = "8.6" }
 
 [dev-dependencies]
 assert_cmd = "2.2"
 escargot = "0.5"
-insta = "1.46"
+insta = "1.47"
 rstest = "0.26"
 tempfile = "3.27"
 
